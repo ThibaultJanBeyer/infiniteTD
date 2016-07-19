@@ -1,0 +1,36 @@
+/*********/
+/* Board */
+/*********/
+
+.board {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.board__field {
+  background: $field;
+  border: 0;
+  height: 10%;
+  margin: 0;
+  padding: 0;
+  width: 10%;
+  
+  &:hover, &:focus {
+    background: $field-select;
+  }
+}
+
+.start, .end {
+  background: $locked;
+
+  &:hover, &:focus {
+    background: $locked;
+  }
+}
+
+.locked {
+  outline: 1px solid blue;
+}

@@ -1,0 +1,60 @@
+/*
+ * Fonts
+ */
+@import url(https://fonts.googleapis.com/css?family=Fira+Sans:700;400);
+
+/*
+ * Body
+ */
+html,
+body,
+main {
+  height: 100%;
+  margin: 0;
+  width: 100%;
+}
+
+/*
+ * Kerning
+ */
+.copy {
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga' 1, 'kern' 1, 'dlig' 1;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
+  text-rendering: optimizeLegibility;
+}
+
+/*
+ * screen readers only (accessibility)
+ */
+.sr-only {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+
+/*
+ * Misc
+ */
+.center-align {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+/*
+ * Game
+ */
+.infiniteTD {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  width: 100%;
+}
