@@ -5,10 +5,10 @@ let p1;
 class Player {
   constructor({
     name,
-    gold = 200,
-    level = 0,
-    score = 0,
-    lives = 10
+    gold,
+    level,
+    score,
+    lives
   }) {
     this.name = name;
     this.gold = gold;
@@ -37,7 +37,10 @@ function setupPlayer() {
   let n = 'Tibo' || prompt('What’s your name?');
   p1 = new Player({
     name: n,
-    gold: 99999
+    gold: 99999,
+    level: 0,
+    score: 0,
+    lives: 10
   });
   scoreboard.update(p1);
 }

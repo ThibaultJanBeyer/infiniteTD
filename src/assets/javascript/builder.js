@@ -48,8 +48,7 @@ class Builder {
       p1.gold -= option.cost;
       scoreboard.update(p1);
       // build on the field
-      field.e.className += ` t ${option.name}`;
-      field.lock();
+      field.buildTower(option);
     }
   }
 }

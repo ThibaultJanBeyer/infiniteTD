@@ -7,11 +7,13 @@ class Creeps {
   constructor({
     ms,
     hp,
-    lvl
+    lvl,
+    bounty
   }) {
     this.e = createElement('div', `c__l${lvl}`);
     this.ms = ms;
     this.hp = hp;
+    this.bounty = bounty;
     // this will contains all the creeps last fields
     // a creep should never walk twice on a field
     this.lasts = [];
@@ -49,7 +51,7 @@ class Creeps {
       // get next field
       // check if it is available
       this.next = isWalkable(this);
-      if (this.next) {
+      if (this.next && !this.dead) {
         this.next.lock('creep');
         // calculate the distance
         // (x:10,y:20)[cur] -dist-> [next](x:20,y:20)
@@ -60,47 +62,39 @@ class Creeps {
           y: this.next.y - this.y
         };
         if(this.dist.x !== 0) {
-          moveCreep(this, 'x'); }
+          moveElement(this, 'x', (el) => { el.setupWalk(el.next, el.current); }); }
         if(this.dist.y !== 0) {
-          moveCreep(this, 'y'); }
+          moveElement(this, 'y', (el) => { el.setupWalk(el.next, el.current); }); }
+      // unlock the field if the creep is dead
+      } else if(this.dead) {
+        this.current.unlock();
       } else {
         alert('don’t block');
       }
     }
   }
+
+  damage(dmg) {
+    this.hp -= dmg;
+    if (this.hp <= 0) {
+      this.remove(true, p1);
+    }
+  }
   
-  remove(killed) {
+  remove(killed, player) {
+    if (killed) {
+      player.gold += this.bounty;
+      player.score += this.bounty;
+      scoreboard.update(player);
+    }
     // remove creep
+    // dead
+    this.dead = true;
     // from board
     board.removeChild(this.e);
     // from allCreeps array
     allCreeps.splice(allCreeps.indexOf(this), 1);
-    // delete it from js memory
-    delete Creeps.this;
   }
-}
-
-// move creep
-function moveCreep(el, direction, cb) {
-  if(!isPaused){
-    // negative distance
-    if(el.dist[direction] < 0) {
-      el[direction]--;
-      el.dist[direction]++;
-    // positive distance
-    } else if(el.dist[direction] > 0) {
-      el[direction]++;
-      el.dist[direction]--;
-    }
-    // update creep
-    (direction === 'x') ? el.e.style.left = `${el.x}px` : el.e.style.top = `${el.y}px`;
-  }
-  if (el.dist[direction] !== 0) {
-    setTimeout(function() {
-      return moveCreep(el, direction);
-    }, el.ms);
-  } else {
-    return el.setupWalk(el.next, el.current); }
 }
 
 // check if the surrounding fields

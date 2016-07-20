@@ -4,3 +4,17 @@
 .t__arrow {
   background: $t-arrow;
 }
+
+/***************/
+/* Projectiles */
+/***************/
+.projectile {
+  height: 5%;
+  position: absolute;
+  transform: translate(50%, 50%);
+  width: 5%;
+}
+
+.projectile__t__arrow {
+  background: #ff0;
+}
