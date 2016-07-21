@@ -4,19 +4,29 @@ let levels = {
     creeps: {
       name: 'peon',
       hp: 50,
-      ms: 10, // less is faster
+      ms: 10,
       bounty: 1
     },
-    amount: 1000
+    amount: 10
+  },
+  2: {
+    creeps: {
+      name: 'peon',
+      hp: 50,
+      ms: 10,
+      bounty: 1
+    },
+    amount: 20
   }
-};
+}, kills = 0;
+
 
 /**************/
 /* next level */
 /**************/
-function nextLevel() {
-  myInterval({
-    cd: levels[p1.level].amount,
+function nextLevel() {  
+  myLoop({
+    cd: levels[p1.level].amount - 1,
     dur: 500,
     cb: () => {
       let creep = new Creeps({

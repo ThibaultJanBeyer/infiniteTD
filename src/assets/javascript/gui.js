@@ -30,14 +30,16 @@ class Scoreboard {
   }
 
   togglePlay() {
-    // if the game has not started yet
-    if (!isStarted) {
-      isStarted = true;
-      p1.levelUp();
-      nextLevel();
+    // if the game is not lost
+    if (!lostGame) {
+      // if the game has not started yet
+      if (!isStarted) {
+        isStarted = true;
+        p1.levelUp();
+      }
+      this.play.innerHTML = (isPaused) ? 'pause' : 'play';
+      isPaused = !isPaused;
     }
-    this.play.innerHTML = (isPaused) ? 'pause' : 'play';
-    isPaused = !isPaused;
   }
 }
 

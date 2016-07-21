@@ -6,7 +6,8 @@ let w = window,
   g = d.getElementsByClassName('infiniteTD')[0],
   // values
   wX, wY, isPaused = true,
-  isStarted = false;
+  isStarted = false,
+  lostGame = false;
 
 /* Setup Scene */
 function init() {

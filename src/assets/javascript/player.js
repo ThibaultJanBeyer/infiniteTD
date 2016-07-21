@@ -17,9 +17,23 @@ class Player {
     this.lives = lives;
   }
 
-  levelUp() {
-    this.level += 1;
+  unitKill(bounty) {
+    this.gold += bounty;
+    this.score += bounty;
     scoreboard.update(this);
+  }
+
+  levelUp() {
+    if (!lostGame) {
+      this.level += 1;
+      scoreboard.update(this);
+      if (!levels[this.level]) {
+        // @TODO: replace alert with nice screen
+        alert('winner winner chicken dinner');
+      } else {
+        nextLevel();
+      }
+    }
   }
   
   loseLife() {
@@ -55,5 +69,7 @@ function lost() {
   for(let i = 0; i < allTowers.length; i++) {
     allTowers[i].className = 'board__field';
   }
+  lostGame = true;
+  isPaused = true;
   alert('you lost');
 }

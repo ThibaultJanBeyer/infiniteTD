@@ -1,28 +1,3 @@
-// move element
-function moveElement(el, dir, cb) {
-  if(!isPaused){
-    direction = dir;
-    // negative distance augment distance
-    if(el.dist[direction] < 0) {
-      el[direction]--;
-      el.dist[direction]++;
-    // positive distance reduce distance
-    } else if(el.dist[direction] > 0) {
-      el[direction]++;
-      el.dist[direction]--;
-    }
-    // update creep
-    (dir === 'x') ? el.e.style.left = `${el.x}px` : el.e.style.top = `${el.y}px`;
-  }
-  if (el.dist[dir] !== 0) {
-    setTimeout(function() {
-      return moveElement(el, dir, cb);
-    }, el.ms);
-  } else {
-    return cb(el, dir, cb);
-  }
-}
-
 /******************************/
 /* Functions for an easy life */
 /******************************/

@@ -10,7 +10,7 @@ class Creeps {
     lvl,
     bounty
   }) {
-    this.e = createElement('div', `c__l${lvl}`);
+    this.e = createElement('div', `c c__l${lvl}`);
     this.ms = ms;
     this.hp = hp;
     this.bounty = bounty;
@@ -36,8 +36,8 @@ class Creeps {
 
   setupWalk(currentField, lastField) {
     if(currentField === endField) {
-      this.remove();
       p1.loseLife();
+      this.remove();
     } else {
       this.x = parseInt(this.e.style.left);
       this.y = parseInt(this.e.style.top);
@@ -62,9 +62,9 @@ class Creeps {
           y: this.next.y - this.y
         };
         if(this.dist.x !== 0) {
-          moveElement(this, 'x', (el) => { el.setupWalk(el.next, el.current); }); }
+          moveCreep(this, 'x', (el) => { el.setupWalk(el.next, el.current); }); }
         if(this.dist.y !== 0) {
-          moveElement(this, 'y', (el) => { el.setupWalk(el.next, el.current); }); }
+          moveCreep(this, 'y', (el) => { el.setupWalk(el.next, el.current); }); }
       // unlock the field if the creep is dead
       } else if(this.dead) {
         this.current.unlock();
@@ -86,16 +86,44 @@ class Creeps {
       // dead
       this.dead = true;
       if (killed) {
-        player.gold += this.bounty;
-        player.score += this.bounty;
-        scoreboard.update(player);
+        player.unitKill(this.bounty);
       }
       // remove creep
       // from board
       board.removeChild(this.e);
       // from allCreeps array
       allCreeps.splice(allCreeps.indexOf(this), 1);
+      kills++;
+      if (kills >= levels[p1.level].amount) {
+        kills = 0;
+        p1.levelUp();
+      }
     }
+  }
+}
+
+// move element
+function moveCreep(el, dir, cb) {
+  if(!isPaused){
+    direction = dir;
+    // negative distance augment distance
+    if(el.dist[direction] < 0) {
+      el[direction] -= el.ms;
+      el.dist[direction] += el.ms;
+    // positive distance reduce distance
+    } else if(el.dist[direction] > 0) {
+      el[direction] += el.ms;
+      el.dist[direction] -= el.ms;
+    }
+    // update creep
+    (dir === 'x') ? el.e.style.left = `${el.x}px` : el.e.style.top = `${el.y}px`;
+  }
+  if (el.dist[dir] !== 0) {
+    setTimeout(function() {
+      return moveCreep(el, dir, cb);
+    }, 60);
+  } else {
+    return cb(el, dir, cb);
   }
 }
 
@@ -104,59 +132,19 @@ class Creeps {
 function isWalkable(el) {
 
   let current = el.current,
-      lasts = el.lasts,
+    lasts = el.lasts,
   // store the number of the current position
-      num = current.pos,
+    num = current.pos,
   // setup fields and check for edge cases
-    right = {
-      field: field[num + 1],
-      edge: (rightFields.indexOf(num) > -1) ? true : false,
-    },
-    left = {
-      field: field[num - 1],
-      edge: (leftFields.indexOf(num) > -1) ? true : false
-    },
-    top = {
-      field: field[num - boardRowSize],
-      edge: (topFields.indexOf(num) > -1) ? true : false
-    },
-    bottom = {
-      field: field[num + boardRowSize],
-      edge: (bottomFields.indexOf(num) > -1) ? true : false
-    };
-  
-  // check for the last fields
-  // never walk on a field twice
-  right.last = (lasts.indexOf(right.field) > -1) ? true : false;
-  left.last = (lasts.indexOf(left.field) > -1) ? true : false;
-  top.last = (lasts.indexOf(top.field) > -1) ? true : false;
-  bottom.last = (lasts.indexOf(bottom.field) > -1) ? true : false;
-  
+    edgeCases = checkEdgeCases(num, lasts),
   // check where the endfield is
   // to know which direction to go
-  let distanceToEnd = {
-    x: endField.x - current.x,
-    y: endField.y - current.y
-  };
-  // assume this board:
-  // [ ][    ][ ][ ][   ]
-  // [ ][curr][ ][ ][   ]
-  // [ ][    ][ ][ ][end]
-  // he would first check if the right
-  // field is empty then the bottom one
-  // because:
-  //    distanceToEnd.x = +3 > 0 (x1 = right)
-  //    distanceToEnd.y = +1 > 0 (y1 = bottom)
-  
-  let goTo = {
-    x1: (distanceToEnd.x >= 0) ? right : left,
-    y1: (distanceToEnd.y >= 0) ? bottom : top,
-    x2: (distanceToEnd.x >= 0) ? left : right,
-    y2: (distanceToEnd.y >= 0) ? top : bottom
-  };
+    goTo = goTowards(edgeCases, current);
 
   // if the next field is the end
-  if([left.edge, top.edge, bottom.edge].indexOf(true) <= -1 && [right.field.pos, left.field.pos, top.field.pos, bottom.field.pos].indexOf(endField.pos) > -1) {
+  let ends = [edgeCases.left.edge, edgeCases.top.edge, edgeCases.bottom.edge],
+    surroundings = [edgeCases.right.field.pos, edgeCases.left.field.pos, edgeCases.top.field.pos, edgeCases.bottom.field.pos];
+  if(ends.indexOf(true) <= -1 && surroundings.indexOf(endField.pos) > -1) {
     return endField;
   // else check if fields are free
   } else if (!goTo.x1.edge && goTo.x1.field.locked !== true && !goTo.x1.last) {
@@ -176,4 +164,60 @@ function isWalkable(el) {
     }
   }
 
+}
+
+function checkEdgeCases(num, lasts) {
+  let edgeCases = {
+    right: {
+      field: field[num + 1],
+      edge: (rightFields.indexOf(num) > -1) ? true : false,
+    },
+    left: {
+      field: field[num - 1],
+      edge: (leftFields.indexOf(num) > -1) ? true : false
+    },
+    top: {
+      field: field[num - boardRowSize],
+      edge: (topFields.indexOf(num) > -1) ? true : false
+    },
+    bottom: {
+      field: field[num + boardRowSize],
+      edge: (bottomFields.indexOf(num) > -1) ? true : false
+    }
+  };
+  // check for the last fields
+  // never walk on a field twice
+  lastfields();
+  function lastfields() {
+    edgeCases.right.last = (lasts.indexOf(edgeCases.right.field) > -1) ? true : false;
+    edgeCases.left.last = (lasts.indexOf(edgeCases.left.field) > -1) ? true : false;
+    edgeCases.top.last = (lasts.indexOf(edgeCases.top.field) > -1) ? true : false;
+    edgeCases.bottom.last = (lasts.indexOf(edgeCases.bottom.field) > -1) ? true : false;
+  }
+
+  return edgeCases;
+}
+
+function goTowards(edgeCases, current) {
+  let distanceToEnd = {
+      x: endField.x - current.x,
+      y: endField.y - current.y
+    },
+  // assume this board:
+  // [ ][    ][ ][ ][   ]
+  // [ ][curr][ ][ ][   ]
+  // [ ][    ][ ][ ][end]
+  // he would first check if the right
+  // field is empty then the bottom one,
+  // then left, then top because:
+  //    distanceToEnd.x = +3 > 0 (x1 = right)
+  //    distanceToEnd.y = +1 > 0 (y1 = bottom)
+    goTo = {
+      x1: (distanceToEnd.x >= 0) ? edgeCases.right : edgeCases.left,
+      y1: (distanceToEnd.y >= 0) ? edgeCases.bottom : edgeCases.top,
+      x2: (distanceToEnd.x >= 0) ? edgeCases.left : edgeCases.right,
+      y2: (distanceToEnd.y >= 0) ? edgeCases.top : edgeCases.bottom
+    };
+  
+  return goTo;
 }
