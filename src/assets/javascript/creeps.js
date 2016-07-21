@@ -82,18 +82,20 @@ class Creeps {
   }
   
   remove(killed, player) {
-    if (killed) {
-      player.gold += this.bounty;
-      player.score += this.bounty;
-      scoreboard.update(player);
+    if (!this.dead) {
+      // dead
+      this.dead = true;
+      if (killed) {
+        player.gold += this.bounty;
+        player.score += this.bounty;
+        scoreboard.update(player);
+      }
+      // remove creep
+      // from board
+      board.removeChild(this.e);
+      // from allCreeps array
+      allCreeps.splice(allCreeps.indexOf(this), 1);
     }
-    // remove creep
-    // dead
-    this.dead = true;
-    // from board
-    board.removeChild(this.e);
-    // from allCreeps array
-    allCreeps.splice(allCreeps.indexOf(this), 1);
   }
 }
 

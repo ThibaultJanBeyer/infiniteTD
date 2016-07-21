@@ -34,10 +34,12 @@ class Player {
 }
 
 function setupPlayer() {
-  let n = 'Tibo' || prompt('What’s your name?');
+  let n = prompt('What’s your name?');
+  // @TODO: remove cheats
+  let cheats = (n === 't') ? 99999 : 100;
   p1 = new Player({
     name: n,
-    gold: 99999,
+    gold: cheats,
     level: 0,
     score: 0,
     lives: 10
