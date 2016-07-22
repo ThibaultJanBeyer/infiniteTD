@@ -1,32 +1,38 @@
 // levels
-let levels = {
-  1: {
-    creeps: {
-      name: 'peon',
-      hp: 50,
-      ms: 10,
-      bounty: 1
-    },
-    amount: 10
-  },
-  2: {
-    creeps: {
-      name: 'peon',
-      hp: 50,
-      ms: 10,
-      bounty: 1
-    },
-    amount: 20
-  }
-}, kills = 0;
+let levels = {}, kills = 0;
 
+// levels 1-10
+for(let i = 1; i <= 10; i++) {
+  // @TODO: remove for testing purpose
+  if (i === 1) {
+    levels[i] = {
+      creeps:
+      {
+        hp: 100000,
+        ms: 15,
+        bounty: 5
+      },
+      amount: 1
+    };
+  } else {
+    levels[i] = {
+      creeps:
+      {
+        hp: 10 * i,
+        ms: i / 2,
+        bounty: 5
+      },
+      amount: 2 * i
+    };
+  }
+}
 
 /**************/
 /* next level */
 /**************/
 function nextLevel() {  
-  myLoop({
-    cd: levels[p1.level].amount - 1,
+  myInterval({
+    cd: levels[p1.level].amount,
     dur: 500,
     cb: () => {
       let creep = new Creeps({

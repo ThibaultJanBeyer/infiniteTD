@@ -49,6 +49,7 @@ class Builder {
       scoreboard.update(p1);
       // build on the field
       field.buildTower(option);
+      gretel.start();
     }
   }
 }

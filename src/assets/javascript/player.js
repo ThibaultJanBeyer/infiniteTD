@@ -50,13 +50,13 @@ class Player {
 function setupPlayer() {
   let n = prompt('What’s your name?');
   // @TODO: remove cheats
-  let cheats = (n === 't') ? 99999 : 100;
+  let cheats = (n.indexOf('t') > -1) ? 99999 : 100;
   p1 = new Player({
     name: n,
     gold: cheats,
     level: 0,
     score: 0,
-    lives: 10
+    lives: cheats / 10
   });
   scoreboard.update(p1);
 }

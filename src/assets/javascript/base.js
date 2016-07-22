@@ -30,6 +30,9 @@ function init() {
     setSizes();
   };
 
+  // Gretel = setup the creeps path
+  setupGretel(); 
+
 }
 
 setTimeout(() => {

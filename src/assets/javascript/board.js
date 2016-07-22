@@ -47,8 +47,10 @@ class Field {
   }
 
   unlock() {
-    this.locked = false;
-    this.e.classList.remove('locked');
+    if (!this.start && !this.end) {
+      this.locked = false;
+      this.e.classList.remove('locked');
+    }
   }
 
   position() {
