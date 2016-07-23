@@ -24,10 +24,10 @@
 }
 
 .start, .end {
-  background: $locked;
+  background: $start-end !important;
 
   &:hover, &:focus {
-    background: $locked;
+    background: $start-end !important;
   }
 }
 

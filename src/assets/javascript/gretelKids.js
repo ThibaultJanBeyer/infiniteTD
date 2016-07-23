@@ -1,13 +1,26 @@
 /* Gretel */
-class Gretel {
-  constructor(start = startField) {
+class GretelKid {
+  constructor(start, lasts, position) {
     this.ms = 99;
     this.startField = start;
+    this.x = parseInt(this.startField.x);
+    this.y = parseInt(this.startField.y);
+    this.fieldCounts = 0;
+    this.lasts = [];
+    this.tolerance = blockTolerance;
+    this.position = position;
+
+    for (let i = 0; i < lasts.length; i++) {
+      this.lasts.push(lasts[i]);
+    }
+  }
+
+  start() {
+    return this.setupWalk(this.startField, this.startField);
   }
 
   setupWalk(currentField, lastField) {
     if(currentField === endField) {
-      this.finish();
       return this.fieldCounts;
     } else {
       this.fieldCounts++;
@@ -16,21 +29,13 @@ class Gretel {
       // since creep moves away from current
       this.current = currentField;
       // store last fields
-      if (this.kid == null) {
-        this.lasts.push(lastField);
-      } else {
-        this.kidLasts.push(lastField);
-      }
+      this.lasts.push(lastField);
       // get next field
       // check if it is available
-      this.next = isWalkableGretel(this);
+      this.next = isWalkableGretelKid(this);
       if (this.next) {
-        if (this.kid == null) {
-          this.next.e.classList.add('gretel__breadcrumb');
-        } else {
-          this.next.e.classList.add('kid');
-        }
-        return moveGretel(this, this.next, (el) => {
+        // this.next.e.classList.add('kid');
+        return moveGretelKid(this, this.next, (el) => {
           return el.setupWalk(el.next, el.current);
         });
       } else {
@@ -38,55 +43,44 @@ class Gretel {
       }
     }
   }
-
-  finish() {
-    this.x = parseInt(this.startField.x);
-    this.y = parseInt(this.startField.y);
-  }
-
-  start() {
-    this.fieldCounts = 0;
-    this.x = parseInt(this.startField.x);
-    this.y = parseInt(this.startField.y);
-    // reset all breadcrumbs
-    let breadcrumbs = document.getElementsByClassName('gretel__breadcrumb');
-    [...breadcrumbs].forEach(function(element) {
-      element.classList.remove('gretel__breadcrumb');
-    }, this);
-    
-    // this will contains all the creeps last fields
-    // a creep should not walk twice on the last fields
-    this.lasts = [];
-    // with exception of a tolerance
-    this.tolerance = blockTolerance;
-    return this.setupWalk(this.startField, this.startField);
-  }
 }
 
-function setupGretel() {
-  gretel = new Gretel();
-  gretel.start();
-}
-
-/* GRETEL ROX */
 // check if the surrounding fields
 // are not blocked
-function isWalkableGretel(el) {
+function isWalkableGretelKid(el) {
 
   let current = el.current,
   // store the number of the current position
     num = current.pos,
   // setup fields and check for edge cases
-    cases = checkCases(num, el),
+    cases = checkCasesKid(num, el),
   // check where the endfield is
   // to know which direction to go
-    goTo = goTowards(cases, current, el);
+    goTo = goTowardsKid(cases, current, el);
 
   // if the next field is the end
   let ends = [cases.left.edge, cases.top.edge, cases.bottom.edge];
   if(ends.indexOf(true) <= -1 && [cases.right.field.pos, cases.left.field.pos, cases.top.field.pos, cases.bottom.field.pos].indexOf(endField.pos) > -1) {
     return endField;
   // else check if fields are free
+  } else if (el.position === 'bottom') {
+    // this checks the kids first move. If the kid is moving bottom
+    // then it checks if bottom/top is blocked or not
+    el.position = 'set';
+    if (!goTo[1].edge && goTo[1].field.locked !== true && !goTo[1].last) {
+      return goTo[1].field;
+    } else {
+      return false;
+    }
+  } else if (el.position === 'top') {
+    // this also checks the kids first move. If the kid is moving bottom
+    // then it checks if bottom/top is blocked or not
+    el.position = 'set';
+    if (!goTo[2].edge && goTo[2].field.locked !== true && !goTo[2].last) {
+      return goTo[2].field;
+    } else {
+      return false;
+    }
   } else {
     // any other move will be checked here
     for (let i = 0; i < 4; i++) {
@@ -97,14 +91,9 @@ function isWalkableGretel(el) {
       }
     }
     if(el.tolerance-- > 0) {
-      if (this.kid == null) {
-        //el.lasts[el.lasts.length - 1].e.classList.remove('gretel__breadcrumb');
-        el.lasts.pop();
-      } else {
-        //el.kidLasts[el.lasts.length - 1].e.classList.remove('gretel__breadcrumb');
-        el.kidLasts.pop();
-      }
-      return isWalkableGretel(el);
+      // el.lasts[el.lasts.length - 1].e.classList.remove('kid');
+      el.lasts.pop();
+      return isWalkableGretelKid(el);
     } else {
       return false;
     }
@@ -112,7 +101,7 @@ function isWalkableGretel(el) {
 
 }
 
-function checkCases(num, el) {
+function checkCasesKid(num, el) {
   let cases = {
     right: {
       field: field[num + 1],
@@ -133,30 +122,19 @@ function checkCases(num, el) {
   };
   // check for the last fields
   // never walk on a field twice
-  if (el.kid == null) {
-    lastfields();
-  } else {
-    kidLastfields();
-  }
+  lastfieldsKid();
 
-  function lastfields() {
+  function lastfieldsKid() {
     cases.right.last = (el.lasts.indexOf(cases.right.field) > -1) ? true : false;
     cases.left.last = (el.lasts.indexOf(cases.left.field) > -1) ? true : false;
     cases.top.last = (el.lasts.indexOf(cases.top.field) > -1) ? true : false;
     cases.bottom.last = (el.lasts.indexOf(cases.bottom.field) > -1) ? true : false;
   }
 
-  function kidLastfields() {
-    cases.right.last = (el.lasts.indexOf(cases.right.field) > -1 || el.kidLasts.indexOf(cases.right.field) > -1) ? true : false;
-    cases.left.last = (el.lasts.indexOf(cases.left.field) > -1 || el.kidLasts.indexOf(cases.left.field) > -1) ? true : false;
-    cases.top.last = (el.lasts.indexOf(cases.top.field) > -1 || el.kidLasts.indexOf(cases.top.field) > -1) ? true : false;
-    cases.bottom.last = (el.lasts.indexOf(cases.bottom.field) > -1 || el.kidLasts.indexOf(cases.bottom.field) > -1) ? true : false;
-  }
-
   return cases;
 }
 
-function goTowards(cases, current, el) {
+function goTowardsKid(cases, current, el) {
   let distanceToEnd = {
       x: endField.x - current.x,
       y: endField.y - current.y
@@ -186,11 +164,12 @@ function goTowards(cases, current, el) {
     // @TODO: have not every creep checking it but our gretel creep
     // who will lie breadcrumbs for the other creeps to follow
     if (distanceToEnd.y === 0) {
-      goTo[0] = cases.right;
-      goTo[1] = cases.bottom;
-      goTo[2] = cases.top;
-      goTo[3] = cases.left;
-      // since the goal is always on the right the left pos is always last
+      goTo = {
+        0: cases.right,
+        1: cases.bottom,
+        2: cases.top,
+        3: cases.left
+      };
       if (!el.kid) {
         goTo.kids = true; // send kids to check path
       }
@@ -199,8 +178,34 @@ function goTowards(cases, current, el) {
   return goTo;
 }
 
+// send kids
+function sendKids(current, el, goTo) {
+  // 1 -> Bottom
+  // 2 -> Top
+  let kidBottom = new GretelKid(current, el.lasts, 'bottom'),
+    bottom = kidBottom.start(),
+    kidTop = new GretelKid(current, el.lasts, 'top'),
+    top = kidTop.start();
+
+  if (bottom || top) {
+    if (!bottom) {
+      return goTo[2].field;
+    } else if(!top) {
+      return goTo[1].field;
+    } else if (bottom < top) {
+      return goTo[1].field;
+    } else if(bottom > top) {
+      return goTo[2].field;
+    } else if (bottom === top) {
+      return goTo[1].field;
+    }
+  } else {
+    return false;
+  }
+}
+
 // move element
-function moveGretel(el, next, cb) {
+function moveGretelKid(el, next, cb) {
   // calculate the distance
   // (x:10,y:20)[cur] -dist-> [next](x:20,y:20)
   // next.x(20) - cur.x(10) = +10 dist
@@ -217,7 +222,7 @@ function moveGretel(el, next, cb) {
   el.y += increment.y;
   el.dist.y -= increment.y;
   if (typeof increment === 'undefined' || increment == null || increment.steps > 0.5) {
-    return moveGretel(el, next, cb);
+    return moveGretelKid(el, next, cb);
   } else {
     return cb(el, next, cb);
   }

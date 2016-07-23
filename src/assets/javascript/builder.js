@@ -20,20 +20,30 @@ class Builder {
   }
 
   draw(field) {
-    this.w = `${field.w * 2}px`;
-    this.h = `${field.w * 2}px`;
-    this.e.style.transform = 'scale(1,1)';
-    this.e.style.width = this.w;
-    this.e.style.height = this.h;
-    this.e.style.left = `${field.x - field.w / 2}px`;
-    this.e.style.top = `${field.y - field.h / 2}px`;
-    this.selectedField = field;
-    this.open = true;
+    field.lock();
+    // check if it would block the field
+    if(!gretel.start()) {
+      field.unlock();
+      this.hide();
+      return alert('don’t block!');
+    } else {
+      field.unlock();
+      this.w = `${field.w * 2}px`;
+      this.h = `${field.w * 2}px`;
+      this.e.style.transform = 'scale(1,1)';
+      this.e.style.width = this.w;
+      this.e.style.height = this.h;
+      this.e.style.left = `${field.x - field.w / 2}px`;
+      this.e.style.top = `${field.y - field.h / 2}px`;
+      this.selectedField = field;
+      this.open = true;
+    }
   }
 
   hide() {
     this.e.style.transform = 'scale(0,0)';
     this.open = false;
+    gretel.start();
   }
 
   build(option, field) {
@@ -49,7 +59,6 @@ class Builder {
       scoreboard.update(p1);
       // build on the field
       field.buildTower(option);
-      gretel.start();
     }
   }
 }

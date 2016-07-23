@@ -85,6 +85,9 @@ class Field {
 
   buildTower(tower) {
     this.e.className += ` t ${tower.name}`;
+    if (this.e.classList.contains('gretel__breadcrumb')) {
+      this.e.classList.remove('gretel__breadcrumb');
+    }
     this.tower = tower; 
     this.lock();
     this.scan();
