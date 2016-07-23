@@ -1,6 +1,6 @@
 /* Gretel */
 class GretelKid {
-  constructor(start, lasts, position) {
+  constructor(start, position) {
     this.ms = 99;
     this.startField = start;
     this.x = parseInt(this.startField.x);
@@ -9,10 +9,6 @@ class GretelKid {
     this.lasts = [];
     this.tolerance = blockTolerance;
     this.position = position;
-
-    for (let i = 0; i < lasts.length; i++) {
-      this.lasts.push(lasts[i]);
-    }
   }
 
   start() {
@@ -87,11 +83,13 @@ function isWalkableGretelKid(el) {
       if (!goTo[i].edge && goTo[i].field.locked !== true && !goTo[i].last) {
         return goTo[i].field;
       } else if (!goTo[i].edge && goTo.kids && !goTo[i].last) {
-        return sendKids(current, el, goTo);
+        let tempPos = sendKids(current, el, goTo);
+        if (tempPos !== 'left') {
+          return tempPos;
+        }
       }
     }
     if(el.tolerance-- > 0) {
-      // el.lasts[el.lasts.length - 1].e.classList.remove('kid');
       el.lasts.pop();
       return isWalkableGretelKid(el);
     } else {
@@ -182,9 +180,9 @@ function goTowardsKid(cases, current, el) {
 function sendKids(current, el, goTo) {
   // 1 -> Bottom
   // 2 -> Top
-  let kidBottom = new GretelKid(current, el.lasts, 'bottom'),
+  let kidBottom = new GretelKid(current, 'bottom'),
     bottom = kidBottom.start(),
-    kidTop = new GretelKid(current, el.lasts, 'top'),
+    kidTop = new GretelKid(current, 'top'),
     top = kidTop.start();
 
   if (bottom || top) {
@@ -200,7 +198,7 @@ function sendKids(current, el, goTo) {
       return goTo[1].field;
     }
   } else {
-    return false;
+    return 'left';
   }
 }
 

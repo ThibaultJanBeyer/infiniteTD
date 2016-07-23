@@ -155,7 +155,7 @@ function setupBoard() {
       endField = field[i];
     }
     // append field to board
-    board.appendChild(field[i].e);
+    board.appendChild(field[i].e); 
   }
   // append to game
   g.appendChild(board);
@@ -174,7 +174,6 @@ function setupBoard() {
     bottomFields.push(i + boardSize - boardRowSize);
     rightFields.push(boardRowSize + i * boardRowSize - 1);
   }
-
 }
 
 /* Relative Sizes */

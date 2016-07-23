@@ -1,3 +1,9 @@
+// gretel is my pathfinder visualizer
+let grid, finder, path;
+
+let gretel,
+  blockTolerance = 100;
+
 /* Gretel */
 class Gretel {
   constructor(start = startField) {
@@ -16,20 +22,12 @@ class Gretel {
       // since creep moves away from current
       this.current = currentField;
       // store last fields
-      if (this.kid == null) {
-        this.lasts.push(lastField);
-      } else {
-        this.kidLasts.push(lastField);
-      }
+      this.lasts.push(lastField);
       // get next field
       // check if it is available
       this.next = isWalkableGretel(this);
       if (this.next) {
-        if (this.kid == null) {
-          this.next.e.classList.add('gretel__breadcrumb');
-        } else {
-          this.next.e.classList.add('kid');
-        }
+        this.next.e.classList.add('gretel__breadcrumb');
         return moveGretel(this, this.next, (el) => {
           return el.setupWalk(el.next, el.current);
         });
@@ -53,7 +51,6 @@ class Gretel {
     [...breadcrumbs].forEach(function(element) {
       element.classList.remove('gretel__breadcrumb');
     }, this);
-    
     // this will contains all the creeps last fields
     // a creep should not walk twice on the last fields
     this.lasts = [];
@@ -64,6 +61,10 @@ class Gretel {
 }
 
 function setupGretel() {
+  // Setup the board for the pathfinder
+  grid = new PF.Grid(boardSize / 10, boardSize / 10);
+  finder = new PF.BestFirstFinder();
+  // Setup Gretel
   gretel = new Gretel();
   gretel.start();
 }
@@ -92,19 +93,16 @@ function isWalkableGretel(el) {
     for (let i = 0; i < 4; i++) {
       if (!goTo[i].edge && goTo[i].field.locked !== true && !goTo[i].last) {
         return goTo[i].field;
-      } else if (!goTo[i].edge && goTo.kids && !goTo[i].last) {
-        return sendKids(current, el, goTo);
+      } else if (!goTo[i].edge && goTo.kids) {
+        let tempPos = sendKids(current, el, goTo);
+        if (tempPos !== 'left') {
+          return tempPos;
+        }
       }
     }
     if(el.tolerance-- > 0) {
-      if (this.kid == null) {
-        //el.lasts[el.lasts.length - 1].e.classList.remove('gretel__breadcrumb');
-        el.lasts.pop();
-      } else {
-        //el.kidLasts[el.lasts.length - 1].e.classList.remove('gretel__breadcrumb');
-        el.kidLasts.pop();
-      }
-      return isWalkableGretel(el);
+      el.lasts[el.lasts.length - 1].e.classList.remove('gretel__breadcrumb');
+      return el.lasts.pop();
     } else {
       return false;
     }
@@ -133,24 +131,13 @@ function checkCases(num, el) {
   };
   // check for the last fields
   // never walk on a field twice
-  if (el.kid == null) {
-    lastfields();
-  } else {
-    kidLastfields();
-  }
+  lastfields();
 
   function lastfields() {
     cases.right.last = (el.lasts.indexOf(cases.right.field) > -1) ? true : false;
     cases.left.last = (el.lasts.indexOf(cases.left.field) > -1) ? true : false;
     cases.top.last = (el.lasts.indexOf(cases.top.field) > -1) ? true : false;
     cases.bottom.last = (el.lasts.indexOf(cases.bottom.field) > -1) ? true : false;
-  }
-
-  function kidLastfields() {
-    cases.right.last = (el.lasts.indexOf(cases.right.field) > -1 || el.kidLasts.indexOf(cases.right.field) > -1) ? true : false;
-    cases.left.last = (el.lasts.indexOf(cases.left.field) > -1 || el.kidLasts.indexOf(cases.left.field) > -1) ? true : false;
-    cases.top.last = (el.lasts.indexOf(cases.top.field) > -1 || el.kidLasts.indexOf(cases.top.field) > -1) ? true : false;
-    cases.bottom.last = (el.lasts.indexOf(cases.bottom.field) > -1 || el.kidLasts.indexOf(cases.bottom.field) > -1) ? true : false;
   }
 
   return cases;
@@ -191,9 +178,7 @@ function goTowards(cases, current, el) {
       goTo[2] = cases.top;
       goTo[3] = cases.left;
       // since the goal is always on the right the left pos is always last
-      if (!el.kid) {
-        goTo.kids = true; // send kids to check path
-      }
+      goTo.kids = true; // send kids to check path
     }
   
   return goTo;

@@ -1,7 +1,5 @@
 // Creeps
-let allCreeps = [],
-  blockTolerance = 5,
-  gretel;
+let allCreeps = [];
 
 /* Creeps */
 class Creeps {

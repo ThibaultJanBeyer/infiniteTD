@@ -4,7 +4,7 @@ var concat = require('gulp-concat');
 var plumber = require('gulp-plumber');
 var uglify = require('gulp-uglify');
 
-var jsSrc = './src/assets/javascript/**/*.js',
+var jsSrc = ['./src/assets/javascript/**/*.js','./bower_components/pathfinding/pathfinding-browser.js'],
     jsDst = './dist/assets/javascript/';
 
 var uglifyOptions = {
