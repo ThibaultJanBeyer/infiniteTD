@@ -1,5 +1,5 @@
 // fields
-let board, field = [], 
+let board, fields = [], 
   startField, endField,
   topFields = [],
   rightFields = [],
@@ -84,7 +84,7 @@ class Field {
   }
 
   buildTower(tower) {
-    this.e.className += ` t ${tower.name}`;
+    this.e.className += ` tower ${tower.name}`;
     if (this.e.classList.contains('gretel__breadcrumb')) {
       this.e.classList.remove('gretel__breadcrumb');
     }
@@ -127,7 +127,7 @@ function setupBoard() {
   // fields
   for (let i = 0; i < boardSize; i++) {
     // create each field
-    field[i] = new Field(i);
+    fields[i] = new Field(i);
     // give fields x & y coordinates
     // starting from top left with 0, 0 to bottom right
     // to get something like this:
@@ -136,8 +136,8 @@ function setupBoard() {
     // [2,0][2,1][2,2]
     // [3,0][3,1][3,2]
     //
-    field[i].fX = tempX;
-    field[i].fY = tempY;
+    fields[i].fX = tempX;
+    fields[i].fY = tempY;
     // give x +1 until last
     // if last x = 0 and y + 1
     if (tempX < boardRowSize - 1) {
@@ -148,14 +148,14 @@ function setupBoard() {
     }
     // lock start & endfield
     if (i === startFieldP) {
-      field[i].lock('start');
-      startField = field[i];
+      fields[i].lock('start');
+      startField = fields[i];
     } else if (i === endFieldP - 1) {
-      field[i].lock('end');
-      endField = field[i];
+      fields[i].lock('end');
+      endField = fields[i];
     }
     // append field to board
-    board.appendChild(field[i].e); 
+    board.appendChild(fields[i].e); 
   }
   // append to game
   g.appendChild(board);
@@ -163,8 +163,8 @@ function setupBoard() {
   // as the elements are drawn
   // we can measure the fields
   // size and thus calculate the fields pos
-  for (let i = 0; i < field.length; i++) {
-    field[i].position();
+  for (let i = 0; i < fields.length; i++) {
+    fields[i].position();
   }
 
   // special fields (at the games border)
@@ -205,8 +205,8 @@ function setSizes() {
 
   // we will have to recalculate the exact
   // pos of each field since their size changed
-  for (let i = 0; i < field.length; i++) {
-    field[i].position();
+  for (let i = 0; i < fields.length; i++) {
+    fields[i].position();
   }
 
 }

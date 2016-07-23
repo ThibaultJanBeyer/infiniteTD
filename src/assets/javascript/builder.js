@@ -20,14 +20,16 @@ class Builder {
   }
 
   draw(field) {
+    isPaused = true;
     field.lock();
     // check if it would block the field
-    if(!gretel.start()) {
+    if(!gretel()) {
       field.unlock();
+      alert('don’t block!');
       this.hide();
-      return alert('don’t block!');
     } else {
       field.unlock();
+      console.log('draw');
       this.w = `${field.w * 2}px`;
       this.h = `${field.w * 2}px`;
       this.e.style.transform = 'scale(1,1)';
@@ -41,12 +43,16 @@ class Builder {
   }
 
   hide() {
+    if (isStarted) {
+      isPaused = false;
+    }
     this.e.style.transform = 'scale(0,0)';
     this.open = false;
-    gretel.start();
+    gretel();
   }
 
   build(option, field) {
+    this.hide();
     // check is player can afford it
     if (p1.gold < option.cost) {
       return alert('you need more gold');

@@ -20,7 +20,7 @@ class Tower {
     this.dmg = dmg;
     this.as = as;
     this.cd = cd;
-    this.rng = field[0].w + rng * field[0].w;
+    this.rng = fields[0].w + rng * fields[0].w;
     this.pms = pms;
     this.targets = targets;
     this.follow = follow;
@@ -33,7 +33,7 @@ class Tower {
 
 function setupTowers() {
   tArrow = new Tower({
-    name: 't__arrow',
+    name: 'tower__arrow',
     cost: 100,
     dmg: 50,
     as: 1500,
@@ -46,11 +46,11 @@ function setupTowers() {
 
 function towersInRange(el) {
   // check if any Tower is in range
-  for(let i = 0; i < field.length; i++) {
-    if(field[i].tower) {
+  for(let i = 0; i < fields.length; i++) {
+    if(fields[i].tower) {
       // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
-      if (euclidDistance(el.x, field[i].x, el.y, field[i].y) <= field[i].tower.rng) {
-        field[i].tower.shoot(field[i], el);
+      if (euclidDistance(el.x, fields[i].x, el.y, fields[i].y) <= fields[i].tower.rng) {
+        fields[i].tower.shoot(fields[i], el);
       }
     }
   }

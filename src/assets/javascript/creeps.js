@@ -13,11 +13,8 @@ class Creeps {
     this.ms = ms;
     this.hp = hp;
     this.bounty = bounty;
-    // this will contains all the creeps last fields
-    // a creep should not walk twice on the last fields
     this.lasts = [];
-    // with exception of a tolerance
-    this.tolerance = blockTolerance;
+    this.tolerance = 5;
 
     this.hpBarC = createElement('div', 'c__hp-container');
     this.hpBar = createElement('div', 'c__hp');
@@ -40,13 +37,14 @@ class Creeps {
     } else {
       this.x = parseInt(this.e.style.left);
       this.y = parseInt(this.e.style.top);
+      // no creep should walk on a field twice
+      this.lasts.push(currentField);
       // handle fields
       // store & unlock current
       // since creep moves away from curr
       this.current = currentField;
       this.current.unlock();
-      // store last fields
-      this.lasts.push(lastField);
+      this.current.unlock();
       // get next field
       // check if it is available
       this.next = isWalkable(this);
@@ -58,8 +56,6 @@ class Creeps {
       // unlock the field if the creep is dead
       } else if(this.dead) {
         this.current.unlock();
-      } else {
-        alert('don’t block');
       }
     }
   }
@@ -92,7 +88,7 @@ class Creeps {
   }
 }
 
-// move element
+// move creep
 function moveCreep(el, next, cb) {
   if (!isPaused) {
     // calculate the distance
@@ -128,21 +124,50 @@ function moveCreep(el, next, cb) {
 // and follow them.
 function isWalkable(el) {
 
-  let cases = {
-    0: field[el.current.pos - boardRowSize], // top
-    1: field[el.current.pos + 1], // right
-    2: field[el.current.pos + boardRowSize], // bottom
-    3: field[el.current.pos - 1] // left
-  };
+  let cases = checkCases(el);
   for (let i = 0; i < 4; i++) {
-    if(cases[i].e.classList.contains('gretel__breadcrumb') && el.lasts.indexOf(cases[i]) < 0) {
-      return cases[i];
+    if(!cases[i].edge && cases[i].field.e.className.indexOf('gretel__breadcrumb') > -1 && !cases[i].last) {
+      return cases[i].field;
     }
   }
-  if(el.tolerance-- > 0) {
-    el.lasts.pop();
-    return isWalkable(el);
+  if (el.tolerance-- > 0) {
+    return el.lasts.pop();
   } else {
-    return false;
+    return endField;
   }
+
+}
+
+function checkCases(el) {
+  let num = el.current.pos;
+  let cases = {
+    0: { // right
+      field: fields[num + 1],
+      edge: (rightFields.indexOf(num) > -1) ? true : false,
+    },
+    1: { // left
+      field: fields[num - 1],
+      edge: (leftFields.indexOf(num) > -1) ? true : false
+    },
+    2: { // top
+      field: fields[num - boardRowSize],
+      edge: (topFields.indexOf(num) > -1) ? true : false
+    },
+    3: { // bottom
+      field: fields[num + boardRowSize],
+      edge: (bottomFields.indexOf(num) > -1) ? true : false
+    }
+  };
+  // check for the last fields
+  // never walk on a field twice
+  lastFields();
+
+  function lastFields() {
+    cases[0].last = (el.lasts.indexOf(cases[0].field) > -1) ? true : false;
+    cases[1].last = (el.lasts.indexOf(cases[1].field) > -1) ? true : false;
+    cases[2].last = (el.lasts.indexOf(cases[2].field) > -1) ? true : false;
+    cases[3].last = (el.lasts.indexOf(cases[3].field) > -1) ? true : false;
+  }
+
+  return cases;
 }
