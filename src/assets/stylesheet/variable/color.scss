@@ -1,10 +1,31 @@
 $black: #000;
+$white: #fff;
 
-$t-sell: #F00;
-$start-end: #F00;
-$locked: #00F;
-$field: #008000;
-$field-select: #0F0;
-$path: #0FF;
-$tower: #00F;
-$t-arrow: #FFF;
+$dark-blue: #0B2433;
+$deep-blue: #0E2D40;
+$light-blue: #9DE2ED;
+
+$red: #EB304A;
+$green: #0f0;
+$yellow: #FFFF67;
+$broun: #A09179;
+
+$light-grey: #F9EFD2;
+$grey: #C4C5C0;
+
+
+$color: $light-grey;
+
+$start-end: $red;
+
+$board: $dark-blue;
+$board-dash: $deep-blue;
+
+$path: $yellow;
+
+$field-select: $green;
+
+$t-block: $grey;
+$t-arrow: $light-grey;
+$t-sell: $red;
+

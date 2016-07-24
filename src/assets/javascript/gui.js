@@ -53,7 +53,8 @@ let scoreboard,
 /* Scoreboard */
 class Scoreboard {
   constructor(name) {
-    this.el = createElement('div', 'scoreboard');
+    this.e = createElement('div', 'scoreboard');
+
     this.name = createElement('strong', 'scoreboard__el scoreboard__el--name');
     this.gold = createElement('p', 'scoreboard__el scoreboard__el--gold');
     this.level = createElement('p', 'scoreboard__el scoreboard__el--level');
@@ -82,8 +83,8 @@ class Scoreboard {
       this.toggleAudio();
     });
 
-    appendChilds(this.el, this.elements);
-    g.appendChild(this.el);
+    appendChilds(this.e, this.elements);
+    g.appendChild(this.e);
   }
 
   update(player) {

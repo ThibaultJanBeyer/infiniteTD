@@ -31,18 +31,18 @@ class Field {
       if (!this.locked) {
         this.openBuilder(builders.towers);
       } else if(this.locked === 'tower') {
-        for (let builder in builders) {
-          if (builders.hasOwnProperty(builder)) {
-            let element = builders[builder];
-            if (this.tower.name === `tower__${builder}`) {
+        for (let bldr in builders) {
+          if (builders.hasOwnProperty(bldr)) {
+            let element = builders[bldr];
+            if (this.tower.name === `tower__${bldr}`) {
               this.openBuilder(element, true);
             }
           }
         }
       } else {
-        for (let builder in builders) {
-          if (builders.hasOwnProperty(builder)) {
-            builders[builder].hide();
+        for (let bldr in builders) {
+          if (builders.hasOwnProperty(bldr)) {
+            builders[bldr].hide();
           }
         }
         e.preventDefault();
@@ -96,9 +96,9 @@ class Field {
       builderOpen = true;
       builder.draw(this);
     } else {
-      for (let builder in builders) {
-        if (builders.hasOwnProperty(builder)) {
-          builders[builder].hide();
+      for (let bldr in builders) {
+        if (builders.hasOwnProperty(bldr)) {
+          builders[bldr].hide();
         }
       }
       builderOpen = false;
@@ -216,21 +216,23 @@ function setSizes() {
   // if the layout is horizontal
   // set the game a square based on the height
   if (wX > wY) {
-    board.style.width = wY + 'px';
-    board.style.height = wY + 'px';
+    board.style.width = `${wY - scoreboard.e.offsetWidth}px`;
+    board.style.height = `${wY - scoreboard.e.offsetWidth}px`;
     // also have the scoreboard elements beneath each other
     scoreboard.elements.forEach((e) => {
-        e.classList.remove('scoreboard__el--alt');
-      });
-      // if the layout is horizontal
-      // set the game a square based on the width
+      e.classList.remove('scoreboard__el--alt');
+    });
+    scoreboard.e.classList.remove('scoreboard--alt');
+  // if the layout is vertical
+  // set the game a square based on the width
   } else {
-    board.style.width = wX + 'px';
-    board.style.height = wX + 'px';
+    board.style.width = `${wX}px`;
+    board.style.height = `${wX}px`;
     // also have the scoreboard elements inline
     scoreboard.elements.forEach((e) => {
       e.classList.add('scoreboard__el--alt');
     });
+    scoreboard.e.classList.add('scoreboard--alt');
   }
 
   // we will have to recalculate the exact

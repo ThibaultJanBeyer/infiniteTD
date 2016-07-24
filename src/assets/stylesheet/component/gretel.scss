@@ -1,0 +1,23 @@
+/**********/
+/* Gretel */
+/**********/
+
+.gretel__breadcrumb {
+  background-color: $path;
+}
+
+.gretel__breadcrumb--top-left {
+  border-radius: 50% 0 0 0;
+}
+
+.gretel__breadcrumb--top-right {
+  border-radius: 0 50% 0 0;
+}
+
+.gretel__breadcrumb--bottom-right {
+  border-radius: 0 0 50% 0;
+}
+
+.gretel__breadcrumb--bottom-left {
+  border-radius: 0 0 0 50%;
+}

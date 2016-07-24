@@ -3,15 +3,19 @@
 /*********/
 
 .board {
-  display: flex;
-  flex-wrap: wrap;
+  background-color: $board;
+  display: inline-block;
   height: 100%;
+  min-height: 320px;
+  min-width: 320px;
+  outline: 5px solid $board-dash;
+  outline-offset: 15px;
   position: relative;
   width: 100%;
 }
 
 .board__field {
-  background: $field;
+  background-color: transparent;
   border: 0;
   height: 10%;
   margin: 0;
@@ -27,15 +31,37 @@
 .start,
 .end {
   // scss-lint:disable ImportantRule
-  background: $start-end !important;
-
-  &:hover,
-  &:focus {
-    // scss-lint:disable ImportantRule
-    background: $start-end !important;
-  }
+  background-color: transparent !important;
+  position: relative;
 }
 
-.locked {
-  outline: 1px solid $locked;
+.start::before,
+.end::before {
+  background: $start-end;
+  content: '';
+  height: 100%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  z-index: 100;
 }
+
+.start.gretel__breadcrumb--vertical-next-bottom::before {
+  border-radius: 0 0 50% 0;
+}
+
+.end.gretel__breadcrumb--vertical-last-top::before {
+  border-radius: 0 0 0 50%;
+}
+
+.start.gretel__breadcrumb--vertical-next-top::before {
+  border-radius: 0 50% 0 0;
+}
+
+.end.gretel__breadcrumb--vertical-last-bottom::before {
+  border-radius: 50% 0 0 0;
+}
+
+// .locked {
+//   outline: 1px solid $locked;
+// }

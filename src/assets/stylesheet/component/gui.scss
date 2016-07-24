@@ -2,12 +2,21 @@
 /* Gui */
 /*******/
 
+// width = 180px
 .scoreboard {
-  padding: 0 15px;
+  background-color: $board;
+  color: $color;
+  display: inline-block;
+  padding: 15px;
+  vertical-align: top;
+  width: 165px;
+  z-index: 1000;
+}
 
-  &:first-child {
-    padding-left: 0;
-  }
+.scoreboard--alt {
+  display: block;
+  padding: 0;
+  width: 100%;
 }
 
 .scoreboard__el {
@@ -18,28 +27,38 @@
   display: inline-block;
 }
 
+.scoreboard__el--pause {
+  background: $board;
+  border: 3px solid $color;
+  border-radius: 15px;
+  padding: 5px 10px;
+  color: $color;
+}
+
 /* Message */
 .scoreboard__el--message {
-  border: 1px solid $black;
+  border: 3px solid $color;
+  border-radius: 15px;
   color: transparent;
   padding: 5px;
   transition: color 500ms, background 500ms;
 }
 
 .scoreboard__el--flash {
-  color: $black;
+  color: $color;
 }
 
 /* Audio */
 .scoreboard__el--audio {
-    padding: 0;
     background: 0;
     border: 0;
     margin: 0;
+    padding: 0;
     vertical-align: middle;
 }
 
 .scoreboard__icon {
-  width: 25px;
-  height: 25px;
+  fill: $color;
+  height: 40px;
+  width: 40px;
 }
