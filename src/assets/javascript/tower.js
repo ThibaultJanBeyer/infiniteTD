@@ -1,60 +1,8 @@
 // Towers
 let tArrow,
-  towerbuilder;
-
-/* Tower */
-class Tower {
-  constructor({
-    name,
-    cost,
-    dmg,
-    as, // attack speed
-    cd, // cooldown
-    rng, // range based on fields (1 = over 1 field, 2 = 2 fields as range)
-    pms, // projectile speed. More = faster
-    targets = 0, // how many targets can be focused (default = 0 hence 1)
-    follow = true // if projectile follows target or not
-  }) {
-    this.name = name;
-    this.cost = cost;
-    this.dmg = dmg;
-    this.as = as;
-    this.cd = cd;
-    this.rng = fields[0].w + rng * fields[0].w;
-    this.pms = pms;
-    this.targets = targets;
-    this.follow = follow;
-  }
-
-  shoot(field, creep) {
-    let porjectile = new Projectile(field, creep);
-  }
-}
-
-function setupTowers() {
-  tArrow = new Tower({
-    name: 'tower__arrow',
-    cost: 100,
-    dmg: 50,
-    as: 1500,
-    pms: 40,
-    cd: 1000,
-    rng: 1
-  });
-  towerbuilder = new Builder([tArrow]);
-}
-
-function towersInRange(el) {
-  // check if any Tower is in range
-  for(let i = 0; i < fields.length; i++) {
-    if(fields[i].tower) {
-      // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
-      if (euclidDistance(el.x, fields[i].x, el.y, fields[i].y) <= fields[i].tower.rng) {
-        fields[i].tower.shoot(fields[i], el);
-      }
-    }
-  }
-}
+  sell,
+  rock,
+  builders = {};
 
 /* projectile */
 class Projectile {
@@ -81,6 +29,74 @@ class Projectile {
     this.dead = true;
     // from board
     this.field.e.removeChild(this.e);
+  }
+}
+
+/* Tower */
+class Tower {
+  constructor({
+    name,
+    cost,
+    dmg,
+    as, // attack speed
+    cd, // cooldown
+    rng, // range based on fields (1 = over 1 field, 2 = 2 fields as range)
+    pms, // projectile speed. More = faster
+    targets = 0, // how many targets can be focused (default = 0 hence 1)
+    follow = true // if projectile follows target or not
+  }) {
+    this.name = name;
+    this.cost = cost;
+    this.dmg = dmg;
+    this.as = as;
+    this.cd = cd;
+    this.rng = fields[0].w + rng * fields[0].w;
+    this.pms = pms;
+    this.targets = targets;
+    this.follow = follow;
+  }
+
+  shoot(field, creep) {
+    if (this.dmg != null) {
+      let porjectile = new Projectile(field, creep);
+    }
+  }
+}
+
+function setupTowers() {
+  tArrow = new Tower({
+    name: 'tower__arrow',
+    cost: 75,
+    dmg: 50,
+    as: 1500,
+    pms: 40,
+    cd: 1000,
+    rng: 1
+  });
+
+  rock = new Tower({
+    name: 'tower__rock',
+    cost: 6
+  });
+
+  sell = new Tower({
+    name: 'tower__sell'
+  });
+
+  builders.towers = new Builder([tArrow, rock]);
+  builders.arrow = new Builder([sell]);
+  builders.rock = new Builder([sell]);
+}
+
+function towersInRange(el) {
+  // check if any Tower is in range
+  for(let i = 0; i < fields.length; i++) {
+    if(fields[i].tower) {
+      // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
+      if (euclidDistance(el.x, fields[i].x, el.y, fields[i].y) <= fields[i].tower.rng) {
+        fields[i].tower.shoot(fields[i], el);
+      }
+    }
   }
 }
 

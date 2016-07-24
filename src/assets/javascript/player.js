@@ -28,8 +28,7 @@ class Player {
       this.level += 1;
       scoreboard.update(this);
       if (!levels[this.level]) {
-        // @TODO: replace alert with nice screen
-        alert('winner winner chicken dinner');
+        audio.play('winner_winner_chicken_dinner');
       } else {
         nextLevel();
       }
@@ -71,5 +70,5 @@ function lost() {
   }
   lostGame = true;
   isPaused = true;
-  alert('you lost');
+  audio.play('you_lost_try_again');
 }

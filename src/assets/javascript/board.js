@@ -9,7 +9,9 @@ let board, fields = [],
   boardSize = 100,
   boardRowSize = boardSize / 10,
   startFieldP = boardSize / 2 - boardRowSize,
-  endFieldP = boardSize / 2;
+  endFieldP = boardSize / 2,
+// builder
+  builderOpen = false;
 
 /***************/
 /* Setup Board */
@@ -24,11 +26,25 @@ class Field {
     this.pos = pos;
 
     this.e.addEventListener('click', (e) => {
+      e.stopPropagation();
       this.position();
       if (!this.locked) {
-        this.openBuilder(towerbuilder);
+        this.openBuilder(builders.towers);
+      } else if(this.locked === 'tower') {
+        for (let builder in builders) {
+          if (builders.hasOwnProperty(builder)) {
+            let element = builders[builder];
+            if (this.tower.name === `tower__${builder}`) {
+              this.openBuilder(element, true);
+            }
+          }
+        }
       } else {
-        towerbuilder.hide();
+        for (let builder in builders) {
+          if (builders.hasOwnProperty(builder)) {
+            builders[builder].hide();
+          }
+        }
         e.preventDefault();
       }
     });
@@ -76,11 +92,18 @@ class Field {
   }
 
   openBuilder(builder) {
-    if (!builder.open) {
+    if (!builderOpen) {
+      builderOpen = true;
       builder.draw(this);
     } else {
-      builder.hide();
+      for (let builder in builders) {
+        if (builders.hasOwnProperty(builder)) {
+          builders[builder].hide();
+        }
+      }
+      builderOpen = false;
     }
+    
   }
 
   buildTower(tower) {
@@ -89,8 +112,15 @@ class Field {
       this.e.classList.remove('gretel__breadcrumb');
     }
     this.tower = tower; 
-    this.lock();
+    this.lock('tower');
     this.scan();
+  }
+
+  destroyTower() {
+    this.e.classList.remove('tower', this.tower.name);
+    this.unlock();
+    clearInterval(this.scanInterval);
+    this.tower = 0;
   }
 
   // scan for creeps nearby tower
@@ -180,7 +210,7 @@ function setupBoard() {
 function setSizes() {
 
   // get viewport of game
-  wX = g.offsetWidth || g.clientWidth,
+  wX = g.offsetWidth || g.clientWidth;
   wY = g.offsetHeight || g.clientHeight;
 
   // if the layout is horizontal

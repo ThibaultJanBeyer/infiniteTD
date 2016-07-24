@@ -17,20 +17,25 @@
   margin: 0;
   padding: 0;
   width: 10%;
-  
-  &:hover, &:focus {
+
+  &:hover,
+  &:focus {
     background: $field-select;
   }
 }
 
-.start, .end {
+.start,
+.end {
+  // scss-lint:disable ImportantRule
   background: $start-end !important;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
+    // scss-lint:disable ImportantRule
     background: $start-end !important;
   }
 }
 
 .locked {
-  outline: 1px solid blue;
+  outline: 1px solid $locked;
 }

@@ -21,7 +21,7 @@ function init() {
   // Board
   setupBoard();
 
-  // Towerbuilder
+  // TowerBuilder
   setupTowers();
 
   // Sizes
@@ -31,7 +31,10 @@ function init() {
   };
 
   // Gretel = setup the creeps path
-  setupGretel(); 
+  setupGretel();
+
+  // Audio
+  setupAudio();
 
 }
 

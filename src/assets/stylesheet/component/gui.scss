@@ -4,12 +4,42 @@
 
 .scoreboard {
   padding: 0 15px;
+
+  &:first-child {
+    padding-left: 0;
+  }
+}
+
+.scoreboard__el {
+  margin: 5px;
 }
 
 .scoreboard__el--alt {
   display: inline-block;
 }
 
-.scoreboard__el {
-  margin: 5px;
+/* Message */
+.scoreboard__el--message {
+  border: 1px solid $black;
+  color: transparent;
+  padding: 5px;
+  transition: color 500ms, background 500ms;
+}
+
+.scoreboard__el--flash {
+  color: $black;
+}
+
+/* Audio */
+.scoreboard__el--audio {
+    padding: 0;
+    background: 0;
+    border: 0;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.scoreboard__icon {
+  width: 25px;
+  height: 25px;
 }

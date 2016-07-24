@@ -1,6 +1,12 @@
+$projectile: #FF0;
+
 /**********/
 /* Towers */
 /**********/
+.tower__sell {
+  background: $t-sell;
+}
+
 .tower__arrow {
   background: $t-arrow;
 }
@@ -16,5 +22,5 @@
 }
 
 .projectile__tower__arrow {
-  background: #ff0;
+  background: $projectile;
 }

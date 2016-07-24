@@ -9,19 +9,7 @@ function gretel() {
   // Setup the board for the pathfinder
   // see https://github.com/qiao/PathFinding.js for more info
   grid = new PF.Grid(boardSize / 10, boardSize / 10);
-  // clear any old path and
-  // get blocked Fields
-  for(let i = 0; i < fields.length; i++) {
-    if (fields[i].e.className.indexOf('gretel__breadcrumb') > -1) {
-      fields[i].e.classList.remove('gretel__breadcrumb');
-    }
-    if (fields[i].locked && fields[i].pos !== startField.pos && fields[i].pos !== endField.pos && fields[i].locked !== 'creep') {
-      grid.setWalkableAt(fields[i].fX, fields[i].fY, false);
-    }
-    if (fields[i].e.className.indexOf('tower') > -1) {
-      fields[i].lock();
-    }
-  }
+  clearOlds();
   // setup a new finder
   finder = new PF.BestFirstFinder({
     heuristic: PF.Heuristic.euclidean
@@ -43,6 +31,22 @@ function gretel() {
     return true;
   } else {
     return false;
+  }
+
+  function clearOlds() {
+    // clear any old path and
+    // get blocked Fields
+    for(let i = 0; i < fields.length; i++) {
+      if (fields[i].e.className.indexOf('gretel__breadcrumb') > -1) {
+        fields[i].e.classList.remove('gretel__breadcrumb');
+      }
+      if (fields[i].e.className.indexOf('tower') > -1) {
+        fields[i].lock('tower');
+      }
+      if (fields[i].locked && fields[i].pos !== startField.pos && fields[i].pos !== endField.pos && fields[i].locked === 'tower') {
+        grid.setWalkableAt(fields[i].fX, fields[i].fY, false);
+      }
+    }
   }
 }
 

@@ -3,7 +3,7 @@
 /***********/
 
 .selector {
-  border: 1px solid black;
+  border: 1px solid $black;
   border-radius: 50%;
   position: absolute;
   transition: transform 0.2s;
@@ -24,9 +24,13 @@
 @for $i from 2 through 10 {
   $divider: 2;
   $pusher: $i;
+
   .selector__element:first-child:nth-last-child(#{$i}),
   .selector__element:first-child:nth-last-child(#{$i}) ~ .selector__element {
-    @if $i == 2 { $divider: 1; $pusher: 3 } // that elements do not get too large
+    @if $i == 2 {
+      $divider: 1;
+      $pusher: 3;
+    } // that elements do not get too large
     top:  50%;
     left: 50%;
     width: 100% / ($i / $divider);
@@ -34,6 +38,7 @@
     margin: -((100% / ($i / $divider)) / 2);
     $angle: (360 / $i);
     $rot: 0;
+
     @for $j from 1 through $i {
       &:nth-of-type(#{$j}) {
         transform: rotate($rot * 1deg) translate(25% * $pusher) rotate($rot * -1deg);
