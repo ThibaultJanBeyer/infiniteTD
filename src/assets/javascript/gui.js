@@ -112,6 +112,8 @@ class Scoreboard {
       if (!isStarted) {
         isStarted = true;
         p1.levelUp();
+      } else {
+        generalPause = !generalPause;
       }
       this.play.innerHTML = (isPaused) ? 'pause' : 'play';
       isPaused = !isPaused;

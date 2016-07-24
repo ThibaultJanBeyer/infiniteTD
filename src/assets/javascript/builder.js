@@ -50,8 +50,9 @@ class Builder {
   }
 
   hide() {
-    if (isStarted) {
+    if (isStarted && !generalPause) {
       isPaused = false;
+      scoreboard.play.innerHTML = 'pause';
     } else {
       isPaused = true;
     }

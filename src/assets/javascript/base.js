@@ -7,6 +7,7 @@ let w = window,
   // values
   wX, wY, isPaused = true,
   isStarted = false,
+  generalPause = false,
   lostGame = false;
 
 /* Setup Scene */
