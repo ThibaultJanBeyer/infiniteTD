@@ -2,7 +2,8 @@
 let tArrow,
   sell,
   rock,
-  builders = {};
+  builders = {},
+  allTowers = [];
 
 /* projectile */
 class Projectile {
@@ -51,6 +52,7 @@ class Tower {
     this.dmg = dmg;
     this.as = as;
     this.cd = cd;
+    this.rngVal = rng;
     this.rng = fields[0].w + rng * fields[0].w;
     this.pms = pms;
     this.targets = targets;
@@ -62,6 +64,10 @@ class Tower {
     if (this.dmg != null) {
       let porjectile = new Projectile(field, creep);
     }
+  }
+
+  update() {
+    this.rng = fields[0].w + this.rngVal * fields[0].w;
   }
 }
 
@@ -75,6 +81,8 @@ function setupTowers() {
     cd: 1000,
     rng: 0.5
   });
+
+  allTowers.push(tArrow);
 
   rock = new Tower({
     name: 'tower__rock',

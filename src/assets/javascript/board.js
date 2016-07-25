@@ -251,4 +251,8 @@ function setSizes() {
     fields[i].position();
   }
 
+  // also the range of the towers have to be updated
+  for(let i = 0; i < allTowers.length; i++) {
+    allTowers[i].update();
+  }
 }

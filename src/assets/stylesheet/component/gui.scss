@@ -4,7 +4,6 @@
 
 // width = 180px
 .scoreboard {
-  background-color: $board;
   color: $color;
   display: inline-block;
   margin: 15px;
@@ -17,6 +16,7 @@
 }
 
 .scoreboard--alt {
+  background-color: $board;
   display: block;
   margin: 0;
   padding: 0;
