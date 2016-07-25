@@ -1,5 +1,10 @@
 @mixin font-size-responsive($sizes: $gamma) {
   font-size: nth($sizes, 1) * 1px;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga' 1, 'kern' 1, 'dlig' 1;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
+  text-rendering: optimizeLegibility;
 
   @include media('>medium') {
     font-size: nth($sizes, 2) * 1px;

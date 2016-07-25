@@ -33,14 +33,10 @@ function gretel() {
       let checks = checkFields(_fields);
 
       corner = '';
-      for(let j = 0; j < checks[0].length; j++) {
-        if(checks[0][j][0]) {
-          corner = checks[0][j][1];
+      for(let j = 0; j < checks.length; j++) {
+        if(checks[j][0]) {
+          corner = checks[j][1];
           break;
-        } else {
-          if (checks[1][j][0]) {
-            corner = checks[1][j][1];
-          }
         }
       }
 
@@ -71,7 +67,7 @@ function gretel() {
 
   function checkFields(field) {
     return [
-      [
+      
         [
           (
             field.y.current > field.y.next && field.y.current === field.y.last && field.x.current > field.x.last && field.x.current === field.x.next ||
@@ -100,15 +96,14 @@ function gretel() {
             field.y.current > field.y.next && field.y.current === field.y.last && field.x.current < field.x.last && field.x.current === field.x.next
           ),
           'gretel__breadcrumb--bottom-left'
-        ]
-      ],
-      [
+        ],
+      
         [
           (field.x.current < field.x.next && field.y.current === field.y.next),
           'gretel__breadcrumb--horizontal-next-right'
         ],
         [
-          (field.x.current > field.x.last && field.y.current === field.y.last),
+          (field.x.current < field.x.last && field.y.current === field.y.last),
           'gretel__breadcrumb--horizontal-last-right'
         ],
         [
@@ -116,7 +111,7 @@ function gretel() {
           'gretel__breadcrumb--horizontal-next-left'
         ],
         [
-          (field.x.current < field.x.last && field.y.current === field.y.last),
+          (field.x.current > field.x.last && field.y.current === field.y.last),
           'gretel__breadcrumb--horizontal-last-left'
         ],
         [
@@ -134,8 +129,8 @@ function gretel() {
         [
           (field.x.current === field.x.last && field.y.current < field.y.last),
           'gretel__breadcrumb--vertical-last-bottom'
-        ],
-      ]
+        ]
+      
     ];
   }
 
@@ -159,7 +154,7 @@ function gretel() {
       'gretel__breadcrumb--vertical-last-left',
       'gretel__breadcrumb--vertical-last-right',
       'gretel__breadcrumb--vertical-last-top',
-      'gretel__breadcrumb--vertical-next-bottom',
+      'gretel__breadcrumb--vertical-last-bottom',
       'gretel__breadcrumb--vertical-next-left',
       'gretel__breadcrumb--vertical-next-right',
       'gretel__breadcrumb--vertical-next-top',

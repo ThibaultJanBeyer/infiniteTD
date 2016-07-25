@@ -71,7 +71,7 @@ function setupTowers() {
     as: 1500,
     pms: 40,
     cd: 1000,
-    rng: 1
+    rng: 0.5
   });
 
   rock = new Tower({

@@ -101,7 +101,7 @@ function moveCreep(el, next, cb) {
     };
 
     increment = calculateIncrement(el, next);
-
+    
     el.x += increment.x;
     el.dist.x -= increment.x;
     el.y += increment.y;
@@ -110,6 +110,7 @@ function moveCreep(el, next, cb) {
     el.e.style.left = `${el.x}px`;
     el.e.style.top = `${el.y}px`;
   }
+
   if (typeof increment === 'undefined' || increment == null || increment.steps > 0.5) {
     setTimeout(function() {
       return moveCreep(el, next, cb);
@@ -126,7 +127,9 @@ function isWalkable(el) {
 
   let cases = checkCases(el);
   for (let i = 0; i < 4; i++) {
-    if(!cases[i].edge && cases[i].field.e.className.indexOf('gretel__breadcrumb') > -1 && !cases[i].last) {
+    if (cases[i].field === endField) {
+      return endField;
+    } else if(!cases[i].edge && cases[i].field.e.className.indexOf('gretel__breadcrumb') > -1 && !cases[i].last) {
       return cases[i].field;
     }
   }

@@ -1,8 +1,8 @@
 /* Builder */
 class Builder {
-  constructor(options) {
+  constructor(options, tower) {
     this.e = createElement('div', 'selector');
-    this.e.style.transform = 'scale(0,0)';
+    this.e.style.transform = 'scale(0, 0)';
     this.e.addEventListener('click', (e) => {
       e.stopPropagation();
       this.hide();
@@ -17,6 +17,15 @@ class Builder {
     }
 
     board.appendChild(this.e);
+
+    this.range = createElement('div', 'tower__range');
+    this.range.style.transform = 'scale(0, 0)';
+    this.range.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.hide();
+    });
+    
+    board.appendChild(this.range);
   }
 
   draw(field, upgrade) {
@@ -26,6 +35,12 @@ class Builder {
       field.lock('tower');
     } else {
       this.upgrading = true;
+      let size = field.tower.rng * 2;
+      this.range.style.width = `${size}px`;
+      this.range.style.height = `${size}px`;
+      this.range.style.left = `${field.x + field.w / 2}px`;
+      this.range.style.top = `${field.y + field.w / 2}px`;
+      this.range.style.transform = `scale(1, 1) translate(-50%, -50%)`;
     }
     // check if it would block the field
     if(!gretel()) {
@@ -44,9 +59,13 @@ class Builder {
       this.e.style.width = this.w;
       this.e.style.height = this.h;
       this.e.style.left = `${field.x - field.w / 2}px`;
-      this.e.style.top = `${field.y - field.h / 2}px`;
+      this.e.style.top = `${field.y - field.w / 2}px`;
       this.selectedField = field;
     }
+  }
+
+  drawRange(size) {
+
   }
 
   hide() {
@@ -56,7 +75,8 @@ class Builder {
     } else {
       isPaused = true;
     }
-    this.e.style.transform = 'scale(0,0)';
+    this.e.style.transform = 'scale(0, 0)';
+    this.range.style.transform = 'scale(0, 0)';
     builderOpen = false;
     gretel();
   }

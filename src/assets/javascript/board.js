@@ -70,8 +70,8 @@ class Field {
   }
 
   position() {
-    this.w = this.e.clientWidth;
-    this.h = this.e.clientHeight;
+    this.w = this.e.offsetWidth;
+    this.h = this.e.offsetHeight;
     // the fields x position * width - width / 2 (to find center):
     // example: assume that fields have 100 height & width then:
     // on this board:
@@ -91,10 +91,10 @@ class Field {
     this.y = this.fY * this.h;
   }
 
-  openBuilder(builder) {
+  openBuilder(builder, upgrade) {
     if (!builderOpen) {
       builderOpen = true;
-      builder.draw(this);
+      builder.draw(this, upgrade);
     } else {
       for (let bldr in builders) {
         if (builders.hasOwnProperty(bldr)) {
