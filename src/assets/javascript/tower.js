@@ -138,7 +138,7 @@ function moveProjectile(el, creep) {
       el.y += increment.y;
       el.dist.y -= increment.y;
       
-      if(increment.steps < 0.5) {
+      if(increment.steps < 1.5) {
         creep.damage(el.dmg);
         el.remove();
         clearInterval(loop);

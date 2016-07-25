@@ -135,7 +135,6 @@ class Field {
       if(!isPaused) {
         this.cooldown++;
         if (this.cooldown >= this.tower.cd / 10) {
-          console.log('now');
           this.cooldown = 0;
           let attacked = 0;
           // get all creeps
