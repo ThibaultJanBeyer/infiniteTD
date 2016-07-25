@@ -17,7 +17,7 @@ class Projectile {
 
     this.e.style.left = `${this.x}px`;
     this.e.style.top = `${this.y}px`;
-    field.e.appendChild(this.e);
+    board.appendChild(this.e);
 
     moveProjectile(this, creep);
   }
@@ -28,7 +28,7 @@ class Projectile {
     // dead
     this.dead = true;
     // from board
-    this.field.e.removeChild(this.e);
+    board.removeChild(this.e);
   }
 }
 
@@ -43,7 +43,8 @@ class Tower {
     rng, // range based on fields (1 = over 1 field, 2 = 2 fields as range)
     pms, // projectile speed. More = faster
     targets = 0, // how many targets can be focused (default = 0 hence 1)
-    follow = true // if projectile follows target or not
+    follow = true, // if projectile follows target or not
+    level = 1
   }) {
     this.name = name;
     this.cost = cost;
@@ -54,6 +55,7 @@ class Tower {
     this.pms = pms;
     this.targets = targets;
     this.follow = follow;
+    this.level = level;
   }
 
   shoot(field, creep) {
@@ -69,7 +71,7 @@ function setupTowers() {
     cost: 75,
     dmg: 50,
     as: 1500,
-    pms: 40,
+    pms: 20,
     cd: 1000,
     rng: 0.5
   });
@@ -110,11 +112,18 @@ function moveProjectile(el, creep) {
     x: creep.x - el.x,
     y: creep.y - el.y
   };
-  let loop = setInterval(interval, 60);
+  el.angleDeg = Math.atan2(creep.y - el.y, creep.x - el.x) * 180 / Math.PI;
+  el.e.style.transform = `translate(100%, 500%) rotate(${el.angleDeg}deg)`;
+  
+  let loop = setInterval(interval, 20);
 
   function interval() {
     if (!isPaused) {
       let increment = calculateIncrement(el, creep);
+      if(el.follow) {
+        el.angleDeg = Math.atan2(creep.y - el.y, creep.x - el.x) * 180 / Math.PI;
+        el.e.style.transform = `translate(100%, 500%) rotate(${el.angleDeg}deg)`;
+      }
       
       el.x += increment.x;
       el.dist.x -= increment.x;

@@ -110,6 +110,7 @@ class Field {
 
   buildTower(tower) {
     this.e.className += ` tower ${tower.name}`;
+    this.e.setAttribute('data-level', tower.level);
     if (this.e.classList.contains('gretel__breadcrumb')) {
       this.e.classList.remove('gretel__breadcrumb');
     }
@@ -120,6 +121,7 @@ class Field {
 
   destroyTower() {
     this.e.classList.remove('tower', this.tower.name);
+    this.e.removeAttribute('data-level');
     this.unlock();
     clearInterval(this.scanInterval);
     this.tower = 0;
@@ -127,24 +129,30 @@ class Field {
 
   // scan for creeps nearby tower
   scan() {
+    this.cooldown = 0;
     // scan if creeps are nearby
     this.scanInterval = setInterval(() => {
       if(!isPaused) {
-        let attacked = 0;
-        // get all creeps
-        for(let i = 0; i < allCreeps.length; i++) {
-          // check if the creeps distance is within tower range with
-          // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
-          if (euclidDistance(allCreeps[i].x, this.x, allCreeps[i].y, this.y) <= this.tower.rng) {
-            // then check how many targets the tower can focus
-            if(attacked <= this.tower.targets) {
-              this.tower.shoot(this, allCreeps[i]);
-              attacked++;
+        this.cooldown++;
+        if (this.cooldown >= this.tower.cd / 10) {
+          console.log('now');
+          this.cooldown = 0;
+          let attacked = 0;
+          // get all creeps
+          for(let i = 0; i < allCreeps.length; i++) {
+            // check if the creeps distance is within tower range with
+            // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
+            if (euclidDistance(allCreeps[i].x, this.x, allCreeps[i].y, this.y) <= this.tower.rng) {
+              // then check how many targets the tower can focus
+              if(attacked <= this.tower.targets) {
+                this.tower.shoot(this, allCreeps[i]);
+                attacked++;
+              }
             }
           }
         }
       }
-    }, this.tower.cd);
+    }, 10);
   }
 }
 

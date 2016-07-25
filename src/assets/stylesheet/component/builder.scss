@@ -3,7 +3,7 @@
 /***********/
 
 .selector {
-  background-color: $deep-blue;
+  border: 3px solid $selector;
   border-radius: 50%;
   position: absolute;
   transition: transform 0.2s;

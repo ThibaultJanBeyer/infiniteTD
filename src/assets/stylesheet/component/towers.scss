@@ -3,6 +3,27 @@ $projectile: #FF0;
 /**********/
 /* Towers */
 /**********/
+.tower {
+  box-shadow: inset 0 -7px 1px rgba($black, .5), 0 7px 1px rgba($black, .5);
+  transform: scale(0.8, 0.8);
+  outline: 2px solid $black;
+  outline-offset: -1px;
+}
+
+.tower:not(.tower__rock)::after {
+  content: attr(data-level);
+  align-items: center;
+  background: #6A24B2;
+  box-shadow: inset 0 -5px 1px rgba($black, .5),0 5px 1px rgba($black, .5);
+  color: white;
+  display: flex;
+  height: 50%;
+  justify-content: center;
+  position: absolute;
+  transform: translate(50%, -70%);
+  width: 50%;
+}
+
 .tower__range {
   background-color: rgba($t-radius, 0.3);
   border: 3px solid rgba($t-radius, 0.5);
@@ -16,7 +37,7 @@ $projectile: #FF0;
 }
 
 .tower__rock {
-  background: $t-arrow;
+  background: $t-rock;
 }
 
 .tower__arrow {
@@ -27,12 +48,13 @@ $projectile: #FF0;
 /* Projectiles */
 /***************/
 .projectile {
-  height: 5%;
+  height: 0.5%;
   position: absolute;
-  transform: translate(50%, 50%);
-  width: 5%;
+  transform: translate(100%, 500%);
+  width: 2.5%;
 }
 
 .projectile__tower__arrow {
-  background: $projectile;
+  background: $t-arrow;
+  border-radius: 40%;
 }

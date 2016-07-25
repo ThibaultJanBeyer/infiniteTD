@@ -2,8 +2,10 @@ $black: #000;
 $white: #fff;
 
 $dark-blue: #0B2433;
-$deep-blue: #0E2D40;
+$deep-blue: #10344A;
 $light-blue: #9DE2ED;
+
+$purple: #6C73B0;
 
 $red: #EB304A;
 $green: #0f0;
@@ -21,12 +23,13 @@ $start-end: $red;
 $board: $dark-blue;
 $board-dash: $deep-blue;
 
-$path: $yellow;
+$path: $deep-blue;
 
-$field-select: $green;
+$field-select: $purple;
+$selector: $deep-blue;
 
-$t-block: $grey;
-$t-arrow: $light-grey;
+$t-rock: $grey;
+$t-arrow: $yellow;
 $t-sell: $red;
 $t-radius: $green;
 
