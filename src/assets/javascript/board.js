@@ -39,6 +39,8 @@ class Field {
             }
           }
         }
+      } else if((this.start || this.end) && !builderOpen) {
+        audio.play('do_not_block');
       } else {
         for (let bldr in builders) {
           if (builders.hasOwnProperty(bldr)) {

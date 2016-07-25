@@ -31,12 +31,15 @@ class Creeps {
   }
 
   setupWalk(currentField, lastField) {
+    this.x = parseInt(this.e.style.left);
+    this.y = parseInt(this.e.style.top);
     if(currentField === endField) {
-      p1.loseLife();
-      this.remove();
+      let afterEnd = { x: this.x + currentField.w / 2.5, y: this.y };
+      moveCreep(this, afterEnd, (el) => {
+        p1.loseLife();
+        this.remove();
+      });
     } else {
-      this.x = parseInt(this.e.style.left);
-      this.y = parseInt(this.e.style.top);
       // no creep should walk on a field twice
       this.lasts.push(currentField);
       // handle fields

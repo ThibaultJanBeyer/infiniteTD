@@ -29,13 +29,25 @@
   }
 }
 
-.start {
-  // scss-lint:disable ImportantRule
-  border-left: 6px solid $start-end;
+.start,
+.end {
+  position: relative;
 }
 
-.end {
-  border-right: 6px solid $start-end;
+.start::before,
+.end::before {
+  // scss-lint:disable ImportantRule
+  background: $start-end;
+  content: '';
+  height: 100%;
+  margin-left: -70%;
+  position: absolute;
+  transform: translate(-50%,-50%);
+  width: 6px;
+}
+
+.end::before {
+  margin-left: 70%;
 }
 
 .start.gretel__breadcrumb--vertical-next-bottom {

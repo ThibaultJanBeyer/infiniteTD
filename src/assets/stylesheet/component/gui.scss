@@ -41,11 +41,13 @@
 
 /* Message */
 .scoreboard__el--message {
+  @include font-size-responsive($delta);
   border: 2px solid $color;
   border-radius: 15px;
   color: transparent;
   padding: 5px;
   transition: color 500ms, background 500ms;
+  text-align: center;
 }
 
 .scoreboard__el--flash {
