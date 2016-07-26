@@ -20,7 +20,7 @@
 }
 
 .scoreboard__icon--player,
-.scoreboard__icon--player ~ p {
+.scoreboard__icon--player ~ input {
   color: $player;
   fill: $player;
 }

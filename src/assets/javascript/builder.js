@@ -2,12 +2,14 @@
 class Builder {
   constructor(options) {
     this.e = createElement('div', 'selector');
+    this.e.setAttribute('tabindex', '0');
     this.e.style.transform = 'scale(0, 0)';
     this.e.addEventListener('click', (e) => {
       e.stopPropagation();
       this.hide();
     });
 
+    // add tower options
     for (let i = 0; i < options.length; i++) {
       let towerContainer = createElement('div', `selector__container ${options[i].name}`);
         let towerOption = createElement('button', `selector__element ${options[i].name}-name`, options[i].nameOg);
@@ -27,7 +29,6 @@ class Builder {
       appendChilds(towerContainer, [towerOption, towerInfo]);
       this.e.appendChild(towerContainer);
     }
-
     board.appendChild(this.e);
 
     // tower range
@@ -37,11 +38,18 @@ class Builder {
       e.stopPropagation();
       this.hide();
     });
-    
     board.appendChild(this.range);
+
+    // record keyboard input
+    this.e.addEventListener('keyup', (e) => {
+      userBuilderWithKey(this, e);
+    });
   }
 
   draw(field, upgrade) {
+    this.selectedField = field;
+    this.selectedField.builder = this;
+    field.builder = this;
     if (!generalPause && isStarted) {
       scoreboard.togglePlay();
     }
@@ -76,11 +84,14 @@ class Builder {
       this.e.style.height = this.h;
       this.e.style.left = `${field.x - field.w / 2}px`;
       this.e.style.top = `${field.y - field.w / 2}px`;
-      this.selectedField = field;
     }
   }
 
   hide(general) {
+    if (this.selectedField) {
+      this.selectedField.builder = false;
+      this.selectedField = false;
+    }
     if (!general && !generalPause && isStarted) {
       scoreboard.togglePlay();
     }
@@ -110,5 +121,16 @@ class Builder {
       // build on the field
       field.buildTower(option);
     }
+  }
+}
+
+function userBuilderWithKey(builder, e) {
+  console.log(e);
+  let key = e.keyCode || e.key;
+  // advanced
+  // close builder with escape
+  if (key === 27 || key === 'Escape') {
+    builder.selectedField.e.focus();
+    builder.hide();
   }
 }

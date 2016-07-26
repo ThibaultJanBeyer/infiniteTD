@@ -7,7 +7,8 @@
   display: inline-block;
 }
 
-.scoreboard__el-p {
+.scoreboard__el-p,
+.scoreboard__el-input {
   display: inline-block;
   margin: 5px 10px;
 }
@@ -19,6 +20,16 @@
   position: relative;
 }
 
+// input
+/*
+ * 1. Gets resetted by input
+ */
+.scoreboard__el-input {
+  @include font-size-responsive($gamma); /* 1. */
+  background: transparent;
+  border: 0px solid transparent;
+  width: 70px;
+}
 
 /*
  * 1. reset weird button positioning

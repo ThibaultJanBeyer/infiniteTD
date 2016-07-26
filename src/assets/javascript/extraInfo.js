@@ -36,8 +36,8 @@ class ExtraInfo {
     this.e.innerHTML = '';
 
     // create the new content
-    this.cont.title = createElement('h1', 'extra-info__title', tower.nameOg);
-    this.cont.description = createElement('p', 'extra-info__description', tower.description);
+    this.cont.title = createElement('h1', 'extra-info__title', capitalizeFirstLetter(tower.nameOg));
+    this.cont.description = createElement('p', 'extra-info__description', capitalizeFirstLetter(tower.description));
 
     // append the new content
     let appends = [];

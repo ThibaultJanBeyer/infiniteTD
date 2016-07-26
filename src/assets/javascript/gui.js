@@ -52,12 +52,13 @@ let scoreboard,
 
 /* Scoreboard */
 class Scoreboard {
-  constructor(name) {
+  constructor() {
     this.e = createElement('div', 'scoreboard');
     this.play = createElement('button', 'scoreboard__el scoreboard__el-pause', 'play');
     this.m = createElement('p', 'scoreboard__el scoreboard__el-message', '.');
     this.money = createSVG({svgName: 'money', title: 'Money: ', extraElement: 'p'});
-    this.player = createSVG({svgName: 'player', title: 'Player: ', extraElement: 'p'});
+    this.player = createSVG({svgName: 'player', title: 'Player: ', extraElement: 'input'});
+    this.player.input.setAttribute('aria-label', 'Player name: ');
     this.level = createSVG({svgName: 'level', title: 'Level: ', extraElement: 'p'});
     this.score = createSVG({svgName: 'score', title: 'Score: ', extraElement: 'p'});
     this.lives = createSVG({svgName: 'lives', title: 'Lives: ', extraElement: 'p'});
@@ -68,42 +69,65 @@ class Scoreboard {
       title: 'Disable Ausio: '
     });
 
-    // Add clicks
+    // Global Play & Pause
     this.play.addEventListener('click', (e) => {
       e.stopPropagation();
       // closebuilders
       // and pause/unpause the game
       if (isStarted) {
-        if (isPaused === true) {
-          generalPause = true;
-        }
+        if (isPaused === true) { generalPause = true; }
         generalPause = !generalPause;
       } else {
+        // first time click on Play
         setSizes();
         generalPause = false;
       }
+      // close all builders
       for (let key in builders) {
         if (builders.hasOwnProperty(key)) {
           builders[key].hide(true);
         }
       }
+      // toggle the button
       this.togglePlay();
-      if (generalPause) {
-        isPaused = true;
-      }
+      // reset to true if not otherwise
+      if (generalPause) { isPaused = true; }
     });
+
+    // Audio
     this.audio.container.addEventListener('click', () => {
       this.toggleAudio();
+    });
+
+    // Player Name
+    this.player.input.addEventListener('keyup', (e) => {
+      let key = e.keyCode || e.key;
+      if (key === 13 || key === 'Enter') {
+        this.player.input.blur();
+      } else {
+        this.playerName(p1);
+      }
+    });
+    this.player.input.addEventListener('focus', () => {
+      this.player.container.classList.add('scoreboard__hint');
+      this.player.input.select();
+    });
+    this.player.input.addEventListener('blur', () => {
+      this.player.container.classList.remove('scoreboard__hint');
     });
 
     // Append all
     this.elements = [this.player.container, this.money.container, this.score.container, this.lives.container, this.level.container, this.play, this.audio.container, this.m];
     appendChilds(this.e, this.elements);
     g.appendChild(this.e);
+
+    setTimeout(() => {
+      this.player.input.select();
+    }, 100);
   }
 
   update(player) {
-    this.player.p.innerHTML = player.name;
+    this.player.input.value = player.name;
     this.money.p.innerHTML = Math.floor(player.money);
     this.level.p.innerHTML = Math.floor(player.level);
     this.score.p.innerHTML = Math.floor(player.score);
@@ -136,6 +160,11 @@ class Scoreboard {
     soundOff = !soundOff;
     this.audio.title.innerHTML = (soundOff) ? 'Turn audio on.' : 'Turn audio off.';
     this.audio.use.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `assets/svg/sprite.svg#sound-${soundOff}`);
+  }
+
+  playerName(player) {
+    player.name = this.player.input.value;
+    this.update(player);
   }
 }
 

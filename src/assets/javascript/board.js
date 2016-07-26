@@ -25,6 +25,7 @@ class Field {
     this.end = false;
     this.pos = pos;
 
+    // field click
     this.e.addEventListener('click', (e) => {
       e.stopPropagation();
       this.position();
@@ -49,6 +50,12 @@ class Field {
         }
         e.preventDefault();
       }
+    });
+
+    // keyboard navigation
+    // add keyboard event listener
+    this.e.addEventListener('keyup', (e) => {
+      useBoardWithKey(this, e);
     });
   }
 
@@ -97,6 +104,7 @@ class Field {
     if (!builderOpen) {
       builderOpen = true;
       builder.draw(this, upgrade);
+      builder.e.focus();
     } else {
       for (let key in builders) {
         if (builders.hasOwnProperty(key)) {
@@ -263,4 +271,41 @@ function setSizes() {
   for(let i = 0; i < allTowers.length; i++) {
     allTowers[i].update();
   }
+}
+
+// Make board accessible via Keyboard
+function useBoardWithKey(field, e) {
+  console.log(e);
+  let cases = getCases(),
+    key = e.keyCode || e.key;
+
+  // basic movement
+  let num = [[39, 'ArrowRight'], [37, 'ArrowLeft'], [38, 'ArrowUp'], [40, 'ArrowDown']];
+  for(let i = 0; i < num.length; i++) {
+    if ((key === num[i][0] || key === num[i][1]) && !cases[i].edge) {
+      cases[i].field.e.focus();
+    }
+  }
+
+  function getCases() {
+    return {
+      0: { // right
+        field: fields[field.pos + 1],
+        edge: (rightFields.indexOf(field.pos) > -1) ? true : false,
+      },
+      1: { // left
+        field: fields[field.pos - 1],
+        edge: (leftFields.indexOf(field.pos) > -1) ? true : false
+      },
+      2: { // top
+        field: fields[field.pos - boardRowSize],
+        edge: (topFields.indexOf(field.pos) > -1) ? true : false
+      },
+      3: { // bottom
+        field: fields[field.pos + boardRowSize],
+        edge: (bottomFields.indexOf(field.pos) > -1) ? true : false
+      }
+    }
+  }
+
 }

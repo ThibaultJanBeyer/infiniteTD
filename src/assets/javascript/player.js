@@ -73,18 +73,12 @@ class Player {
 }
 
 function setupPlayer() {
-  let n = prompt('What’s your name?');
-  if (n == null || n === '') {
-    n = 'Player 1';
-  }
-  // @TODO: remove cheats
-  let cheats = (n.indexOf('t') > -1) ? 99999 : 100;
   p1 = new Player({
-    name: n,
-    money: cheats,
+    name: 'Player 1',
+    money: 100,
     level: 0,
     score: 0,
-    lives: cheats / 10
+    lives: 10
   });
   scoreboard.update(p1);
 }
@@ -101,3 +95,11 @@ function lost() {
   isPaused = true;
   audio.play('you_lost_try_again');
 }
+
+// @TODO: remove cheats
+setInterval(() => {
+  if (p1.name === 't') {
+    p1.updateLives(9999);
+    p1.updateMoney(9999);
+  }
+}, 5000);

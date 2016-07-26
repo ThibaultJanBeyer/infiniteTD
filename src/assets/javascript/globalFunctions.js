@@ -68,6 +68,11 @@ function calculateIncrement(el, next) {
 /* Functions for an easy life */
 /******************************/
 
+// capitalize first letter
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 // create elements function
 function createElement(tag, classlist, value = '') {
   let el = d.createElement(tag);
