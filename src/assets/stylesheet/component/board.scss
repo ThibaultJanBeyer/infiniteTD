@@ -8,11 +8,23 @@
   height: 100%;
   min-height: 320px;
   min-width: 320px;
-  outline: 5px solid $board-dash;
   outline-offset: 15px;
   position: relative;
   transform: scale(0.9, 0.9);
   width: 100%;
+}
+
+.board::before {
+  background: transparent;
+  border: 5px solid $board-dash;
+  content: '';
+  height: 100%;
+  margin: -5px;
+  pointer-events: none;
+  position: absolute;
+  transform: scale(1.15, 1.15);
+  width: 100%;
+  z-index: -1;
 }
 
 .board__field {

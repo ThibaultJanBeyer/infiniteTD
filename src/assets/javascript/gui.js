@@ -69,8 +69,28 @@ class Scoreboard {
     });
 
     // Add clicks
-    this.play.addEventListener('click', () => {
+    this.play.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // closebuilders
+      // and pause/unpause the game
+      if (isStarted) {
+        if (isPaused === true) {
+          generalPause = true;
+        }
+        generalPause = !generalPause;
+      } else {
+        setSizes();
+        generalPause = false;
+      }
+      for (let bldr in builders) {
+        if (builders.hasOwnProperty(bldr)) {
+          builders[bldr].hide(true);
+        }
+      }
       this.togglePlay();
+      if (generalPause) {
+        isPaused = true;
+      }
     });
     this.audio.container.addEventListener('click', () => {
       this.toggleAudio();
@@ -100,19 +120,16 @@ class Scoreboard {
 
   togglePlay() {
     // if the game is not lost
-    if (isPaused === 'building') {
-      audio.play('finish_building_process_first');
-    } else if (!lostGame) {
+    if (!lostGame) {
       // if the game has not started yet
       if (!isStarted) {
         isStarted = true;
         p1.levelUp();
-      } else {
-        generalPause = !generalPause;
       }
       this.play.innerHTML = (isPaused) ? 'pause' : 'play';
       isPaused = !isPaused;
     }
+    console.log('isPaused: ' + isPaused, 'general: ' + generalPause);
   }
 
   toggleAudio() {

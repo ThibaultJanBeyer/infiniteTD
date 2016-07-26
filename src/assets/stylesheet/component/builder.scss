@@ -22,7 +22,7 @@
 }
 
 .selector__element {
-  @include font-size-responsive($minimum);
+  @include font-size-responsive($epsilon);
   background: transparent;
   width: 100%;
   height: 100%;
@@ -31,7 +31,7 @@
 }
 
 .selector__info {
-  @include font-size-responsive($minimum);
+  @include font-size-responsive($epsilon);
   align-items: center;
   background: $selector;
   border: 0px solid transparent;

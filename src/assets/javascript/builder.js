@@ -15,7 +15,7 @@ class Builder {
         let towerInfo = createElement('button', `selector__info ${options[i].name}-showinfo`, '?');
       
       towerInfo.addEventListener('click', (e) => {
-        e.stopImmediatePropagation();
+        e.stopPropagation();
         // @TODO: info panel
         console.log('show info');
       });
@@ -43,7 +43,9 @@ class Builder {
   }
 
   draw(field, upgrade) {
-    isPaused = 'building';
+    if (!generalPause && isStarted) {
+      scoreboard.togglePlay();
+    }
     if (!upgrade) {
       this.upgrading = false;
       field.lock('tower');
@@ -79,13 +81,11 @@ class Builder {
     }
   }
 
-  hide() {
-    if (isStarted && !generalPause) {
-      isPaused = false;
-      scoreboard.play.innerHTML = 'pause';
-    } else {
-      isPaused = true;
+  hide(general) {
+    if (!general && !generalPause && isStarted) {
+      scoreboard.togglePlay();
     }
+    // unpause ?
     this.e.style.transform = 'scale(0, 0)';
     this.range.style.transform = 'scale(0, 0)';
     builderOpen = false;

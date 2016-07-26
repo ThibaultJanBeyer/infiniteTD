@@ -38,6 +38,8 @@ function init() {
 
 }
 
-setTimeout(() => {
-  init();
-}, 500);
+(function(){
+  setTimeout(() => {
+    init();
+  }, 500);
+})();

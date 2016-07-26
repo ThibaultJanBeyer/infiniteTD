@@ -213,6 +213,15 @@ function setupBoard() {
     bottomFields.push(i + boardSize - boardRowSize);
     rightFields.push(boardRowSize + i * boardRowSize - 1);
   }
+
+  // close builder when outside is clicked
+  g.addEventListener('click', (e) => {
+    for (let bldr in builders) {
+      if (builders.hasOwnProperty(bldr)) {
+        builders[bldr].hide();
+      }
+    }
+  });
 }
 
 /* Relative Sizes */
