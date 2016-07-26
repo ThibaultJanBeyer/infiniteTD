@@ -1,6 +1,6 @@
 /* Builder */
 class Builder {
-  constructor(options, tower) {
+  constructor(options) {
     this.e = createElement('div', 'selector');
     this.e.style.transform = 'scale(0, 0)';
     this.e.addEventListener('click', (e) => {
@@ -9,15 +9,29 @@ class Builder {
     });
 
     for (let i = 0; i < options.length; i++) {
-      let towerOption = createElement('button', `selector__element ${options[i].name}`);
+      let towerContainer = createElement('div', `selector__container ${options[i].name}`);
+        let towerOption = createElement('button', `selector__element ${options[i].name}-name`, options[i].nameOg);
+          let towerPrice = createElement('span', `selector__info ${options[i].name}-price`, `${options[i].cost}$`);
+        let towerInfo = createElement('button', `selector__info ${options[i].name}-showinfo`, '?');
+      
+      towerInfo.addEventListener('click', (e) => {
+        e.stopImmediatePropagation();
+        // @TODO: info panel
+        console.log('show info');
+      });
+      
       towerOption.addEventListener('click', (e) => {
         this.build(options[i], this.selectedField);
       });
-      this.e.appendChild(towerOption);
+
+      towerOption.appendChild(towerPrice);
+      appendChilds(towerContainer, [towerOption, towerInfo]);
+      this.e.appendChild(towerContainer);
     }
 
     board.appendChild(this.e);
 
+    // tower range
     this.range = createElement('div', 'tower__range');
     this.range.style.transform = 'scale(0, 0)';
     this.range.addEventListener('click', (e) => {
@@ -35,7 +49,8 @@ class Builder {
       field.lock('tower');
     } else {
       this.upgrading = true;
-      let size = field.tower.rng * 2;
+      // tower range
+      let size = field.tower.rng * 2 - 10;
       this.range.style.width = `${size}px`;
       this.range.style.height = `${size}px`;
       this.range.style.left = `${field.x + field.w / 2}px`;
@@ -64,10 +79,6 @@ class Builder {
     }
   }
 
-  drawRange(size) {
-
-  }
-
   hide() {
     if (isStarted && !generalPause) {
       isPaused = false;
@@ -86,8 +97,7 @@ class Builder {
     // is it a sell request
     if (option.name === 'tower__sell') {
       // give some money back
-      p1.money += field.tower.cost / 2;
-      scoreboard.update(p1);
+      p1.updateMoney(field.tower.cost / 2, field);
       field.destroyTower();
     // check is player can afford it  
     } else if (p1.money < option.cost) {
@@ -97,8 +107,7 @@ class Builder {
     // if he is allowed to buy, proceed
     } else {
       // substract the costs
-      p1.money -= option.cost;
-      scoreboard.update(p1);
+      p1.updateMoney(option.cost * -1, field);
       // build on the field
       field.buildTower(option);
     }

@@ -1,7 +1,6 @@
 function animateScore({ className, value, pos1, pos2 }) {
   if (pos1) {
     let eBoard = createElement('div', className, value);
-    console.log(pos1.x, pos1.y);
     eBoard.style.left = `${pos1.x}px`;
     eBoard.style.top = `${pos1.y}px`;
     board.appendChild(eBoard);

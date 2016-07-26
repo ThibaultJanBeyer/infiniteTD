@@ -45,9 +45,11 @@ class Tower {
     pms, // projectile speed. More = faster
     targets = 0, // how many targets can be focused (default = 0 hence 1)
     follow = true, // if projectile follows target or not
-    level = 1
+    level = 1,
+    special // what is special to this tower (shown in info)
   }) {
-    this.name = name;
+    this.nameOg = name;
+    this.name = `tower__${name}`;
     this.cost = cost;
     this.dmg = dmg;
     this.as = as;
@@ -58,6 +60,7 @@ class Tower {
     this.targets = targets;
     this.follow = follow;
     this.level = level;
+    this.special = special;
   }
 
   shoot(field, creep) {
@@ -73,24 +76,26 @@ class Tower {
 
 function setupTowers() {
   tArrow = new Tower({
-    name: 'tower__arrow',
-    cost: 75,
+    name: 'arrow',
+    cost: 50,
     dmg: 50,
     as: 1500,
     pms: 20,
     cd: 1000,
-    rng: 0.5
+    rng: 0.6,
+    special: 'speed'
   });
 
   allTowers.push(tArrow);
 
   rock = new Tower({
-    name: 'tower__rock',
+    name: 'rock',
     cost: 6
   });
 
   sell = new Tower({
-    name: 'tower__sell'
+    name: 'sell',
+    cost: '½'
   });
 
   builders.towers = new Builder([tArrow, rock]);

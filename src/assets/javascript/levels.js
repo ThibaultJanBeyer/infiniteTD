@@ -18,7 +18,7 @@ for(let i = 1; i <= 10; i++) {
     creeps:
     {
       hp: 10 * i,
-      ms: (i !== 1 && i !== 2) ? i / 3 : i,
+      ms: 1,
       bounty: 5
     },
     amount: 2 * i

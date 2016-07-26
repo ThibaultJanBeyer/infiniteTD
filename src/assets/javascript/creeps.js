@@ -36,7 +36,7 @@ class Creeps {
     if(currentField === endField) {
       let afterEnd = { x: this.x + currentField.w / 2.5, y: this.y };
       moveCreep(this, afterEnd, (el) => {
-        p1.loseLife();
+        p1.updateLives(-1);
         this.remove();
       });
     } else {

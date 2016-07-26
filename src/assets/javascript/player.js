@@ -35,23 +35,48 @@ class Player {
       } else {
         nextLevel();
       }
+      setTimeout(() => {
+        if (!lostGame) {
+          if (this.level % 2 === 0) {
+            this.updateLives(1);
+          }
+        }
+      }, 1000);
     }
   }
   
-  loseLife() {
+  updateLives(amount) {
     // lose life
-    this.lives--;
-    animateScore({className: 'animation__loselife', value: '-1', pos1: endField, pos2: scoreboard.lives.container});
+    this.lives += amount;
+    if (amount >= 0) {
+      animateScore({className: 'animation__gainlives', value: `+${amount}`, pos2: scoreboard.lives.container});
+    } else {
+      animateScore({className: 'animation__loselives', value: amount, pos1: endField, pos2: scoreboard.lives.container});
+    }
     scoreboard.update(this);
     // check if lost
     if(this.lives <= 0) {
       lost();
     }
   }
+
+  updateMoney(amount, place) {
+    // update wallet
+    this.money += amount;
+    if (amount >= 0) {
+      animateScore({className: 'animation__gainmoney', value: `+${amount} $`, pos1: place, pos2: scoreboard.money.container});
+    } else {
+      animateScore({className: 'animation__losemoney', value: `${amount} $`, pos1: place, pos2: scoreboard.money.container});
+    }
+    scoreboard.update(this);
+  }
 }
 
 function setupPlayer() {
   let n = prompt('What’s your name?');
+  if (n == null || n === '') {
+    n = 'Player 1';
+  }
   // @TODO: remove cheats
   let cheats = (n.indexOf('t') > -1) ? 99999 : 100;
   p1 = new Player({
