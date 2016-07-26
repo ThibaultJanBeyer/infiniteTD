@@ -40,8 +40,8 @@ $projectile: #FF0;
   background: $t-rock;
 }
 
-.tower__arrow {
-  background: $t-arrow;
+.tower__basic {
+  background: $t-basic;
 }
 
 /***************/
@@ -54,7 +54,7 @@ $projectile: #FF0;
   width: 2.5%;
 }
 
-.projectile__tower__arrow {
-  background: $t-arrow;
+.projectile__tower__basic {
+  background: $t-basic;
   border-radius: 40%;
 }

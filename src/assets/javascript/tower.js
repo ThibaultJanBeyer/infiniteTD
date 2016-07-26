@@ -1,5 +1,5 @@
 // Towers
-let tArrow,
+let tBasic,
   sell,
   rock,
   builders = {},
@@ -77,18 +77,19 @@ class Tower {
 }
 
 function setupTowers() {
-  tArrow = new Tower({
-    name: 'arrow',
+  tBasic = new Tower({
+    name: 'basic',
     cost: 50,
     dmg: 50,
     as: 1500,
     pms: 20,
     cd: 1000,
     rng: 0.6,
-    special: 'speed'
+    special: 'speed',
+    description: 'This tower has a high attack speed with a basic damage and range. However, upgrades drastically improve its range. Moreover, with special researches, this tower will be key to your success.'
   });
 
-  allTowers.push(tArrow);
+  allTowers.push(tBasic);
 
   rock = new Tower({
     name: 'rock',
@@ -101,8 +102,8 @@ function setupTowers() {
     cost: '½'
   });
 
-  builders.towers = new Builder([tArrow, rock]);
-  builders.arrow = new Builder([sell]);
+  builders.towers = new Builder([tBasic, rock]);
+  builders.basic = new Builder([sell]);
   builders.rock = new Builder([sell]);
 }
 
