@@ -1,0 +1,70 @@
+.scoreboard__el {
+  @include font-size-responsive($gamma);
+  margin: 5px;
+}
+
+.scoreboard__el--alt {
+  display: inline-block;
+}
+
+.scoreboard__el-p {
+  display: inline-block;
+  margin: 5px 10px;
+}
+
+.scoreboard__el-lives,
+.scoreboard__el-score,
+.scoreboard__el-money,
+.scoreboard__el-level {
+  position: relative;
+}
+
+
+/*
+ * 1. reset weird button positioning
+ */
+.scoreboard__el-pause {
+  background: $board;
+  border: 2px solid $color;
+  border-radius: 15px;
+  color: $color;
+  cursor: pointer;
+  padding: 0 10px 3px; /* 1. */
+
+  &:focus,
+  &:hover {
+    border: 2px solid $select;
+    color: $select;
+  }
+}
+
+/* Message */
+.scoreboard__el-message {
+  @include font-size-responsive($delta);
+  color: transparent;
+  display: block;
+  transition: color 500ms, background 500ms, visibility 0s 0s;
+  text-align: center;
+  visibility: visible;
+}
+
+.scoreboard__el--flash {
+  color: $color;
+  transition: color 500ms, background 500ms, visibility 1s 1s;
+  visibility: hidden;
+}
+
+/* Audio */
+.scoreboard__el-audio {
+    background: 0;
+    border: 0;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.scoreboard__el-audio:focus .scoreboard__icon,
+.scoreboard__el-audio:hover .scoreboard__icon {
+  fill: $select;
+}

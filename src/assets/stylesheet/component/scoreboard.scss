@@ -1,0 +1,24 @@
+/*******/
+/* Gui */
+/*******/
+
+// width = 180px
+.scoreboard {
+  color: $color;
+  display: inline-block;
+  margin: 15px;
+  margin-left: 0;
+  padding: 15px;
+  padding-left: 0;
+  vertical-align: top;
+  width: 165px;
+  z-index: 1000;
+}
+
+.scoreboard--alt {
+  background-color: $board;
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}

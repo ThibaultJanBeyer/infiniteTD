@@ -86,18 +86,18 @@ class Builder {
     // is it a sell request
     if (option.name === 'tower__sell') {
       // give some money back
-      p1.gold += field.tower.cost / 2;
+      p1.money += field.tower.cost / 2;
       scoreboard.update(p1);
       field.destroyTower();
     // check is player can afford it  
-    } else if (p1.gold < option.cost) {
-      audio.play('need_more_gold');
+    } else if (p1.money < option.cost) {
+      audio.play('need_more_money');
     } else if(field.locked) {
       audio.play('cannot_build_here');
     // if he is allowed to buy, proceed
     } else {
       // substract the costs
-      p1.gold -= option.cost;
+      p1.money -= option.cost;
       scoreboard.update(p1);
       // build on the field
       field.buildTower(option);

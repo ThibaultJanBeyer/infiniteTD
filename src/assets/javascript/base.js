@@ -1,11 +1,10 @@
 /* Globals */
 // available elements
-let w = window,
-  d = document,
+const d = document,
   b = d.body,
-  g = d.getElementsByClassName('infiniteTD')[0],
+  g = d.getElementsByClassName('infiniteTD')[0];
   // values
-  wX, wY, isPaused = true,
+let wX, wY, isPaused = true,
   isStarted = false,
   generalPause = false,
   lostGame = false;

@@ -75,7 +75,7 @@ class Creeps {
       // dead
       this.dead = true;
       if (killed) {
-        player.unitKill(this.bounty);
+        player.unitKill(this);
       }
       // remove creep
       // from board

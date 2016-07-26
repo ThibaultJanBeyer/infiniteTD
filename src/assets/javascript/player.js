@@ -5,27 +5,30 @@ let p1;
 class Player {
   constructor({
     name,
-    gold,
+    money,
     level,
     score,
     lives
   }) {
     this.name = name;
-    this.gold = gold;
+    this.money = money;
     this.level = level;
     this.score = score;
     this.lives = lives;
   }
 
-  unitKill(bounty) {
-    this.gold += bounty;
-    this.score += bounty;
+  unitKill(unit) {
+    this.money += unit.bounty;
+    this.score += unit.bounty;
     scoreboard.update(this);
+    animateScore({className: 'animation__gainmoney', value: `+${unit.bounty} $`, pos1: unit, pos2: scoreboard.money.container});
+    animateScore({className: 'animation__gainpoints', value: `+${unit.bounty}`, pos2: scoreboard.score.container});
   }
 
   levelUp() {
     if (!lostGame) {
       this.level += 1;
+      animateScore({className: 'animation__levelup', value: '+1', pos1: startField, pos2: scoreboard.level.container});
       scoreboard.update(this);
       if (!levels[this.level]) {
         audio.play('winner_winner_chicken_dinner');
@@ -38,6 +41,7 @@ class Player {
   loseLife() {
     // lose life
     this.lives--;
+    animateScore({className: 'animation__loselife', value: '-1', pos1: endField, pos2: scoreboard.lives.container});
     scoreboard.update(this);
     // check if lost
     if(this.lives <= 0) {
@@ -52,7 +56,7 @@ function setupPlayer() {
   let cheats = (n.indexOf('t') > -1) ? 99999 : 100;
   p1 = new Player({
     name: n,
-    gold: cheats,
+    money: cheats,
     level: 0,
     score: 0,
     lives: cheats / 10

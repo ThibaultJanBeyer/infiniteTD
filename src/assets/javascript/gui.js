@@ -18,7 +18,7 @@ let scoreboard,
       'do_not_block':
       {
         'start': 3,
-        'end': 4.1,
+        'end': 4,
         'loop': false
       },
       'finish_building_process_first':
@@ -27,10 +27,10 @@ let scoreboard,
         'end': 7.1,
         'loop': false
       },
-      'need_more_gold':
+      'need_more_money':
       {
         'start': 9,
-        'end': 10.1,
+        'end': 10.2,
         'loop': false
       },
       'winner_winner_chicken_dinner':
@@ -54,45 +54,40 @@ let scoreboard,
 class Scoreboard {
   constructor(name) {
     this.e = createElement('div', 'scoreboard');
+    this.play = createElement('button', 'scoreboard__el scoreboard__el-pause', 'play');
+    this.m = createElement('p', 'scoreboard__el scoreboard__el-message', '.');
+    this.money = createSVG({svgName: 'money', title: 'Money: ', extraElement: 'p'});
+    this.player = createSVG({svgName: 'player', title: 'Player: ', extraElement: 'p'});
+    this.level = createSVG({svgName: 'level', title: 'Level: ', extraElement: 'p'});
+    this.score = createSVG({svgName: 'score', title: 'Score: ', extraElement: 'p'});
+    this.lives = createSVG({svgName: 'lives', title: 'Lives: ', extraElement: 'p'});
+    this.audio = createSVG({
+      container: 'button',
+      svgName: 'audio', 
+      svg: `sound-${soundOff}`,
+      title: 'Disable Ausio: '
+    });
 
-    this.name = createElement('strong', 'scoreboard__el scoreboard__el--name');
-    this.gold = createElement('p', 'scoreboard__el scoreboard__el--gold');
-    this.level = createElement('p', 'scoreboard__el scoreboard__el--level');
-    this.score = createElement('p', 'scoreboard__el scoreboard__el--score');
-    this.lives = createElement('p', 'scoreboard__el scoreboard__el--lives');
-    this.play = createElement('button', 'scoreboard__el scoreboard__el--pause', 'play');
-    
-    this.audio = createElement('button', 'scoreboard__el scoreboard__el--audio');
-    this.audioSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    this.audioSvg.classList.add('scoreboard__icon');
-    this.audioSvg.setAttribute('role', 'img');
-    this.audioTitle = createElement('title', '', 'Disable Audio');
-    this.audioUse = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-    this.audioUse.setAttribute('role', 'presentation');
-    this.audioUse.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `assets/svg/sprite.svg#sound-${soundOff}`);
-    appendChilds(this.audioSvg, [this.audioTitle, this.audioUse]);
-    this.audio.appendChild(this.audioSvg);
-
-    this.m = createElement('p', 'scoreboard__el scoreboard__el--message');
-    this.elements = [this.name, this.gold, this.level, this.score, this.lives, this.play, this.audio, this.m];
-
+    // Add clicks
     this.play.addEventListener('click', () => {
       this.togglePlay();
     });
-    this.audio.addEventListener('click', () => {
+    this.audio.container.addEventListener('click', () => {
       this.toggleAudio();
     });
 
+    // Append all
+    this.elements = [this.player.container, this.money.container, this.score.container, this.lives.container, this.level.container, this.play, this.audio.container, this.m];
     appendChilds(this.e, this.elements);
     g.appendChild(this.e);
   }
 
   update(player) {
-    this.name.innerHTML = player.name;
-    this.gold.innerHTML = `Gold: ${Math.floor(player.gold)}`;
-    this.level.innerHTML = `Level: ${Math.floor(player.level)}`;
-    this.score.innerHTML = `Score: ${Math.floor(player.score)}`;
-    this.lives.innerHTML = `Lives: ${Math.floor(player.lives)}`;
+    this.player.p.innerHTML = player.name;
+    this.money.p.innerHTML = Math.floor(player.money);
+    this.level.p.innerHTML = Math.floor(player.level);
+    this.score.p.innerHTML = Math.floor(player.score);
+    this.lives.p.innerHTML = Math.floor(player.lives);
   }
 
   message(message, duration) {
@@ -122,8 +117,8 @@ class Scoreboard {
 
   toggleAudio() {
     soundOff = !soundOff;
-    this.audioTitle.innerHTML = (soundOff) ? 'Turn audio on.' : 'Turn audio off.';
-    this.audioUse.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `assets/svg/sprite.svg#sound-${soundOff}`);
+    this.audio.title.innerHTML = (soundOff) ? 'Turn audio on.' : 'Turn audio off.';
+    this.audio.use.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `assets/svg/sprite.svg#sound-${soundOff}`);
   }
 }
 
@@ -139,7 +134,7 @@ class Audio {
 
     this.src = [];
     for(let i = 0; i < sounds.resources.length; i++) {
-      this.src[i] = document.createElement('source');
+      this.src[i] = d.createElement('source');
       this.src[i].setAttribute('src', sounds.resources[i][0]);
       this.src[i].setAttribute('type', sounds.resources[i][1]);
       this.e.appendChild(this.src[i]);

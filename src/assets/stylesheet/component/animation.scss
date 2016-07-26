@@ -1,0 +1,39 @@
+.animation__loselife,
+.animation__gainpoints,
+.animation__gainmoney,
+.animation__levelup {
+  @include font-size-responsive($delta);
+  animation: flyUp 1000ms ease-out 1 forwards;
+  position: absolute;
+}
+
+.animation__loselife--scoreboard,
+.animation__gainpoints--scoreboard,
+.animation__gainmoney--scoreboard,
+.animation__levelup--scoreboard {
+  margin-left: 30px;
+  margin-top: -30px;
+}
+
+.animation__loselife {
+  color: $life;
+}
+
+.animation__gainmoney {
+  color: $money;
+}
+
+.animation__gainpoints {
+  color: $score;
+}
+
+.animation__levelup {
+  color: $level;
+}
+
+@keyframes flyUp {
+  to {
+    opacity: 0;
+    transform: translateY(-300%);
+  }
+}

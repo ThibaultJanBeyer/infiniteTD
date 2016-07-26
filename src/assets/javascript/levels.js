@@ -3,15 +3,27 @@ let levels = {}, kills = 0;
 
 // levels 1-10
 for(let i = 1; i <= 10; i++) {
+  if (i === 1) {
+    levels[i] = {
+      creeps:
+      {
+        hp: 100 * i,
+        ms: 10,
+        bounty: 5
+      },
+      amount: 1
+    };
+  } else {
   levels[i] = {
     creeps:
     {
       hp: 10 * i,
-      ms: i / 2,
+      ms: (i !== 1 && i !== 2) ? i / 3 : i,
       bounty: 5
     },
     amount: 2 * i
   };
+  }
 }
 
 /**************/

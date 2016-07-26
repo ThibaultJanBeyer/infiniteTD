@@ -1,3 +1,23 @@
+function animateScore({ className, value, pos1, pos2 }) {
+  if (pos1) {
+    let eBoard = createElement('div', className, value);
+    console.log(pos1.x, pos1.y);
+    eBoard.style.left = `${pos1.x}px`;
+    eBoard.style.top = `${pos1.y}px`;
+    board.appendChild(eBoard);
+    setTimeout(() => {
+      board.removeChild(eBoard);
+    }, 1000);
+  }
+  if (pos2) {
+    let eScore = createElement('div', `${className} ${className}--scoreboard`, value);
+    pos2.appendChild(eScore);
+    setTimeout(() => {
+      pos2.removeChild(eScore);
+    }, 1000);
+  }
+}
+
 // this function calculates the x and y increments
 // that have to be added each step. Assume following example:
 // assume a movementspeed (ms) of 1
@@ -54,6 +74,38 @@ function createElement(tag, classlist, value = '') {
   let el = d.createElement(tag);
   el.className = classlist;
   el.innerHTML = value;
+  return el;
+}
+
+// Create Svg
+function createSVG({
+    containerClass = 'scoreboard__el',
+    container = 'div',
+    svg,
+    svgName,
+    className = 'scoreboard__icon',
+    title,
+    extraElement = false
+  }) {
+  let svgElement = (svg) ? svg : svgName; 
+  let el = {};
+  el.container = createElement(container, `${containerClass} ${containerClass}-${svgName}`);
+    el.svg = d.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      el.svg.classList.add(`${className}`, `${className}--${svgName}`);
+      el.svg.setAttribute('role', 'img');
+        el.title = createElement('title', '', title);
+        el.use = d.createElementNS('http://www.w3.org/2000/svg', 'use');
+        el.use.setAttribute('role', 'presentation');
+        el.use.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `assets/svg/sprite.svg#${svgElement}`);
+  appendChilds(el.svg, [el.title, el.use]);
+
+  if(extraElement) {
+    el[extraElement] = createElement(extraElement, `${containerClass}-${extraElement}`);
+    appendChilds(el.container, [el.svg, el[extraElement]]);
+  } else {
+    el.container.appendChild(el.svg);
+  }
+
   return el;
 }
 
