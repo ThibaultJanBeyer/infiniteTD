@@ -16,8 +16,7 @@ class Builder {
       
       towerInfo.addEventListener('click', (e) => {
         e.stopPropagation();
-        // @TODO: info panel
-        console.log('show info');
+        extraInfo.tower(options[i]);
       });
       
       towerOption.addEventListener('click', (e) => {

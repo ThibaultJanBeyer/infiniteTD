@@ -46,7 +46,8 @@ class Tower {
     targets = 0, // how many targets can be focused (default = 0 hence 1)
     follow = true, // if projectile follows target or not
     level = 1,
-    special // what is special to this tower (shown in info)
+    special, // what is special to this tower (shown in info)
+    description
   }) {
     this.nameOg = name;
     this.name = `tower__${name}`;
@@ -61,6 +62,7 @@ class Tower {
     this.follow = follow;
     this.level = level;
     this.special = special;
+    this.description = description;
   }
 
   shoot(field, creep) {
@@ -90,7 +92,8 @@ function setupTowers() {
 
   rock = new Tower({
     name: 'rock',
-    cost: 6
+    cost: 6,
+    description: 'Simple & cheap rock. Usefull to block a path.'
   });
 
   sell = new Tower({

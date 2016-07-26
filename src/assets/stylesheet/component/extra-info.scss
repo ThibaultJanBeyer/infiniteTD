@@ -1,0 +1,77 @@
+// custom
+.extra-info__title {
+  @include heading-alpha;
+  margin-bottom: 10px;
+}
+
+.extra-info__description {
+  @include font-size-responsive($gamma);
+}
+
+
+/* -------------------------------------------------------------------------- *\
+ * Necessary styling for the dialog to work
+ * -------------------------------------------------------------------------- */
+
+.dialog[aria-hidden="true"] {
+  display: none;
+}
+
+/* -------------------------------------------------------------------------- *\
+ * Styling to make the dialog look like a dialog
+ * -------------------------------------------------------------------------- */
+
+.dialog-overlay {
+  background-color: rgba($black, 0.8);
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 9000;
+}
+
+.dialog-content {
+  background-color: $board;
+  outline: 3px solid $board-dash;
+  outline-offset: 5px;
+  color: $color;
+  left: 50%;
+  max-width: 90%;
+  padding: 1em;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9001;
+}
+
+@media screen and (min-width: 700px) {
+  .dialog-content {
+    padding: 2em;
+  }
+}
+
+.dialog-close {
+  background-color: transparent;
+  border: 0;
+  color: $color;
+  cursor: pointer;
+  font-size: 1.25em;
+  font-weight: bold;
+  height: 1.2em;
+  padding: 0;
+  position: absolute;
+  right: 0.5em;
+  text-align: center;
+  top: 0.5em;
+  transition: 0.15s;
+  width: 1.2em;
+  z-index: 9002;
+}
+
+@media screen and (min-width: 700px) {
+  .dialog-close {
+    right: 1em;
+    top: 1em;
+  }
+}

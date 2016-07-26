@@ -82,9 +82,9 @@ class Scoreboard {
         setSizes();
         generalPause = false;
       }
-      for (let bldr in builders) {
-        if (builders.hasOwnProperty(bldr)) {
-          builders[bldr].hide(true);
+      for (let key in builders) {
+        if (builders.hasOwnProperty(key)) {
+          builders[key].hide(true);
         }
       }
       this.togglePlay();

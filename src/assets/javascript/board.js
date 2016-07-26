@@ -31,10 +31,10 @@ class Field {
       if (!this.locked) {
         this.openBuilder(builders.towers);
       } else if(this.locked === 'tower') {
-        for (let bldr in builders) {
-          if (builders.hasOwnProperty(bldr)) {
-            let element = builders[bldr];
-            if (this.tower.name === `tower__${bldr}`) {
+        for (let key in builders) {
+          if (builders.hasOwnProperty(key)) {
+            let element = builders[key];
+            if (this.tower.name === `tower__${key}`) {
               this.openBuilder(element, true);
             }
           }
@@ -42,9 +42,9 @@ class Field {
       } else if((this.start || this.end) && !builderOpen) {
         audio.play('do_not_block');
       } else {
-        for (let bldr in builders) {
-          if (builders.hasOwnProperty(bldr)) {
-            builders[bldr].hide();
+        for (let key in builders) {
+          if (builders.hasOwnProperty(key)) {
+            builders[key].hide();
           }
         }
         e.preventDefault();
@@ -98,9 +98,9 @@ class Field {
       builderOpen = true;
       builder.draw(this, upgrade);
     } else {
-      for (let bldr in builders) {
-        if (builders.hasOwnProperty(bldr)) {
-          builders[bldr].hide();
+      for (let key in builders) {
+        if (builders.hasOwnProperty(key)) {
+          builders[key].hide();
         }
       }
       builderOpen = false;
@@ -216,9 +216,9 @@ function setupBoard() {
 
   // close builder when outside is clicked
   g.addEventListener('click', (e) => {
-    for (let bldr in builders) {
-      if (builders.hasOwnProperty(bldr)) {
-        builders[bldr].hide();
+    for (let key in builders) {
+      if (builders.hasOwnProperty(key)) {
+        builders[key].hide();
       }
     }
   });

@@ -24,17 +24,20 @@ function init() {
   // TowerBuilder
   setupTowers();
 
-  // Sizes
-  setSizes();
-  b.onresize = () => {
-    setSizes();
-  };
-
   // Gretel = setup the creeps path
   setupGretel();
 
   // Audio
   setupAudio();
+
+  // Extrainfo
+  setupExtraInfo();
+
+  // Sizes
+  setSizes();
+  b.onresize = () => {
+    setSizes();
+  };
 
 }
 
