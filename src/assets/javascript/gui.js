@@ -153,7 +153,6 @@ class Scoreboard {
       this.play.innerHTML = (isPaused) ? 'pause' : 'play';
       isPaused = !isPaused;
     }
-    console.log('isPaused: ' + isPaused, 'general: ' + generalPause);
   }
 
   toggleAudio() {

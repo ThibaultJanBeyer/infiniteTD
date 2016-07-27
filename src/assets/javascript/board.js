@@ -104,7 +104,7 @@ class Field {
     if (!builderOpen) {
       builderOpen = true;
       builder.draw(this, upgrade);
-      builder.e.focus();
+      builder.towerOptionE[0].focus();
     } else {
       for (let key in builders) {
         if (builders.hasOwnProperty(key)) {
@@ -275,7 +275,6 @@ function setSizes() {
 
 // Make board accessible via Keyboard
 function useBoardWithKey(field, e) {
-  console.log(e);
   let cases = getCases(),
     key = e.keyCode || e.key;
 
@@ -285,6 +284,15 @@ function useBoardWithKey(field, e) {
     if ((key === num[i][0] || key === num[i][1]) && !cases[i].edge) {
       cases[i].field.e.focus();
     }
+  }
+
+  if (key === 27 || key === 'Escape') {
+    for (let key in builders) {
+      if (builders.hasOwnProperty(key)) {
+        builders[key].hide();
+      }
+    }
+    scoreboard.play.focus();
   }
 
   function getCases() {

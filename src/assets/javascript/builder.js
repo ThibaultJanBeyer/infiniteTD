@@ -2,7 +2,6 @@
 class Builder {
   constructor(options) {
     this.e = createElement('div', 'selector');
-    this.e.setAttribute('tabindex', '0');
     this.e.style.transform = 'scale(0, 0)';
     this.e.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -10,11 +9,19 @@ class Builder {
     });
 
     // add tower options
+    this.towerContainerE = [];
+    this.towerOptionE = [];
+    this.towerPriceE = [];
+    this.towerInfoE = [];
     for (let i = 0; i < options.length; i++) {
       let towerContainer = createElement('div', `selector__container ${options[i].name}`);
+      this.towerContainerE.push(towerContainer);
         let towerOption = createElement('button', `selector__element ${options[i].name}-name`, options[i].nameOg);
+        this.towerOptionE.push(towerOption);
           let towerPrice = createElement('span', `selector__info ${options[i].name}-price`, `${options[i].cost}$`);
+          this.towerPriceE.push(towerPrice);
         let towerInfo = createElement('button', `selector__info ${options[i].name}-showinfo`, '?');
+        this.towerInfoE.push(towerPrice);
       
       towerInfo.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -120,12 +127,12 @@ class Builder {
       p1.updateMoney(option.cost * -1, field);
       // build on the field
       field.buildTower(option);
+      field.e.focus();
     }
   }
 }
 
 function userBuilderWithKey(builder, e) {
-  console.log(e);
   let key = e.keyCode || e.key;
   // advanced
   // close builder with escape
