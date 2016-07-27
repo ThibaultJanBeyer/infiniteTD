@@ -5,7 +5,7 @@ var browserSync = require('browser-sync').create();
 // Individual tasks
 gulp.task('audio', require('./gulp-tasks/audio'));
 gulp.task('clean', require('./gulp-tasks/clean'));
-//gulp.task('img', require('./gulp-tasks/img'));
+gulp.task('img', require('./gulp-tasks/img'));
 gulp.task('html', require('./gulp-tasks/html'));
 gulp.task('javascript', require('./gulp-tasks/javascript'));
 //gulp.task('moving', require('./gulp-tasks/moving'));
@@ -15,9 +15,9 @@ gulp.task('stylechecker', require('./gulp-tasks/stylechecker'));
 gulp.task('watch', require('./gulp-tasks/watch'));
 
 // Globs
-gulp.task('build', ['html', 'sass', 'javascript', 'stylechecker', 'audio', 'svg']);
+gulp.task('build', ['html', 'sass', 'javascript', 'stylechecker', 'img', 'audio', 'svg']);
 gulp.task('cln', ['clean']);
-gulp.task('devl', ['html', 'sass', 'javascript', 'watch', 'stylechecker', 'audio', 'svg']);
+gulp.task('devl', ['html', 'sass', 'javascript', 'watch', 'img', 'stylechecker', 'audio', 'svg']);
 
 // Default task
 gulp.task('default', ['devl']);

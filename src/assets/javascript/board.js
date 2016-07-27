@@ -16,153 +16,6 @@ let board, fields = [],
 /***************/
 /* Setup Board */
 /***************/
-/* Field */
-class Field {
-  constructor(pos) {
-    this.e = createElement('button', 'board__field');
-    this.locked = false;
-    this.start = false;
-    this.end = false;
-    this.pos = pos;
-
-    // field click
-    this.e.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.position();
-      if (!this.locked) {
-        this.openBuilder(builders.towers);
-      } else if(this.locked === 'tower') {
-        for (let key in builders) {
-          if (builders.hasOwnProperty(key)) {
-            let element = builders[key];
-            if (this.tower.name === `tower__${key}`) {
-              this.openBuilder(element, true);
-            }
-          }
-        }
-      } else if((this.start || this.end) && !builderOpen) {
-        audio.play('do_not_block');
-      } else {
-        for (let key in builders) {
-          if (builders.hasOwnProperty(key)) {
-            builders[key].hide();
-          }
-        }
-        e.preventDefault();
-      }
-    });
-
-    // keyboard navigation
-    // add keyboard event listener
-    this.e.addEventListener('keyup', (e) => {
-      useBoardWithKey(this, e);
-    });
-  }
-
-  lock(unit) {
-    this.locked = (unit) ? unit : true;
-    this.e.classList.add('locked');
-    if (unit === 'start') {
-      this.e.classList.add('start');
-      this.start = true;
-    } else if (unit === 'end') {
-      this.e.classList.add('end');
-      this.end = true;
-    }
-  }
-
-  unlock() {
-    if (!this.start && !this.end) {
-      this.locked = false;
-      this.e.classList.remove('locked');
-    }
-  }
-
-  position() {
-    this.w = this.e.offsetWidth;
-    this.h = this.e.offsetHeight;
-    // the fields x position * width - width / 2 (to find center):
-    // example: assume that fields have 100 height & width then:
-    // on this board:
-    //
-    // [0,0][0,1][0,2]
-    // [1,0][1,1][1,2]
-    // [2,0][2,1][2,2]
-    // [3,0][3,1][3,2]
-    //
-    // field 3 (fX=2) in row 3 (fY=2):
-    // (note position begins at 0,0)
-    // will have a position of
-    // x = 3 * 100 - 100 / 2
-    // y = 2 * 100 - 100 / 2
-    // hence: 250x, 150y
-    this.x = this.fX * this.w;
-    this.y = this.fY * this.h;
-  }
-
-  openBuilder(builder, upgrade) {
-    if (!builderOpen) {
-      builderOpen = true;
-      builder.draw(this, upgrade);
-      builder.towerOptionE[0].focus();
-    } else {
-      for (let key in builders) {
-        if (builders.hasOwnProperty(key)) {
-          builders[key].hide();
-        }
-      }
-      builderOpen = false;
-    }
-    
-  }
-
-  buildTower(tower) {
-    this.e.className += ` tower ${tower.name}`;
-    this.e.setAttribute('data-level', tower.level);
-    if (this.e.classList.contains('gretel__breadcrumb')) {
-      this.e.classList.remove('gretel__breadcrumb');
-    }
-    this.tower = tower; 
-    this.lock('tower');
-    this.scan();
-  }
-
-  destroyTower() {
-    this.e.classList.remove('tower', this.tower.name);
-    this.e.removeAttribute('data-level');
-    this.unlock();
-    clearInterval(this.scanInterval);
-    this.tower = 0;
-  }
-
-  // scan for creeps nearby tower
-  scan() {
-    this.cooldown = 0;
-    // scan if creeps are nearby
-    this.scanInterval = setInterval(() => {
-      if(!isPaused) {
-        this.cooldown++;
-        if (this.cooldown >= this.tower.cd / 10) {
-          this.cooldown = 0;
-          let attacked = 0;
-          // get all creeps
-          for(let i = 0; i < allCreeps.length; i++) {
-            // check if the creeps distance is within tower range with
-            // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
-            if (euclidDistance(allCreeps[i].x, this.x, allCreeps[i].y, this.y) <= this.tower.rng) {
-              // then check how many targets the tower can focus
-              if(attacked <= this.tower.targets) {
-                this.tower.shoot(this, allCreeps[i]);
-                attacked++;
-              }
-            }
-          }
-        }
-      }
-    }, 10);
-  }
-}
-
 function setupBoard() {
 
   let tempX = 0,
@@ -279,20 +132,27 @@ function useBoardWithKey(field, e) {
     key = e.keyCode || e.key;
 
   // basic movement
-  let num = [[39, 'ArrowRight'], [37, 'ArrowLeft'], [38, 'ArrowUp'], [40, 'ArrowDown']];
-  for(let i = 0; i < num.length; i++) {
-    if ((key === num[i][0] || key === num[i][1]) && !cases[i].edge) {
-      cases[i].field.e.focus();
+  basicMovement();
+  escape();
+
+  function basicMovement(){
+    let num = [[39, 'ArrowRight'], [37, 'ArrowLeft'], [38, 'ArrowUp'], [40, 'ArrowDown']];
+    for(let i = 0; i < num.length; i++) {
+      if ((key === num[i][0] || key === num[i][1]) && !cases[i].edge) {
+        cases[i].field.e.focus();
+      }
     }
   }
 
-  if (key === 27 || key === 'Escape') {
-    for (let key in builders) {
-      if (builders.hasOwnProperty(key)) {
-        builders[key].hide();
+  function escape() {
+    if (key === 27 || key === 'Escape') {
+      for (let key in builders) {
+        if (builders.hasOwnProperty(key)) {
+          builders[key].hide();
+        }
       }
+      scoreboard.play.focus();
     }
-    scoreboard.play.focus();
   }
 
   function getCases() {
@@ -313,7 +173,7 @@ function useBoardWithKey(field, e) {
         field: fields[field.pos + boardRowSize],
         edge: (bottomFields.indexOf(field.pos) > -1) ? true : false
       }
-    }
+    };
   }
 
 }

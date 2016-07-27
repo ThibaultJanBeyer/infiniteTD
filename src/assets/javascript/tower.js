@@ -38,11 +38,10 @@ class Tower {
   constructor({
     name,
     cost,
-    dmg,
-    as, // attack speed
-    cd, // cooldown
+    dmg = 0,
+    cd = 0, // cooldown
     rng, // range based on fields (1 = over 1 field, 2 = 2 fields as range)
-    pms, // projectile speed. More = faster
+    pms, // Attack Speed -> projectile speed. More = faster
     targets = 0, // how many targets can be focused (default = 0 hence 1)
     follow = true, // if projectile follows target or not
     level = 1,
@@ -53,7 +52,6 @@ class Tower {
     this.name = `tower__${name}`;
     this.cost = cost;
     this.dmg = dmg;
-    this.as = as;
     this.cd = cd;
     this.rngVal = rng;
     this.rng = fields[0].w + rng * fields[0].w;
@@ -81,12 +79,11 @@ function setupTowers() {
     name: 'basic',
     cost: 50,
     dmg: 50,
-    as: 1500,
     pms: 20,
     cd: 1000,
     rng: 0.6,
     special: 'speed',
-    description: 'This tower has a high attack speed with a basic damage and range. However, upgrades drastically improve its range. Moreover, with special researches, this tower will be key to your success.'
+    description: 'This tower has a high attack speed with a basic damage and range. Upgrades drastically improve its range. Moreover, with special researches, this tower will be key to your success.'
   });
 
   allTowers.push(tBasic);

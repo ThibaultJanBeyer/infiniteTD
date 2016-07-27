@@ -1,0 +1,35 @@
+@mixin extra-info-overlay($element, $color, $position: 'topleft', $subels: true) {
+  .extra-info__#{$element} {
+    border: 3px solid $color;
+    color: $color;
+    flex-wrap: wrap;
+    @if($position == 'topleft') {
+      left: -40px;
+      top: -40px;
+    } @else if($position == 'topright') {
+      right: -40px;
+      top: -40px;
+    } @else if($position == 'bottomleft') {
+      left: -40px;
+      bottom: -40px;
+    } @else if($position == 'bottomright') {
+      right: -40px;
+      bottom: -40px;
+    } @else {}
+  }
+
+  @if($subels) {
+    .extra-info__#{$element}-text {
+      align-self: flex-end;
+      margin-top: 5px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .extra-info__#{$element}-value {
+      align-self: flex-start;
+      text-align: center;
+      width: 100%;
+    }
+  }
+}

@@ -34,7 +34,7 @@
   @include font-size-responsive($delta);
   align-items: center;
   background: $selector;
-  border: 0px solid transparent;
+  border: 0 solid transparent;
   border-radius: 50%;
   display: flex;
   height: 30px;
@@ -45,13 +45,15 @@
 }
 
 .selector__info[class*='price'] {
-  color: $money;
-  margin: -105% -40%;
+  color: $t-cost;
+  left: -15px;
+  top: -15px;
 }
 
 .selector__info[class*='showinfo'] {
-  color: $level;
-  margin: 70% 60%;
+  bottom: -15px;
+  color: $t-info;
+  right: -15px;
 }
 
 // place elements on a circle based on the number of elements
@@ -65,7 +67,7 @@
       $divider: 1;
       $pusher: 3;
     } // that elements do not get too large
-    top:  40%;
+    top: 40%;
     left: 50%;
     width: 100% / ($i / $divider);
     height: 100% / ($i / $divider);
@@ -77,6 +79,7 @@
       &:nth-of-type(#{$j}) {
         transform: rotate($rot * 1deg) translate(25% * $pusher) rotate($rot * -1deg);
       }
+
       $rot: $rot + $angle;
     }
   }

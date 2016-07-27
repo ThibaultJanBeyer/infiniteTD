@@ -27,7 +27,7 @@
 .scoreboard__el-input {
   @include font-size-responsive($gamma); /* 1. */
   background: transparent;
-  border: 0px solid transparent;
+  border: 0 solid transparent;
   width: 70px;
 }
 
@@ -67,12 +67,12 @@
 
 /* Audio */
 .scoreboard__el-audio {
-    background: 0;
-    border: 0;
-    cursor: pointer;
-    margin: 0;
-    padding: 0;
-    vertical-align: middle;
+  background: 0;
+  border: 0;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
 }
 
 .scoreboard__el-audio:focus .scoreboard__icon,
