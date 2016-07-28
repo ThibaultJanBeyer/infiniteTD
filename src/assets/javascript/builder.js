@@ -29,7 +29,11 @@ class Builder {
       
       towerInfo.addEventListener('click', (e) => {
         e.stopPropagation();
-        extraInfo.tower(option);
+        if (option.name === 'sell') {
+          extraInfo.upgrade(option);
+        } else {
+          extraInfo.tower(option);
+        }
       });
       
       towerOption.addEventListener('click', (e) => {

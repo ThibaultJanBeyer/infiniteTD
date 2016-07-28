@@ -37,7 +37,11 @@ class ExtraInfo {
 
     // create the new content
     // cost, level, damage, cooldown (because reversed)
-    let els = ['cost', 'level', 'dmg', 'cd'];
+    let els = ['cost'];
+    if (tower.level !== 0) { els.push('level'); }
+    if (tower.dmg !== 0) { els.push('dmg'); }
+    if (tower.cd !== 0) { els.push('cd'); }
+
     this.cont.floatsContainer = d.createElement('div');
     for(let i = 0, il = els.length; i < il; i++) {
       let info = els[i], val = tower[els[i]], extra = '';
@@ -68,7 +72,7 @@ class ExtraInfo {
       // title
       this.cont.title = createElement('h1', 'extra-info__title', capitalizeFirstLetter(tower.nameOg));
       // desc
-      this.cont.description = createElement('p', 'extra-info__description', capitalizeFirstLetter(tower.description));
+      this.cont.description = createElement('p', 'extra-info__description', tower.description);
       appendChilds(this.cont.container, [this.cont.imgContainer, this.cont.title, this.cont.description]);
 
     appendChilds(this.e, [this.cont.floatsContainer, this.cont.container]);

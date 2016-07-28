@@ -88,12 +88,15 @@ function setupTowers() {
   rock = new Tower({
     name: 'rock',
     cost: 6,
+    level: 0,
     description: 'Simple & cheap rock. Usefull to block a path.'
   });
 
   sell = new Tower({
     name: 'sell',
-    cost: '½'
+    cost: '+½',
+    level: 0,
+    description: 'You can sell any tower and get back the half of its cost.'
   });
 
   builders.towers = new Builder([tBasic, rock]);

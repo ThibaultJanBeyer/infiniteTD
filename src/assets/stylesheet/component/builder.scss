@@ -44,6 +44,10 @@
   z-index: 1000;
 }
 
+.selector__element[class*='sell-name'] {
+  color: $money;
+}
+
 .selector__info[class*='price'] {
   color: $t-cost;
   left: -15px;
