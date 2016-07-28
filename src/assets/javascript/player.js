@@ -84,12 +84,12 @@ function setupPlayer() {
 }
 
 function lost() {
-  for(let i = 0; i < allCreeps.length; i++) {
+  let i = allCreeps.length; while (i--) {
     allCreeps[i].remove();
   }
   let allTowers = board.querySelectorAll('.t');
-  for(let i = 0; i < allTowers.length; i++) {
-    allTowers[i].className = 'board__field';
+  let j = allTowers.length; while (j--) {
+    allTowers[j].className = 'board__field';
   }
   lostGame = true;
   isPaused = true;

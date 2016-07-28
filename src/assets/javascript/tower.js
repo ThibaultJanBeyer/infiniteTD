@@ -45,7 +45,6 @@ class Tower {
     targets = 0, // how many targets can be focused (default = 0 hence 1)
     follow = true, // if projectile follows target or not
     level = 1,
-    special, // what is special to this tower (shown in info)
     description
   }) {
     this.nameOg = name;
@@ -59,7 +58,6 @@ class Tower {
     this.targets = targets;
     this.follow = follow;
     this.level = level;
-    this.special = special;
     this.description = description;
   }
 
@@ -82,7 +80,6 @@ function setupTowers() {
     pms: 20,
     cd: 1000,
     rng: 0.6,
-    special: 'speed',
     description: 'This tower has a high attack speed with a basic damage and range. Upgrades drastically improve its range. Moreover, with special researches, this tower will be key to your success.'
   });
 
@@ -106,7 +103,7 @@ function setupTowers() {
 
 function towersInRange(el) {
   // check if any Tower is in range
-  for(let i = 0; i < fields.length; i++) {
+  for (let i = 0, il = fields.length; i < il; i++) {
     if(fields[i].tower) {
       // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
       if (euclidDistance(el.x, fields[i].x, el.y, fields[i].y) <= fields[i].tower.rng) {

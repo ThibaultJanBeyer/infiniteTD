@@ -70,9 +70,14 @@ class Field {
       builder.draw(this, upgrade);
       builder.towerOptionE[0].focus();
     } else {
-      for (let key in builders) {
-        if (builders.hasOwnProperty(key)) {
-          builders[key].hide();
+      let bu = builders, sb = scoreboard;
+      for (let key in bu) {
+        if (bu.hasOwnProperty(key) && bu[key].selectedField) {
+          let buK = bu[key];
+          // hide it
+          buK.hide();
+          // unpause if the builder was not an upgrade builder
+          if (!buK.upgrading && !generalPause && isStarted) { sb.togglePlay(); }
         }
       }
       builderOpen = false;
@@ -91,6 +96,7 @@ class Field {
     if (tower.cd !== 0) {
       this.scan();
     }
+    gretel();
   }
 
   destroyTower() {
@@ -103,56 +109,66 @@ class Field {
 
   // scan for creeps nearby tower
   scan() {
-    this.cooldown = 0;
+    let cooldown = 0, tcooldown = this.tower.cd / 100;
     // scan if creeps are nearby
     this.scanInterval = setInterval(() => {
       if(!isPaused) {
-        this.cooldown++;
-        if (this.cooldown >= this.tower.cd / 10) {
-          this.cooldown = 0;
-          let attacked = 0;
+        cooldown += 1;
+        if (cooldown >= tcooldown) {
+          console.log('ready');
+          let attacked = 0,
+            t = this.tower,
+            trange = t.rng,
+            ttargets = t.targets;
           // get all creeps
-          for(let i = 0; i < allCreeps.length; i++) {
+          for(let i = 0, il = allCreeps.length; i < il; i++) {
             // check if the creeps distance is within tower range with
             // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
-            if (euclidDistance(allCreeps[i].x, this.x, allCreeps[i].y, this.y) <= this.tower.rng) {
+            if (euclidDistance(allCreeps[i].x, this.x, allCreeps[i].y, this.y) <= trange) {
               // then check how many targets the tower can focus
-              if(attacked <= this.tower.targets) {
-                this.tower.shoot(this, allCreeps[i]);
+              if(attacked <= ttargets) {
+                t.shoot(this, allCreeps[i]);
                 attacked++;
+                cooldown = 0;
               }
             }
           }
         }
       }
-    }, 10);
+    }, 100);
   }
 }
 
 function handleFieldClick(el, e) {
+  let bu = builders, sb = scoreboard;
   el.position();
   if (!el.locked) {
-    el.openBuilder(builders.towers);
+    el.openBuilder(bu.towers);
   } else if(el.locked === 'tower') {
-    checkWhichTowerToOpen();
+    checkWhichTowerToOpen(el, bu, sb);
   } else if((el.start || el.end) && !builderOpen) {
     audio.play('do_not_block');
   } else {
-    for (let key in builders) {
-      if (builders.hasOwnProperty(key)) {
-        builders[key].hide();
+    // traverse all possible builders
+    for (let key in bu) {
+      if (bu.hasOwnProperty(key) && bu[key].selectedField) {
+        let buK = bu[key];
+        // hide it
+        buK.hide();
+        // unpause if the builder was not an upgrade builder
+        if (!buK.upgrading && !generalPause && isStarted) { sb.togglePlay(); }
       }
     }
     e.preventDefault();
   }
+}
 
-  function checkWhichTowerToOpen() {
-    for (let key in builders) {
-      if (builders.hasOwnProperty(key)) {
-        let element = builders[key];
-        if (el.tower.name === `tower__${key}`) {
-          el.openBuilder(element, true);
-        }
+function checkWhichTowerToOpen(el, bu, sb) {
+  for (let key in bu) {
+    if (bu.hasOwnProperty(key)) {
+      let element = bu[key];
+      if (el.tower.name === `tower__${key}`) {
+        el.openBuilder(element, true);
       }
     }
   }

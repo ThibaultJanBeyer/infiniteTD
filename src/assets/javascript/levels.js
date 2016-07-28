@@ -2,7 +2,7 @@
 let levels = {}, kills = 0;
 
 // levels 1-10
-for(let i = 1; i <= 10; i++) {
+let i = 10; while (i--) {
   if (i === 1) {
     levels[i] = {
       creeps:

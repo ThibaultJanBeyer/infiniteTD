@@ -36,10 +36,10 @@ class ExtraInfo {
     this.e.innerHTML = '';
 
     // create the new content
-    // cost, level, damage, cooldown
+    // cost, level, damage, cooldown (because reversed)
     let els = ['cost', 'level', 'dmg', 'cd'];
     this.cont.floatsContainer = d.createElement('div');
-    for(let i = 0; i < els.length; i++) {
+    for(let i = 0, il = els.length; i < il; i++) {
       let info = els[i], val = tower[els[i]], extra = '';
       if(els[i] === 'cost') {
         extra = ' $';

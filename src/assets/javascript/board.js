@@ -25,7 +25,7 @@ function setupBoard() {
   board = createElement('div', 'board');
 
   // fields
-  for (let i = 0; i < boardSize; i++) {
+  for (let i = 0, il = boardSize; i < il; i++) {
     // create each field
     fields[i] = new Field(i);
     // give fields x & y coordinates
@@ -63,26 +63,58 @@ function setupBoard() {
   // as the elements are drawn
   // we can measure the fields
   // size and thus calculate the fields pos
-  for (let i = 0; i < fields.length; i++) {
-    fields[i].position();
+  let j = fields.length; while (j--) {
+    fields[j].position();
   }
 
   // special fields (at the games border)
-  for (let i = 0; i < boardRowSize; i++) {
-    topFields.push(i);
-    leftFields.push(i * boardRowSize);
-    bottomFields.push(i + boardSize - boardRowSize);
-    rightFields.push(boardRowSize + i * boardRowSize - 1);
+  for (let k = 0, kl = boardRowSize; k < kl; k++) {
+    topFields.push(k);
+    leftFields.push(k * boardRowSize);
+    bottomFields.push(k + boardSize - boardRowSize);
+    rightFields.push(boardRowSize + k * boardRowSize - 1);
   }
 
   // close builder when outside is clicked
   g.addEventListener('click', (e) => {
-    for (let key in builders) {
-      if (builders.hasOwnProperty(key)) {
-        builders[key].hide();
+    e.stopPropagation();
+    globalClick(e);
+  });
+
+  // pause / unpause game with spacebar
+  g.addEventListener('keyup', (e) => {
+    globalKeyboard(e);
+  });
+}
+
+function globalClick(e) {
+  let bu = builders, sb = scoreboard;
+  for (let key in bu) {
+    if (bu.hasOwnProperty(key) && bu[key].selectedField) {
+      let buK = bu[key];
+      // hide it
+      buK.hide();
+      // unpause if the builder was not an upgrade builder
+      if (!buK.upgrading && !generalPause && isStarted) { sb.togglePlay(); }
+    }
+  }
+}
+
+function globalKeyboard(e) {
+  let key = e.keyCode || e.key;
+  // advanced
+  // close builder with escape
+  if (key === 80 || key === 'p') {
+    if (builderOpen) {
+      for (let key in builders) {
+        if (builders.hasOwnProperty(key) && builders[key].selectedField) {
+          builders[key].hide();
+        }
       }
     }
-  });
+    // togglepause
+    if(!generalPause && isStarted) { generalPause = !generalPause; scoreboard.togglePlay(); } else { scoreboard.togglePlay(); }
+  }
 }
 
 /* Relative Sizes */
@@ -116,47 +148,19 @@ function setSizes() {
 
   // we will have to recalculate the exact
   // pos of each field since their size changed
-  for (let i = 0; i < fields.length; i++) {
+  let i = fields.length; while (i--) {
     fields[i].position();
   }
 
   // also the range of the towers have to be updated
-  for(let i = 0; i < allTowers.length; i++) {
-    allTowers[i].update();
+  let j = allTowers.length; while (j--) {
+    allTowers[j].update();
   }
 }
 
 // Make board accessible via Keyboard
 function useBoardWithKey(field, e) {
-  let cases = getCases(),
-    key = e.keyCode || e.key;
-
-  // basic movement
-  basicMovement();
-  escape();
-
-  function basicMovement(){
-    let num = [[39, 'ArrowRight'], [37, 'ArrowLeft'], [38, 'ArrowUp'], [40, 'ArrowDown']];
-    for(let i = 0; i < num.length; i++) {
-      if ((key === num[i][0] || key === num[i][1]) && !cases[i].edge) {
-        cases[i].field.e.focus();
-      }
-    }
-  }
-
-  function escape() {
-    if (key === 27 || key === 'Escape') {
-      for (let key in builders) {
-        if (builders.hasOwnProperty(key)) {
-          builders[key].hide();
-        }
-      }
-      scoreboard.play.focus();
-    }
-  }
-
-  function getCases() {
-    return {
+  let cases = {
       0: { // right
         field: fields[field.pos + 1],
         edge: (rightFields.indexOf(field.pos) > -1) ? true : false,
@@ -173,7 +177,32 @@ function useBoardWithKey(field, e) {
         field: fields[field.pos + boardRowSize],
         edge: (bottomFields.indexOf(field.pos) > -1) ? true : false
       }
-    };
-  }
+    },
+    key = e.keyCode || e.key;
 
+  // basic movement
+  keyboardBasicMovement(key, cases);
+  keyboardEscape(key);
+
+}
+
+function keyboardBasicMovement(key, cases){
+  let num = [[39, 'ArrowRight'], [37, 'ArrowLeft'], [38, 'ArrowUp'], [40, 'ArrowDown']];
+  let i = num.length; while (i--) {
+    if ((key === num[i][0] || key === num[i][1]) && !cases[i].edge) {
+      cases[i].field.e.focus();
+    }
+  }
+}
+
+function keyboardEscape(k) {
+  let bu = builders, sb = scoreboard;
+  if (k === 27 || k === 'Escape') {
+    for (let key in bu) {
+      if (bu.hasOwnProperty(key)) {
+        bu[key].hide();
+      }
+    }
+    sb.play.focus();
+  }
 }

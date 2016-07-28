@@ -1,6 +1,8 @@
 /* Builder */
 class Builder {
   constructor(options) {
+    this.selectedField = false;
+
     this.e = createElement('div', 'selector');
     this.e.style.transform = 'scale(0, 0)';
     this.e.addEventListener('click', (e) => {
@@ -13,23 +15,26 @@ class Builder {
     this.towerOptionE = [];
     this.towerPriceE = [];
     this.towerInfoE = [];
-    for (let i = 0; i < options.length; i++) {
-      let towerContainer = createElement('div', `selector__container ${options[i].name}`);
+
+    for (let i = 0, il = options.length; i < il; i++) {
+      let option = options[i];
+      let towerContainer = createElement('div', `selector__container ${option.name}`);
       this.towerContainerE.push(towerContainer);
-        let towerOption = createElement('button', `selector__element ${options[i].name}-name`, options[i].nameOg);
+        let towerOption = createElement('button', `selector__element ${option.name}-name`, option.nameOg);
         this.towerOptionE.push(towerOption);
-          let towerPrice = createElement('span', `selector__info ${options[i].name}-price`, `${options[i].cost}$`);
+          let towerPrice = createElement('span', `selector__info ${option.name}-price`, `${option.cost}$`);
           this.towerPriceE.push(towerPrice);
-        let towerInfo = createElement('button', `selector__info ${options[i].name}-showinfo`, '?');
+        let towerInfo = createElement('button', `selector__info ${option.name}-showinfo`, '?');
         this.towerInfoE.push(towerPrice);
       
       towerInfo.addEventListener('click', (e) => {
         e.stopPropagation();
-        extraInfo.tower(options[i]);
+        extraInfo.tower(option);
       });
       
       towerOption.addEventListener('click', (e) => {
-        this.build(options[i], this.selectedField);
+        e.stopPropagation();
+        this.build(option, this.selectedField);
       });
 
       towerOption.appendChild(towerPrice);
@@ -57,12 +62,11 @@ class Builder {
     this.selectedField = field;
     this.selectedField.builder = this;
     field.builder = this;
-    if (!generalPause && isStarted) {
-      scoreboard.togglePlay();
-    }
     if (!upgrade) {
       this.upgrading = false;
       field.lock('tower');
+      // pause
+      if (!generalPause && isStarted) { scoreboard.togglePlay(); }
     } else {
       this.upgrading = true;
       // tower range
@@ -94,13 +98,10 @@ class Builder {
     }
   }
 
-  hide(general) {
+  hide(general = false) {
     if (this.selectedField) {
       this.selectedField.builder = false;
       this.selectedField = false;
-    }
-    if (!general && !generalPause && isStarted) {
-      scoreboard.togglePlay();
     }
     // unpause ?
     this.e.style.transform = 'scale(0, 0)';
@@ -111,6 +112,10 @@ class Builder {
 
   build(option, field) {
     this.hide();
+    if (!this.upgrading) {
+      // unpause
+      if (!generalPause && isStarted) { scoreboard.togglePlay(); }
+    }
     // is it a sell request
     if (option.name === 'tower__sell') {
       // give some money back

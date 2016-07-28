@@ -115,7 +115,7 @@ function createSVG({
 
 // append childs function
 function appendChilds(to, els) {
-  for (let i = 0; i < els.length; i++) {
+  for (let i = 0, il = els.length; i < il; i++) {
     to.appendChild(els[i]);
   }
 }

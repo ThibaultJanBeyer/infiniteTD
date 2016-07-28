@@ -23,7 +23,7 @@ class Creeps {
   }
 
   create() {
-    this.e.style.transform = 'translate(50%,50%)';
+    this.e.style.transform = 'translate(50%, 50%)';
     board.appendChild(this.e);
     this.e.style.left = `${startField.x}px`;
     this.e.style.top = `${startField.y}px`;
@@ -50,7 +50,7 @@ class Creeps {
       this.current.unlock();
       // get next field
       // check if it is available
-      this.next = isWalkable(this);
+      this.next = isWalkable(this.current.pos, this.lasts, this.tolerance);
       if (this.next && !this.dead) {
         this.next.lock('creep');
         moveCreep(this, this.next, (el) => {
@@ -126,54 +126,73 @@ function moveCreep(el, next, cb) {
 // Gretel did all the heavy lifting
 // we now check for gretels breadcrumbs
 // and follow them.
-function isWalkable(el) {
+function isWalkable(num, lasts, tolerance) {
+  let cases = {},
+    ef = endField,
+    brs = boardRowSize,
+    // right - left - top - bottom
+    // will be reversed from while loop to: bottom - top - left - right
+    p = [num + 1, num - 1, num - brs, num + brs],
+    localfields = fields;
+  
+  // get all fields
+  // right - left - top - bottom
+  cases.fields = casesFields(p, localfields);
+  cases.edges = casesEdges(num);
+  cases.lasts = casesLasts(p, lasts, localfields);
+  cases.gretels = casesGretels(cases.fields);
 
-  let cases = checkCases(el);
   for (let i = 0; i < 4; i++) {
-    if (cases[i].field === endField) {
-      return endField;
-    } else if(!cases[i].edge && cases[i].field.e.className.indexOf('gretel__breadcrumb') > -1 && !cases[i].last) {
-      return cases[i].field;
+    if (cases.fields[i] === ef) {
+      return ef;
+    } else if(!cases.edges[i] && cases.gretels[i] && !cases.lasts[i]) {
+      return cases.fields[i];
     }
   }
-  if (el.tolerance-- > 0) {
-    return el.lasts.pop();
+  if (tolerance-- > 0) {
+    return lasts.pop();
   } else {
-    return endField;
+    return ef;
   }
-
 }
 
-function checkCases(el) {
-  let num = el.current.pos;
-  let cases = {
-    0: { // right
-      field: fields[num + 1],
-      edge: (rightFields.indexOf(num) > -1) ? true : false,
-    },
-    1: { // left
-      field: fields[num - 1],
-      edge: (leftFields.indexOf(num) > -1) ? true : false
-    },
-    2: { // top
-      field: fields[num - boardRowSize],
-      edge: (topFields.indexOf(num) > -1) ? true : false
-    },
-    3: { // bottom
-      field: fields[num + boardRowSize],
-      edge: (bottomFields.indexOf(num) > -1) ? true : false
-    }
-  };
-  // check for the last fields
-  // never walk on a field twice
-  lastFields();
+function casesFields(p, lf) {
+  let output = {};
 
-  function lastFields() {
-    cases[0].last = (el.lasts.indexOf(cases[0].field) > -1) ? true : false;
-    cases[1].last = (el.lasts.indexOf(cases[1].field) > -1) ? true : false;
-    cases[2].last = (el.lasts.indexOf(cases[2].field) > -1) ? true : false;
-    cases[3].last = (el.lasts.indexOf(cases[3].field) > -1) ? true : false;
+  for (let i = 0; i < 4; i++) {
+    output[i] = lf[p[i]];
   }
 
-  return cases;
+  return output;
+}
+
+function casesEdges(num) {
+  let output = {},
+    f = [rightFields, leftFields, topFields, bottomFields];
+
+  for (let i = 0; i < 4; i++) {
+    output[i] = (f[i].indexOf(num[i]) > -1) ? true : false;
+  }
+
+  return output;
+}
+
+function casesLasts(p, lasts, lf) {
+  let output = {};
+  
+  for (let i = 0; i < 4; i++) {
+    output[i] = (lasts.indexOf(lf[p[i]]) > -1) ? true : false;
+  }
+
+  return output;
+}
+
+function casesGretels(fields) {
+  let output = {};
+
+  for (let i = 0; i < 4; i++) {
+    output[i] = (fields[i].e.className.indexOf('gretel__breadcrumb') > -1) ? true : false;
+  }
+  
+  return output;
 }

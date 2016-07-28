@@ -95,15 +95,17 @@ class Scoreboard {
     });
 
     // Audio
-    this.audio.container.addEventListener('click', () => {
+    this.audio.container.addEventListener('click', (e) => {
+      e.stopPropagation();
       this.toggleAudio();
     });
 
     // Player Name
     this.player.input.addEventListener('keyup', (e) => {
       let key = e.keyCode || e.key;
+      e.stopPropagation();
       if (key === 13 || key === 'Enter') {
-        this.player.input.blur();
+        g.focus();
       } else {
         this.playerName(p1);
       }
@@ -178,7 +180,7 @@ class Audio {
     this.e.setAttribute('preload', 'true');
 
     this.src = [];
-    for(let i = 0; i < sounds.resources.length; i++) {
+    let i = sounds.resources.length; while (i--) {
       this.src[i] = d.createElement('source');
       this.src[i].setAttribute('src', sounds.resources[i][0]);
       this.src[i].setAttribute('type', sounds.resources[i][1]);
