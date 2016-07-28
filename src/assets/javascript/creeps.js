@@ -23,44 +23,11 @@ class Creeps {
   }
 
   create() {
-    this.e.style.transform = 'translate(50%, 50%)';
+    this.e.style.transform = 'translate(50%, 35%)';
     board.appendChild(this.e);
     this.e.style.left = `${startField.x}px`;
     this.e.style.top = `${startField.y}px`;
-    this.setupWalk(startField, startField);
-  }
-
-  setupWalk(currentField, lastField) {
-    this.x = parseInt(this.e.style.left);
-    this.y = parseInt(this.e.style.top);
-    if(currentField === endField) {
-      let afterEnd = { x: this.x + currentField.w / 2.5, y: this.y };
-      moveCreep(this, afterEnd, (el) => {
-        p1.updateLives(-1);
-        this.remove();
-      });
-    } else {
-      // no creep should walk on a field twice
-      this.lasts.push(currentField);
-      // handle fields
-      // store & unlock current
-      // since creep moves away from curr
-      this.current = currentField;
-      this.current.unlock();
-      this.current.unlock();
-      // get next field
-      // check if it is available
-      this.next = isWalkable(this.current.pos, this.lasts, this.tolerance);
-      if (this.next && !this.dead) {
-        this.next.lock('creep');
-        moveCreep(this, this.next, (el) => {
-          el.setupWalk(el.next, el.current);
-        });
-      // unlock the field if the creep is dead
-      } else if(this.dead) {
-        this.current.unlock();
-      }
-    }
+    nextLocation(this);
   }
 
   damage(dmg) {
@@ -87,6 +54,30 @@ class Creeps {
         kills = 0;
         p1.levelUp();
       }
+    }
+  }
+}
+
+// the variable gretelFields contains all fields set by gretels path coordinates
+function nextLocation(creep, i = 0) {
+  let gf = gretelFields;
+  // check if creep is not dead
+  if (!creep.dead) {
+    let length = gretelFields.length - 1;
+    if (i++ < length) {
+      // set current position
+      creep.x = parseInt(creep.e.style.left);
+      creep.y = parseInt(creep.e.style.top);
+      // move to next position
+      moveCreep(creep, gf[i], (el) => {
+        nextLocation(el, i);
+      });
+    } else {
+      let afterEnd = { x: creep.x + endField.w / 3, y: creep.y };
+      moveCreep(creep, afterEnd, () => {
+        p1.updateLives(-1);
+        creep.remove();
+      });
     }
   }
 }
@@ -121,78 +112,4 @@ function moveCreep(el, next, cb) {
   } else {
     return cb(el, next, cb);
   }
-}
-
-// Gretel did all the heavy lifting
-// we now check for gretels breadcrumbs
-// and follow them.
-function isWalkable(num, lasts, tolerance) {
-  let cases = {},
-    ef = endField,
-    brs = boardRowSize,
-    // right - left - top - bottom
-    // will be reversed from while loop to: bottom - top - left - right
-    p = [num + 1, num - 1, num - brs, num + brs],
-    localfields = fields;
-  
-  // get all fields
-  // right - left - top - bottom
-  cases.fields = casesFields(p, localfields);
-  cases.edges = casesEdges(num);
-  cases.lasts = casesLasts(p, lasts, localfields);
-  cases.gretels = casesGretels(cases.fields);
-
-  for (let i = 0; i < 4; i++) {
-    if (cases.fields[i] === ef) {
-      return ef;
-    } else if(!cases.edges[i] && cases.gretels[i] && !cases.lasts[i]) {
-      return cases.fields[i];
-    }
-  }
-  if (tolerance-- > 0) {
-    return lasts.pop();
-  } else {
-    return ef;
-  }
-}
-
-function casesFields(p, lf) {
-  let output = {};
-
-  for (let i = 0; i < 4; i++) {
-    output[i] = lf[p[i]];
-  }
-
-  return output;
-}
-
-function casesEdges(num) {
-  let output = {},
-    f = [rightFields, leftFields, topFields, bottomFields];
-
-  for (let i = 0; i < 4; i++) {
-    output[i] = (f[i].indexOf(num[i]) > -1) ? true : false;
-  }
-
-  return output;
-}
-
-function casesLasts(p, lasts, lf) {
-  let output = {};
-  
-  for (let i = 0; i < 4; i++) {
-    output[i] = (lasts.indexOf(lf[p[i]]) > -1) ? true : false;
-  }
-
-  return output;
-}
-
-function casesGretels(fields) {
-  let output = {};
-
-  for (let i = 0; i < 4; i++) {
-    output[i] = (fields[i].e.className.indexOf('gretel__breadcrumb') > -1) ? true : false;
-  }
-  
-  return output;
 }

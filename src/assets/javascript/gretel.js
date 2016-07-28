@@ -2,7 +2,7 @@
 // figured out that it might take ages
 // end up using https://github.com/qiao/PathFinding.js
 // gretel is my pathfinder visualizer
-let grid, finder, path;
+let gretelFields = [], grid, finder, path;
 
 /* Gretel */
 function gretel() {
@@ -27,48 +27,49 @@ function gretel() {
 }
 
 function clearOlds() {
-    let _fields = fields,
-      clearClasses =
-    [ // clear any old path
-      'gretel__breadcrumb',
-      'gretel__breadcrumb--top-left',
-      'gretel__breadcrumb--top-right',
-      'gretel__breadcrumb--bottom-left',
-      'gretel__breadcrumb--bottom-right',
-      'gretel__breadcrumb--bottom-right',
-      'gretel__breadcrumb--horizontal-last-left',
-      'gretel__breadcrumb--horizontal-last-right',
-      'gretel__breadcrumb--horizontal-last-top',
-      'gretel__breadcrumb--horizontal-next-bottom',
-      'gretel__breadcrumb--horizontal-next-left',
-      'gretel__breadcrumb--horizontal-next-right',
-      'gretel__breadcrumb--horizontal-next-top',
-      'gretel__breadcrumb--horizontal-next-bottom',
-      'gretel__breadcrumb--vertical-last-left',
-      'gretel__breadcrumb--vertical-last-right',
-      'gretel__breadcrumb--vertical-last-top',
-      'gretel__breadcrumb--vertical-last-bottom',
-      'gretel__breadcrumb--vertical-next-left',
-      'gretel__breadcrumb--vertical-next-right',
-      'gretel__breadcrumb--vertical-next-top',
-      'gretel__breadcrumb--vertical-next-bottom'
-    ];
-    for(let i = 0, il = _fields.length; i < il; i++) {
-      for(let j = 0, jl = clearClasses.length; j < jl; j++) {
-        if (_fields[i].e.className.indexOf(clearClasses[j]) > -1) {
-          _fields[i].e.classList.remove(clearClasses[j]);
-        }
-      }
-      // re-lock all towers to be sure
-      if (_fields[i].e.className.indexOf('tower') > -1) {
-        _fields[i].lock('tower');
-      }
-      // get blocked _fields
-      if (_fields[i].locked && _fields[i].pos !== startField.pos && _fields[i].pos !== endField.pos && _fields[i].locked === 'tower') {
-        grid.setWalkableAt(_fields[i].fX, _fields[i].fY, false);
+  gretelFields = [];
+  let _fields = fields,
+    clearClasses =
+  [ // clear any old path
+    'gretel__breadcrumb',
+    'gretel__breadcrumb--top-left',
+    'gretel__breadcrumb--top-right',
+    'gretel__breadcrumb--bottom-left',
+    'gretel__breadcrumb--bottom-right',
+    'gretel__breadcrumb--bottom-right',
+    'gretel__breadcrumb--horizontal-last-left',
+    'gretel__breadcrumb--horizontal-last-right',
+    'gretel__breadcrumb--horizontal-last-top',
+    'gretel__breadcrumb--horizontal-next-bottom',
+    'gretel__breadcrumb--horizontal-next-left',
+    'gretel__breadcrumb--horizontal-next-right',
+    'gretel__breadcrumb--horizontal-next-top',
+    'gretel__breadcrumb--horizontal-next-bottom',
+    'gretel__breadcrumb--vertical-last-left',
+    'gretel__breadcrumb--vertical-last-right',
+    'gretel__breadcrumb--vertical-last-top',
+    'gretel__breadcrumb--vertical-last-bottom',
+    'gretel__breadcrumb--vertical-next-left',
+    'gretel__breadcrumb--vertical-next-right',
+    'gretel__breadcrumb--vertical-next-top',
+    'gretel__breadcrumb--vertical-next-bottom'
+  ];
+  for(let i = 0, il = _fields.length; i < il; i++) {
+    for(let j = 0, jl = clearClasses.length; j < jl; j++) {
+      if (_fields[i].e.className.indexOf(clearClasses[j]) > -1) {
+        _fields[i].e.classList.remove(clearClasses[j]);
       }
     }
+    // re-lock all towers to be sure
+    if (_fields[i].e.className.indexOf('tower') > -1) {
+      _fields[i].lock('tower');
+    }
+    // get blocked _fields
+    if (_fields[i].locked && _fields[i].pos !== startField.pos && _fields[i].pos !== endField.pos && _fields[i].locked === 'tower') {
+      grid.setWalkableAt(_fields[i].fX, _fields[i].fY, false);
+    }
   }
+}
 
 // this fill draw smooth corners to the path
 function handlePath(path) {
@@ -93,6 +94,7 @@ function handlePath(path) {
       if (globFields[k].fX === path[i][0] && globFields[k].fY === path[i][1]) {
         // add the breadcrumbs class
         globFields[k].e.className += ` gretel__breadcrumb ${corner}`;
+        gretelFields.push(globFields[k]);
       }
     }
   }
