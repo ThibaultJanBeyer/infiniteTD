@@ -12,18 +12,18 @@ class Creeps {
     this.e = createElement('div', `c c__l${lvl}`);
     this.ms = ms;
     this.hp = hp;
+    this.fullHp = hp;
     this.bounty = bounty;
     this.lasts = [];
     this.tolerance = 5;
 
-    this.hpBarC = createElement('div', 'c__hp-container');
-    this.hpBar = createElement('div', 'c__hp');
-    this.hpBarC.appendChild(this.hpBar);
-    this.e.appendChild(this.hpBarC);
+    // visually represent hitpoints
+    // this.hp / this.fullHp = 0.5 at 50% hp
+    // * 10 to get a full number value so that .ceil rounds to a full number properly
+    this.e.setAttribute('data-hp', Math.ceil(this.hp / this.fullHp * 10));
   }
 
   create() {
-    this.e.style.transform = 'translate(50%, 35%)';
     board.appendChild(this.e);
     this.e.style.left = `${startField.x}px`;
     this.e.style.top = `${startField.y}px`;
@@ -32,6 +32,7 @@ class Creeps {
 
   damage(dmg) {
     this.hp -= dmg;
+    this.e.setAttribute('data-hp', Math.ceil(this.hp / this.fullHp * 10));
     if (this.hp <= 0) {
       this.remove(true, p1);
     }

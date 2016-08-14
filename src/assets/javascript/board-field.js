@@ -115,7 +115,6 @@ class Field {
       if(!isPaused) {
         cooldown += 1;
         if (cooldown >= tcooldown) {
-          console.log('ready');
           let attacked = 0,
             t = this.tower,
             trange = t.rng,
