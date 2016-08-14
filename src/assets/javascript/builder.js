@@ -125,6 +125,7 @@ class Builder {
       // give some money back
       p1.updateMoney(field.tower.cost / 2, field);
       field.destroyTower();
+      field.e.focus();
     // check is player can afford it  
     } else if (p1.money < option.cost) {
       audio.play('need_more_money');
