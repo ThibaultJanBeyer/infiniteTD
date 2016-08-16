@@ -1,9 +1,9 @@
 var gulp = require('gulp');
 var imagemin = require('gulp-imagemin');
-var svgSprite = require('gulp-svg-sprite');
+// var svgSprite = require('gulp-svg-sprite');
 
 var svgSrc = './src/assets/svg/*.svg',
-    svgDst = './dist/assets/svg/';
+    svgDst = './src/assets/svg/';
 
 var svgOptions = {
     progressive: true,
@@ -12,22 +12,22 @@ var svgOptions = {
     ]
   };
 
-var options = {
-  svg: {
-    doctypeDeclaration: false,
-    xmlDeclaration: false
-  },
-  mode: {
-    stack: {
-        dest: '',
-        sprite: 'sprite.svg'
-      }
-  }
-};
+// var options = {
+//   svg: {
+//     doctypeDeclaration: false,
+//     xmlDeclaration: false
+//   },
+//   mode: {
+//     stack: {
+//         dest: '',
+//         sprite: 'sprite.svg'
+//       }
+//   }
+// };
 
 module.exports = function () {
   return gulp.src(svgSrc)
-    .pipe(svgSprite(options))
+    // .pipe(svgSprite(options))
     .pipe(imagemin(svgOptions))
     .pipe(gulp.dest(svgDst));
 };

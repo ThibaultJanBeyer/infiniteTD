@@ -56,18 +56,15 @@ class Scoreboard {
     this.e = createElement('div', 'scoreboard');
     this.play = createElement('button', 'scoreboard__el scoreboard__el-pause', 'play');
     this.m = createElement('p', 'scoreboard__el scoreboard__el-message', '.');
-    this.money = createSVG({svgName: 'money', title: 'Money: ', extraElement: 'p'});
-    this.player = createSVG({svgName: 'player', title: 'Player: ', extraElement: 'input'});
+    this.money = createSVG({svgName: 'money', extraElement: 'p', svg: SVGmoney});
+    this.player = createSVG({svgName: 'player', extraElement: 'input', svg: SVGplayer});
     this.player.input.setAttribute('aria-label', 'Player name: ');
-    this.level = createSVG({svgName: 'level', title: 'Level: ', extraElement: 'p'});
-    this.score = createSVG({svgName: 'score', title: 'Score: ', extraElement: 'p'});
-    this.lives = createSVG({svgName: 'lives', title: 'Lives: ', extraElement: 'p'});
-    this.audio = createSVG({
-      container: 'button',
-      svgName: 'audio', 
-      svg: `sound-${soundOff}`,
-      title: 'Disable Ausio: '
-    });
+    this.level = createSVG({svgName: 'level', extraElement: 'p', svg: SVGlevel});
+    this.score = createSVG({svgName: 'score', extraElement: 'p', svg: SVGscore});
+    this.lives = createSVG({svgName: 'lives', extraElement: 'p', svg: SVGlives});
+    this.audioOff = createSVG({container: 'button', svgName: 'audio', svg: SVGaudio.off});
+    this.audioOn = createSVG({container: 'button', svgName: 'audio', svg: SVGaudio.on});
+    this.audioOn.container.style.display = 'none';
 
     // Global Play & Pause
     this.play.addEventListener('click', (e) => {
@@ -95,7 +92,11 @@ class Scoreboard {
     });
 
     // Audio
-    this.audio.container.addEventListener('click', (e) => {
+    this.audioOn.container.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleAudio();
+    });
+    this.audioOff.container.addEventListener('click', (e) => {
       e.stopPropagation();
       this.toggleAudio();
     });
@@ -119,7 +120,7 @@ class Scoreboard {
     });
 
     // Append all
-    this.elements = [this.player.container, this.money.container, this.score.container, this.lives.container, this.level.container, this.play, this.audio.container, this.m];
+    this.elements = [this.player.container, this.money.container, this.score.container, this.lives.container, this.level.container, this.play, this.audioOn.container, this.audioOff.container, this.m];
     appendChilds(this.e, this.elements);
     g.appendChild(this.e);
 
@@ -159,8 +160,13 @@ class Scoreboard {
 
   toggleAudio() {
     soundOff = !soundOff;
-    this.audio.title.innerHTML = (soundOff) ? 'Turn audio on.' : 'Turn audio off.';
-    this.audio.use.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `assets/svg/sprite.svg#sound-${soundOff}`);
+    if (soundOff) {
+      this.audioOff.container.style.display = 'none';
+      this.audioOn.container.style.display = 'inline-block';
+    } else {
+      this.audioOff.container.style.display = 'inline-block';
+      this.audioOn.container.style.display = 'none';
+    }
   }
 
   playerName(player) {

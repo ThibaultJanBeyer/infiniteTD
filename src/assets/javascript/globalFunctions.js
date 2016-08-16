@@ -81,38 +81,6 @@ function createElement(tag, classlist, value = '') {
   return el;
 }
 
-// Create Svg
-function createSVG({
-    containerClass = 'scoreboard__el',
-    container = 'div',
-    svg,
-    svgName,
-    className = 'scoreboard__icon',
-    title,
-    extraElement = false
-  }) {
-  let svgElement = (svg) ? svg : svgName; 
-  let el = {};
-  el.container = createElement(container, `${containerClass} ${containerClass}-${svgName}`);
-    el.svg = d.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      el.svg.classList.add(`${className}`, `${className}--${svgName}`);
-      el.svg.setAttribute('role', 'img');
-        el.title = createElement('title', '', title);
-        el.use = d.createElementNS('http://www.w3.org/2000/svg', 'use');
-        el.use.setAttribute('role', 'presentation');
-        el.use.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `assets/svg/sprite.svg#${svgElement}`);
-  appendChilds(el.svg, [el.title, el.use]);
-
-  if(extraElement) {
-    el[extraElement] = createElement(extraElement, `${containerClass}-${extraElement}`);
-    appendChilds(el.container, [el.svg, el[extraElement]]);
-  } else {
-    el.container.appendChild(el.svg);
-  }
-
-  return el;
-}
-
 // append childs function
 function appendChilds(to, els) {
   for (let i = 0, il = els.length; i < il; i++) {
