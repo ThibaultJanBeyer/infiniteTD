@@ -4,33 +4,22 @@
 
 .board {
   background-color: $board;
+  border: 5px solid $board-dash;
   display: inline-block;
   height: 100%;
   min-height: 320px;
   min-width: 320px;
-  outline-offset: 15px;
   position: relative;
   transform: scale(0.9, 0.9);
   width: 100%;
 }
 
-.board::before {
-  background: transparent;
-  border: 5px solid $board-dash;
-  content: '';
-  height: 100%;
-  margin: -5px;
-  pointer-events: none;
-  position: absolute;
-  transform: scale(1.15, 1.15);
-  width: 100%;
-  z-index: -1;
-}
-
 .board__field {
+  align-items: inherit;
   background-color: transparent;
   border: 0;
   cursor: pointer;
+  float: left;
   height: 10%;
   margin: 0;
   padding: 0;
@@ -42,24 +31,12 @@
   }
 }
 
-.start,
+.start {
+  border-left: 5px solid $start-end;
+}
+
 .end {
-  position: relative;
-}
-
-.start::before,
-.end::before {
-  background: $start-end;
-  content: '';
-  height: 120%;
-  margin-left: -80%;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  width: 5px;
-}
-
-.end::before {
-  margin-left: 80%;
+  border-right: 5px solid $start-end;
 }
 
 .start.gretel__breadcrumb--vertical-next-bottom {

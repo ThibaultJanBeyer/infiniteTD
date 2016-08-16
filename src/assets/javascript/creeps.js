@@ -85,6 +85,8 @@ function nextLocation(creep, i = 0) {
 
 // move creep
 function moveCreep(el, next, cb) {
+  let increment;
+
   if (!isPaused) {
     // calculate the distance
     // (x:10,y:20)[cur] -dist-> [next](x:20,y:20)
@@ -96,7 +98,6 @@ function moveCreep(el, next, cb) {
     };
 
     increment = calculateIncrement(el, next);
-    
     el.x += increment.x;
     el.dist.x -= increment.x;
     el.y += increment.y;
@@ -106,7 +107,7 @@ function moveCreep(el, next, cb) {
     el.e.style.top = `${el.y}px`;
   }
 
-  if (typeof increment === 'undefined' || increment == null || increment.steps > 0.5) {
+  if (typeof increment === 'undefined' || increment == null || increment.steps >= 1) {
     setTimeout(function() {
       return moveCreep(el, next, cb);
     }, 10);

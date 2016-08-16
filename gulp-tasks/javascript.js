@@ -8,9 +8,7 @@ var jsSrc = ['./src/assets/javascript/**/*.js','./bower_components/pathfinding/p
     jsDst = './dist/assets/javascript/';
 
 var uglifyOptions = {
-  compress: {
-    drop_console: true
-  }
+  compress: { drop_console: true }
 };
 
 module.exports = function () {
@@ -21,8 +19,8 @@ module.exports = function () {
         this.emit('end');
       }
     }))
-    .pipe(babel())
     .pipe(concat('bundle.js'))
-    //.pipe(uglify(uglifyOptions))
+    .pipe(babel({ presets: ['es2015'] }))
+    .pipe(uglify(uglifyOptions))
     .pipe(gulp.dest(jsDst));
 };
