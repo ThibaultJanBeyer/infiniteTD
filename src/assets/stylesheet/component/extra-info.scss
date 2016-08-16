@@ -37,9 +37,7 @@
 
 .extra-info__title {
   @include heading-alpha;
-  margin: -70px 10px;
-  position: absolute;
-  text-align: center;
+  margin: -60px 10px 20px;
 }
 
 .extra-info__description {

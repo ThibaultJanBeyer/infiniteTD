@@ -1,22 +1,21 @@
+$creeps: #F09;
+
 /**********/
 /* Creeps */
 /**********/
 .c {
+  background: $creeps;
+  border-radius: 50%;
+  height: 5%;
   position: absolute;
   width: 5%;
-  height: 5%;
-}
-
-.c {
-  background: #f09;
-  border-radius: 50%;
 }
 
 /**
  * a different size based on the creeps hp attribute:
  * if the creep has only 50% hp = 0.5 = i then the creeps
- * scale is 0.5 = 50% as well 
- **/ 
+ * scale is 0.5 = 50% as well
+ **/
 @for $i from 0 through 10 {
   .c[data-hp="#{$i}"] {
     transform: translate(50%, 35%) scale($i / 10, $i / 10);

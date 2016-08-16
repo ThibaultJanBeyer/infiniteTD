@@ -22,7 +22,7 @@ module.exports = function () {
       }
     }))
     .pipe(sass(sassOptions).on('error', sass.logError))
-    .pipe(autoprefixer())
+    .pipe(autoprefixer({ browsers: ['Chrome < 23']}))
     .pipe(concat('bundle.css'))
     .pipe(csso())
     .pipe(gulp.dest(scssDst));
