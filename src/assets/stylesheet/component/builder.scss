@@ -6,8 +6,14 @@
   border: 3px solid $selector;
   border-radius: 50%;
   position: absolute;
+  transform: scale(0, 0);
   transition: transform 0.2s;
   z-index: 900;
+}
+
+// Hide / Show
+.selector--show {
+  transform: scale(1, 1);
 }
 
 .selector__container {

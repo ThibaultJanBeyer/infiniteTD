@@ -21,6 +21,6 @@ module.exports = function () {
     }))
     .pipe(concat('bundle.js'))
     .pipe(babel({ presets: ['es2015'] }))
-    .pipe(uglify(uglifyOptions))
+    //.pipe(uglify(uglifyOptions))
     .pipe(gulp.dest(jsDst));
 };

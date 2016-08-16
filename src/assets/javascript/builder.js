@@ -4,7 +4,6 @@ class Builder {
     this.selectedField = false;
 
     this.e = createElement('div', 'selector');
-    this.e.style.transform = 'scale(0, 0)';
     this.e.addEventListener('click', (e) => {
       e.stopPropagation();
       this.hide();
@@ -49,7 +48,6 @@ class Builder {
 
     // tower range
     this.range = createElement('div', 'tower__range');
-    this.range.style.transform = 'scale(0, 0)';
     this.range.addEventListener('click', (e) => {
       e.stopPropagation();
       this.hide();
@@ -79,7 +77,7 @@ class Builder {
       this.range.style.height = `${size}px`;
       this.range.style.left = `${field.x + field.w / 2}px`;
       this.range.style.top = `${field.y + field.w / 2}px`;
-      this.range.style.transform = `scale(1, 1) translate(-50%, -50%)`;
+      this.range.className = 'tower__range tower__range--show';
     }
     // check if it would block the field
     if(!gretel()) {
@@ -94,7 +92,7 @@ class Builder {
       }
       this.w = `${field.w * 2}px`;
       this.h = `${field.w * 2}px`;
-      this.e.style.transform = 'scale(1,1)';
+      this.e.className = 'selector selector--show';
       this.e.style.width = this.w;
       this.e.style.height = this.h;
       this.e.style.left = `${field.x - field.w / 2}px`;
@@ -107,9 +105,9 @@ class Builder {
       this.selectedField.builder = false;
       this.selectedField = false;
     }
-    // unpause ?
-    this.e.style.transform = 'scale(0, 0)';
-    this.range.style.transform = 'scale(0, 0)';
+    // unpause & remove the show classes from builders
+    this.e.className = 'selector';
+    this.range.className = 'tower__range';
     builderOpen = false;
     gretel();
   }

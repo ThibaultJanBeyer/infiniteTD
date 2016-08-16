@@ -11,7 +11,7 @@ let wX, wY, isPaused = true,
 
 /* Setup Scene */
 function init() {
-
+  
   // Scoreboard
   setupScoreboard();
 

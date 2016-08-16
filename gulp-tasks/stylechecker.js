@@ -9,7 +9,7 @@ var scssSrc =
   .pipe(scsslint());
 
 var jsSrc =
-  gulp.src('./src/assets/javascript/**/*.js')
+  gulp.src(['./src/assets/javascript/**/*.js', '!./src/assets/javascript/polyfills/*'])
   .pipe(jscs())
   .pipe(jshint({ esnext: true }))
   .pipe(jshint.reporter('jshint-stylish'));
