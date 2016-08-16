@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var audiosprite = require('gulp-audiosprite');
 
 var audioSrc = './src/assets/sounds/*.wav';
-var audioDst = './dist/assets/sounds';
+var audioDst = './www/assets/sounds';
     
 module.exports = function () {
   return gulp.src(audioSrc)

@@ -5,7 +5,7 @@ var plumber = require('gulp-plumber');
 var uglify = require('gulp-uglify');
 
 var jsSrc = ['./src/assets/javascript/**/*.js','./bower_components/pathfinding/pathfinding-browser.js','./bower_components/espi-a11y-dialog/a11y-dialog.js'],
-    jsDst = './dist/assets/javascript/';
+    jsDst = './www/assets/javascript/';
 
 var uglifyOptions = {
   compress: { drop_console: true }

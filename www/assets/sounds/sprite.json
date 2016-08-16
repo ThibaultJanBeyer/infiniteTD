@@ -1,0 +1,38 @@
+{
+  "resources": [
+    "sprite.ogg",
+    "sprite.mp3"
+  ],
+  "spritemap": {
+    "cannot_build_here": {
+      "start": 0,
+      "end": 1.2028344671201814,
+      "loop": false
+    },
+    "do_not_block": {
+      "start": 3,
+      "end": 3.989886621315193,
+      "loop": false
+    },
+    "finish_building_process_first": {
+      "start": 5,
+      "end": 7.0928344671201815,
+      "loop": false
+    },
+    "need_more_money": {
+      "start": 9,
+      "end": 10.16374149659864,
+      "loop": false
+    },
+    "winner_winner_chicken_dinner": {
+      "start": 12,
+      "end": 13.47997732426304,
+      "loop": false
+    },
+    "you_lost_try_again": {
+      "start": 15,
+      "end": 17.22485260770975,
+      "loop": false
+    }
+  }
+}

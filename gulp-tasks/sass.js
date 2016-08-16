@@ -6,7 +6,7 @@ var csso = require('gulp-csso');
 var concat = require('gulp-concat');
 
 var scssSrc = './src/assets/stylesheet/bundle.scss',
-    scssDst = './dist/assets/stylesheet/';
+    scssDst = './www/assets/stylesheet/';
 
 var sassOptions = {
   errLogToConsole: true
