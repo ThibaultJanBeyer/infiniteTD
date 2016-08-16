@@ -121,9 +121,8 @@ function globalKeyboard(e) {
 function setSizes() {
 
   // get viewport of game
-  wX = g.offsetWidth || g.clientWidth;
-  wY = g.offsetHeight || g.clientHeight;
-
+  wX = b.offsetWidth || b.clientWidth;
+  wY = b.offsetHeight || b.clientHeight;
   // if the layout is horizontal
   // set the game a square based on the height
   if (wX > wY) {
@@ -134,16 +133,26 @@ function setSizes() {
       e.classList.remove('scoreboard__el--alt');
     });
     scoreboard.e.classList.remove('scoreboard--alt');
+    board.classList.remove('board--alt');
+    let i = fields.length; while (i--) {
+      fields[i].e.style.width = board.clientWidth / 10 + 'px';
+      fields[i].e.style.height = board.clientHeight / 10 + 'px';
+    }
   // if the layout is vertical
   // set the game a square based on the width
   } else {
-    board.style.width = `${wX}px`;
-    board.style.height = `${wX}px`;
+    board.style.width = `${wX - scoreboard.e.offsetHeight}px`;
+    board.style.height = `${wX - scoreboard.e.offsetHeight}px`;
     // also have the scoreboard elements inline
     scoreboard.elements.forEach((e) => {
       e.classList.add('scoreboard__el--alt');
     });
     scoreboard.e.classList.add('scoreboard--alt');
+    board.classList.add('board--alt');
+    let i = fields.length; while (i--) {
+      fields[i].e.style.width = board.clientWidth / 10 + 'px';
+      fields[i].e.style.height = board.clientHeight / 10 + 'px';
+    }
   }
 
   // we will have to recalculate the exact

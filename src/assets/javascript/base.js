@@ -1,13 +1,9 @@
-window.addEventListener("orientationchange", function(){
-  alert(screen.orientation); // e.g. portrait 
-});
-
-
 /* Globals */
 // available elements
 const d = document,
   b = d.body,
-  g = d.getElementsByClassName('infiniteTD')[0];
+  g = d.getElementsByClassName('infiniteTD')[0],
+  w = window;
   // values
 let wX, wY, isPaused = true,
   isStarted = false,
@@ -43,6 +39,9 @@ function init() {
   b.onresize = () => {
     setSizes();
   };
+  w.addEventListener('orientationchange', () => {
+    setSizes();
+  });
 
 }
 

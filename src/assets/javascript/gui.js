@@ -54,7 +54,6 @@ let scoreboard,
 class Scoreboard {
   constructor() {
     this.e = createElement('div', 'scoreboard');
-    this.play = createElement('button', 'scoreboard__el scoreboard__el-pause', 'play');
     this.m = createElement('p', 'scoreboard__el scoreboard__el-message', '.');
     this.money = createSVG({svgName: 'money', extraElement: 'p', svg: SVGmoney});
     this.player = createSVG({svgName: 'player', extraElement: 'input', svg: SVGplayer});
@@ -62,9 +61,12 @@ class Scoreboard {
     this.level = createSVG({svgName: 'level', extraElement: 'p', svg: SVGlevel});
     this.score = createSVG({svgName: 'score', extraElement: 'p', svg: SVGscore});
     this.lives = createSVG({svgName: 'lives', extraElement: 'p', svg: SVGlives});
+    this.controls = createElement('div', 'scoreboard__el-controls');
+    this.play = createElement('button', 'scoreboard__el scoreboard__el-pause', 'play');
     this.audioOff = createSVG({container: 'button', svgName: 'audio', svg: SVGaudio.off});
     this.audioOn = createSVG({container: 'button', svgName: 'audio', svg: SVGaudio.on});
     this.audioOn.container.style.display = 'none';
+    appendChilds(this.controls, [this.play, this.audioOff.container, this.audioOn.container]);
 
     // Global Play & Pause
     this.play.addEventListener('click', (e) => {
@@ -120,7 +122,7 @@ class Scoreboard {
     });
 
     // Append all
-    this.elements = [this.player.container, this.money.container, this.score.container, this.lives.container, this.level.container, this.play, this.audioOn.container, this.audioOff.container, this.m];
+    this.elements = [this.player.container, this.money.container, this.score.container, this.lives.container, this.level.container, this.controls, this.m];
     appendChilds(this.e, this.elements);
     g.appendChild(this.e);
 

@@ -41,7 +41,6 @@
   border: 0 solid transparent;
   border-radius: 50%;
   height: 30px;
-  line-height: 30px;
   position: absolute;
   text-align: center;
   width: 30px;
@@ -55,12 +54,14 @@
 .selector__info[class*='price'] {
   color: $t-cost;
   left: -15px;
+  line-height: 30px;
   top: -15px;
 }
 
 .selector__info[class*='showinfo'] {
   bottom: -15px;
   color: $t-info;
+  line-height: 30px;
   right: -15px;
 }
 

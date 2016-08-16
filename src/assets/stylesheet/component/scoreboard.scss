@@ -8,7 +8,10 @@
   display: inline-block;
   margin: 15px;
   padding: 15px;
-  vertical-align: top;
+  position: absolute;
+  text-align: left;
+  top: 50%;
+  transform: translateY(-50%);
   width: 150px;
   z-index: 1000;
 }
@@ -18,7 +21,10 @@
   display: block;
   margin: 0;
   padding: 0;
+  position: inherit;
   text-align: center;
+  top: inherit;
+  transform: translateY(0);
   width: 100%;
 }
 

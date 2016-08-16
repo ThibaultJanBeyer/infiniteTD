@@ -7,11 +7,15 @@
   border: 5px solid $board-dash;
   display: inline-block;
   height: 100%;
+  margin-left: 180px;
   min-height: 320px;
   min-width: 320px;
   position: relative;
-  transform: scale(0.9, 0.9);
   width: 100%;
+}
+
+.board--alt {
+  margin: 0;
 }
 
 .board__field {
