@@ -1,3 +1,8 @@
+window.addEventListener("orientationchange", function(){
+  alert(screen.orientation); // e.g. portrait 
+});
+
+
 /* Globals */
 // available elements
 const d = document,

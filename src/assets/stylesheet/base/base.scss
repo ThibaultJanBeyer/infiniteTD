@@ -7,10 +7,11 @@
  * Body
  */
 html,
-body,
-main {
+body {
+  background-color: $board;
   height: 100%;
   margin: 0;
+  overflow: hidden;
   width: 100%;
 }
 
@@ -28,26 +29,14 @@ main {
   width: 1px;
 }
 
-
-/*
- * Misc
- */
-.center-align {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-}
-
 /*
  * Game
  */
  // scss-lint:disable SelectorFormat
 .infiniteTD {
-  align-items: center;
   background-color: $board;
-  display: flex;
-  flex-wrap: wrap;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
+  position: relative;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
 }

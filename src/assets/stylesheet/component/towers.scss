@@ -10,18 +10,16 @@ $projectile: #FF0;
   outline-offset: -1px;
 }
 
+/*
+ * 1. Center align the tower level indicator
+ */
 .tower:not(.tower__rock)::after {
   content: attr(data-level);
-  align-items: center;
   background: $t-level;
   box-shadow: inset 0 -5px 1px rgba($black, 0.5), 0 5px 1px rgba($black, 0.5);
   color: $white;
-  display: flex;
-  height: 50%;
-  justify-content: center;
+  padding: 12.5% 20% 15%; /* 1 */
   position: absolute;
-  transform: translate(50%, -70%);
-  width: 50%;
 }
 
 .tower__range {
