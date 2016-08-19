@@ -57,7 +57,7 @@ function clearOlds() {
   for(let i = 0, il = _fields.length; i < il; i++) {
     for(let j = 0, jl = clearClasses.length; j < jl; j++) {
       if (_fields[i].e.className.indexOf(clearClasses[j]) > -1) {
-        _fields[i].e.classList.remove(clearClasses[j]);
+        removeClass(_fields[i].e, clearClasses[j]);
       }
     }
     // re-lock all towers to be sure

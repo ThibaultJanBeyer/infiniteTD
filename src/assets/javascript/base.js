@@ -57,5 +57,5 @@ document.addEventListener('deviceready', function() {
     if (!isDevice) {
       init();
     }
-  }, 5000);
+  }, 2000);
 })();

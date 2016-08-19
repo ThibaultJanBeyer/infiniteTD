@@ -114,11 +114,11 @@ class Scoreboard {
       }
     });
     this.player.input.addEventListener('focus', () => {
-      this.player.container.classList.add('scoreboard__hint');
+      addClass(this.player.container, 'scoreboard__hint');
       this.player.input.select();
     });
     this.player.input.addEventListener('blur', () => {
-      this.player.container.classList.remove('scoreboard__hint');
+      removeClass(this.player.container, 'scoreboard__hint');
     });
 
     // Append all
@@ -143,7 +143,7 @@ class Scoreboard {
     this.m.innerHTML = message;
     this.m.className += ' scoreboard__el--flash';
     setTimeout(() => {
-      this.m.classList.remove('scoreboard__el--flash');
+      removeClass(this.m, 'scoreboard__el--flash');
     }, Math.floor(duration) * 1000 + 500);
   }
 

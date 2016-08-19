@@ -25,12 +25,12 @@ class Field {
 
   lock(unit) {
     this.locked = (unit) ? unit : true;
-    this.e.classList.add('locked');
+    addClass(this.e, 'locked');
     if (unit === 'start') {
-      this.e.classList.add('start');
+      addClass(this.e, 'start');
       this.start = true;
     } else if (unit === 'end') {
-      this.e.classList.add('end');
+      addClass(this.e, 'end');
       this.end = true;
     }
   }
@@ -38,7 +38,7 @@ class Field {
   unlock() {
     if (!this.start && !this.end) {
       this.locked = false;
-      this.e.classList.remove('locked');
+      removeClass(this.e, 'locked');
     }
   }
 
@@ -88,8 +88,8 @@ class Field {
   buildTower(tower) {
     this.e.className += ` tower ${tower.name}`;
     this.e.setAttribute('data-level', tower.level);
-    if (this.e.classList.contains('gretel__breadcrumb')) {
-      this.e.classList.remove('gretel__breadcrumb');
+    if (this.e.className.indexOf('gretel__breadcrumb') > -1) {
+      removeClass(this.e, 'gretel__breadcrumb');
     }
     this.tower = tower; 
     this.lock('tower');
@@ -100,7 +100,8 @@ class Field {
   }
 
   destroyTower() {
-    this.e.classList.remove('tower', this.tower.name);
+    removeClass(this.e, 'tower');
+    removeClass(this.e, this.tower.name);
     this.e.removeAttribute('data-level');
     this.unlock();
     clearInterval(this.scanInterval);

@@ -129,11 +129,9 @@ function setSizes() {
     board.style.width = `${wY - scoreboard.e.offsetWidth}px`;
     board.style.height = `${wY - scoreboard.e.offsetWidth}px`;
     // also have the scoreboard elements beneath each other
-    scoreboard.elements.forEach((e) => {
-      e.classList.remove('scoreboard__el--alt');
-    });
-    scoreboard.e.classList.remove('scoreboard--alt');
-    board.classList.remove('board--alt');
+    scoreboard.elements.forEach((e) => { removeClass(e, 'scoreboard__el--alt'); });
+    removeClass(scoreboard.e, 'scoreboard--alt');
+    removeClass(board, 'board--alt');
     let i = fields.length; while (i--) {
       fields[i].e.style.width = board.clientWidth / 10 + 'px';
       fields[i].e.style.height = board.clientHeight / 10 + 'px';
@@ -144,11 +142,9 @@ function setSizes() {
     board.style.width = `${wX - scoreboard.e.offsetHeight}px`;
     board.style.height = `${wX - scoreboard.e.offsetHeight}px`;
     // also have the scoreboard elements inline
-    scoreboard.elements.forEach((e) => {
-      e.classList.add('scoreboard__el--alt');
-    });
-    scoreboard.e.classList.add('scoreboard--alt');
-    board.classList.add('board--alt');
+    scoreboard.elements.forEach((e) => { addClass(e, 'scoreboard__el--alt'); });
+    addClass(scoreboard.e, 'scoreboard--alt');
+    addClass(board.e, 'board--alt');
     let i = fields.length; while (i--) {
       fields[i].e.style.width = board.clientWidth / 10 + 'px';
       fields[i].e.style.height = board.clientHeight / 10 + 'px';

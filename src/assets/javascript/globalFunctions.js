@@ -122,3 +122,22 @@ function myInterval({ cd, dur, cb }) {
 function euclidDistance(x1,x2,y1,y2) {
 	return Math.sqrt(Math.pow(x1-x2,2) + Math.pow(y1-y2,2));
 }
+
+// sadly old phones do not support the quite new .classlist
+// so we have to use this workaround to add/remove classes
+// all credits to http://clubmate.fi/javascript-adding-and-removing-class-names-from-elements/
+function addClass( element, classname ) {
+  var cn = element.className;
+  //test for existance
+  if( cn.indexOf(classname) !== -1 ) { return; }
+  //add a space if the element already has class
+  if( cn !== '' ) { classname = ' ' + classname; }
+  element.className = cn+classname;
+}
+
+function removeClass( element, classname ) {
+  var cn = element.className;
+  var rxp = new RegExp( classname + '\\b', 'g' );
+  cn = cn.replace( classname, '' );
+  element.className = cn;
+}
