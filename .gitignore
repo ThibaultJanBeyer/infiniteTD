@@ -1,9 +1,0 @@
-originals/
-node_modules/
-dist/
-platforms/
-plugins/
-.vscode
-*.DS_Store
-*.log
-*.swp
