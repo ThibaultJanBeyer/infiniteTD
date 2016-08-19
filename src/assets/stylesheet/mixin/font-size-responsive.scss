@@ -1,4 +1,4 @@
-@mixin font-size-responsive($sizes: $gamma) {
+@mixin font-size-responsive($sizes: $gamma, $lh: $line-height, $lhs: $line-height--small) {
   font-family: $ff;
   font-size: nth($sizes, 1) * 1px;
   -moz-osx-font-smoothing: grayscale;
@@ -7,10 +7,10 @@
   font-variant-ligatures: common-ligatures;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  line-height: $line-height--small;
+  line-height: $lhs;
 
   @include media('>medium') {
     font-size: nth($sizes, 2) * 1px;
-    line-height: $line-height;
+    line-height: $lh;
   }
 }

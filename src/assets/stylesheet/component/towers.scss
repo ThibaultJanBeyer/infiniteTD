@@ -14,13 +14,12 @@ $projectile: #FF0;
  * 1. Center align the tower level indicator
  */
 .tower:not(.tower__rock)::after {
-  @include font-size-responsive($delta);
+  @include font-size-responsive($delta, 1, 1);
   background: $t-level;
   box-shadow: inset 0 -5px 1px rgba($black, 0.5), 0 5px 1px rgba($black, 0.5);
   color: $white;
   content: attr(data-level);
   left: 0;
-  line-height: 1;
   margin: 15% 25%;
   padding: 15% 0;
   position: absolute;
