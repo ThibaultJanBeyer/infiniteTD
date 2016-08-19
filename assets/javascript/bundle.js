@@ -237,7 +237,7 @@ function checkWhichTowerToOpen(el, bu, sb) {
 }
 
 // fields
-let board, creepContainer, fields = [], 
+let board, creepContainer, projectileContainer, fields = [], 
   startField, endField,
   topFields = [],
   rightFields = [],
@@ -262,9 +262,10 @@ function setupBoard() {
   // setup board
   board = createElement('div', 'board');
 
-  // create creep container
-  creepContainer = createElement('div', 'creep-container');
-  board.appendChild(creepContainer);
+  // create creep & projectile container
+  creepContainer = d.createElement('div');
+  projectileContainer = d.createElement('div');
+  appendChilds(board, [creepContainer, projectileContainer]);
 
   // fields
   for (let i = 0, il = boardSize; i < il; i++) {
@@ -1634,7 +1635,7 @@ class Projectile {
 
     this.e.style.left = `${this.x}px`;
     this.e.style.top = `${this.y}px`;
-    board.appendChild(this.e);
+    projectileContainer.appendChild(this.e);
 
     moveProjectile(this, creep);
   }
@@ -1645,7 +1646,7 @@ class Projectile {
     // dead
     this.dead = true;
     // from board
-    board.removeChild(this.e);
+    projectileContainer.removeChild(this.e);
   }
 }
 
