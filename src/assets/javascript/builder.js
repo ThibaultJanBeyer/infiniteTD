@@ -95,8 +95,16 @@ class Builder {
       this.e.className = 'selector selector--show';
       this.e.style.width = this.w;
       this.e.style.height = this.h;
-      this.e.style.left = `${field.x - field.w / 2}px`;
-      this.e.style.top = `${field.y - field.w / 2}px`;
+      // check if size would be below minimum (90)
+      let pos = [field.x - field.w / 2, field.y - field.w / 2];
+      console.log(parseInt(this.w));
+      if (parseInt(this.w) <= 90) {
+        pos = [field.x - 35, field.y - 35];
+        console.log('inside');
+      }
+      console.log(pos);
+      this.e.style.left = `${pos[0]}px`;
+      this.e.style.top = `${pos[1]}px`;
     }
   }
 

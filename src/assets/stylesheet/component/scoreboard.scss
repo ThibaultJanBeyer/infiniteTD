@@ -13,7 +13,6 @@
   top: 50%;
   transform: translateY(-50%);
   width: 150px;
-  z-index: 1000;
 }
 
 .scoreboard--alt {
@@ -28,27 +27,39 @@
   width: 100%;
 }
 
+.scoreboard__hint {
+  position: relative;
+}
+
 .scoreboard__hint::after,
 .scoreboard__hint::before {
   pointer-events: none;
 }
 
 .scoreboard__hint[class*='player']::after {
-  content: '';
-  position: absolute;
   background: $board-dash;
-  width: 20px;
+  content: '';
   height: 20px;
-  transform: rotate(45deg) scale(1, 1);
+  left: 50%;
+  position: absolute;
+  top: -20px;
+  transform: translateX(-60px) rotate(45deg) scale(1,1);
+  width: 20px;
+}
+
+.scoreboard__el[class*='alt']::after {
+  display: none;
 }
 
 .scoreboard__hint[class*='player']::before {
-  content: 'enter your name';
-  position: absolute;
   background: $board-dash;
-  padding: 5px 10px;
-  margin: -5px 115px;
-  transform: scale(1, 1);
-  z-index: 1;
   color: $color;
+  content: 'enter your name';
+  left: 0;
+  padding: 5px 10px;
+  position: absolute;
+  top: -40px;
+  transform: scale(1,1);
+  width: 145px;
+  z-index: 1;
 }

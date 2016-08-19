@@ -55,16 +55,16 @@
 
 .selector__info[class*='price'] {
   color: $t-cost;
-  left: -15px;
+  left: -20px;
   line-height: 30px;
-  top: -15px;
+  top: -20px;
 }
 
 .selector__info[class*='showinfo'] {
-  bottom: -15px;
+  bottom: -20px;
   color: $t-info;
   line-height: 30px;
-  right: -15px;
+  right: -20px;
 }
 
 // place elements on a circle based on the number of elements
