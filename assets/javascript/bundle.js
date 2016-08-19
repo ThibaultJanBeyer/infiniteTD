@@ -1,6 +1,6 @@
 'use strict';var _typeof=typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"?function(obj){return typeof obj;}:function(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol?"symbol":typeof obj;};var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}/* Globals */// available elements
 var d=document,b=d.body,g=d.getElementsByClassName('infiniteTD')[0],w=window;// values
-var wX=void 0,wY=void 0,isPaused=true,isStarted=false,generalPause=false,lostGame=false;/* Setup Scene */function init(){// Scoreboard
+var wX=void 0,wY=void 0,isPaused=true,isStarted=false,generalPause=false,lostGame=false,isDevice=false;/* Setup Scene */function init(){// Scoreboard
 setupScoreboard();// Player
 setupPlayer();// Board
 setupBoard();// TowerBuilder
@@ -8,7 +8,7 @@ setupTowers();// Gretel = setup the creeps path
 setupGretel();// Audio
 setupAudio();// Extrainfo
 setupExtraInfo();// Sizes
-setSizes();b.onresize=function(){setSizes();};w.addEventListener('orientationchange',function(){setSizes();});}document.addEventListener('deviceready',function(){AndroidFullScreen.immersiveMode();init();},false);(function(){setTimeout(function(){},500);})();/****************//* Setup Fields *//****************//* Field */var Field=function(){function Field(pos){var _this=this;_classCallCheck(this,Field);this.e=createElement('button','board__field');this.locked=false;this.start=false;this.end=false;this.pos=pos;// field click
+setSizes();b.onresize=function(){setSizes();};w.addEventListener('orientationchange',function(){setSizes();});}document.addEventListener('deviceready',function(){AndroidFullScreen.immersiveMode();isDevice=true;init();},false);(function(){setTimeout(function(){if(!isDevice){init();}},1000);})();/****************//* Setup Fields *//****************//* Field */var Field=function(){function Field(pos){var _this=this;_classCallCheck(this,Field);this.e=createElement('button','board__field');this.locked=false;this.start=false;this.end=false;this.pos=pos;// field click
 this.e.addEventListener('click',function(e){e.stopPropagation();handleFieldClick(_this,e);});// keyboard navigation
 // add keyboard event listener
 this.e.addEventListener('keyup',function(e){useBoardWithKey(_this,e);});}_createClass(Field,[{key:'lock',value:function lock(unit){this.locked=unit?unit:true;this.e.classList.add('locked');if(unit==='start'){this.e.classList.add('start');this.start=true;}else if(unit==='end'){this.e.classList.add('end');this.end=true;}}},{key:'unlock',value:function unlock(){if(!this.start&&!this.end){this.locked=false;this.e.classList.remove('locked');}}},{key:'position',value:function position(){this.w=this.e.offsetWidth;this.h=this.e.offsetHeight;// the fields x position * width - width / 2 (to find center):
