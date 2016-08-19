@@ -663,7 +663,7 @@ class Creeps {
       }
       // remove creep
       // from board
-      board.removeChild(this.e);
+      creepContainer.removeChild(this.e);
       // from allCreeps array
       allCreeps.splice(allCreeps.indexOf(this), 1);
       kills++;
