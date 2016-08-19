@@ -10,6 +10,7 @@ $creeps: #F09 #F0F;
   height: 5%;
   position: absolute;
   width: 5%;
+  z-index: 1;
 }
 
 /**
@@ -19,7 +20,7 @@ $creeps: #F09 #F0F;
  **/
 @for $i from 0 through 10 {
   .c[data-hp="#{$i}"] {
-    transform: translate(50%, 35%) scale($i / 10, $i / 10);
+    transform: translate3d(50%, 35%, 1px) scale($i / 10, $i / 10);
   }
 }
 

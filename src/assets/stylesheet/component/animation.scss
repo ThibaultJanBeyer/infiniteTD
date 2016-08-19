@@ -43,6 +43,6 @@
 @keyframes flyUp {
   to {
     opacity: 0;
-    transform: translateY(-300%);
+    transform: translate3d(0, -300%, 1px);
   }
 }

@@ -24,7 +24,7 @@ class Creeps {
   }
 
   create() {
-    board.appendChild(this.e);
+    creepContainer.appendChild(this.e);
     this.e.style.left = `${startField.x}px`;
     this.e.style.top = `${startField.y}px`;
     nextLocation(this);
@@ -47,7 +47,7 @@ class Creeps {
       }
       // remove creep
       // from board
-      board.removeChild(this.e);
+      creepContainer.removeChild(this.e);
       // from allCreeps array
       allCreeps.splice(allCreeps.indexOf(this), 1);
       kills++;

@@ -18,7 +18,7 @@ class Projectile {
 
     this.e.style.left = `${this.x}px`;
     this.e.style.top = `${this.y}px`;
-    board.appendChild(this.e);
+    projectileContainer.appendChild(this.e);
 
     moveProjectile(this, creep);
   }
@@ -29,7 +29,7 @@ class Projectile {
     // dead
     this.dead = true;
     // from board
-    board.removeChild(this.e);
+    projectileContainer.removeChild(this.e);
   }
 }
 
@@ -126,18 +126,12 @@ function moveProjectile(el, creep) {
     x: creep.x - el.x,
     y: creep.y - el.y
   };
-  el.angleDeg = Math.atan2(creep.y - el.y, creep.x - el.x) * 180 / Math.PI;
-  el.e.style.transform = `translate(100%, 500%) rotate(${el.angleDeg}deg)`;
   
   let loop = setInterval(interval, 20);
 
   function interval() {
     if (!isPaused) {
       let increment = calculateIncrement(el, creep);
-      if(el.follow) {
-        el.angleDeg = Math.atan2(creep.y - el.y, creep.x - el.x) * 180 / Math.PI;
-        el.e.style.transform = `translate(100%, 500%) rotate(${el.angleDeg}deg)`;
-      }
       
       el.x += increment.x;
       el.dist.x -= increment.x;
