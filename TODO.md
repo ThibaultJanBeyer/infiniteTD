@@ -1,6 +1,6 @@
 #Graphics
 
-- Creeps should be weird flying balls producing shock waves
+- Design bosses
 
 
 #Animation
@@ -11,7 +11,7 @@
 
 #User Stories
 
-- As a user I want to play the game on my phone
+- As a user I want a lag free game
 - As a user I want to save my progress
 - As I user I want to see my ranking among other players
 
