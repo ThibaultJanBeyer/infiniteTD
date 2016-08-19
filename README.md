@@ -1,5 +1,6 @@
 # infiniteTD
-just another tower defense
+just another tower defense.  
+Definitely not ready for primetime yet, but can already be played via: [https://thibaultjanbeyer.github.io/infiniteTD/]()
 
 
 ---

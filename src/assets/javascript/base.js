@@ -8,11 +8,12 @@ const d = document,
 let wX, wY, isPaused = true,
   isStarted = false,
   generalPause = false,
-  lostGame = false;
+  lostGame = false,
+  isDevice = false;
 
 /* Setup Scene */
 function init() {
-  
+
   // Scoreboard
   setupScoreboard();
 
@@ -45,8 +46,16 @@ function init() {
 
 }
 
+document.addEventListener('deviceready', function() {
+  AndroidFullScreen.immersiveMode();
+  isDevice = true;
+  init();
+}, false);
+
 (function(){
   setTimeout(() => {
-    init();
-  }, 500);
+    if (!isDevice) {
+      init();
+    }
+  }, 5000);
 })();

@@ -13,9 +13,10 @@ gulp.task('sass', require('./gulp-tasks/sass'));
 gulp.task('svg', require('./gulp-tasks/svg'));
 gulp.task('stylechecker', require('./gulp-tasks/stylechecker'));
 gulp.task('watch', require('./gulp-tasks/watch'));
+gulp.task('deploy', require('./gulp-tasks/deploy'));
 
 // Globs
-gulp.task('build', ['html', 'sass', 'javascript', 'stylechecker', 'img', 'audio', 'svg']);
+gulp.task('build', ['html', 'sass', 'javascript', 'stylechecker', 'img', 'audio', 'svg', 'deploy']);
 gulp.task('cln', ['clean']);
 gulp.task('devl', ['html', 'sass', 'javascript', 'watch', 'img', 'stylechecker', 'audio', 'svg']);
 
