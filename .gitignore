@@ -3,7 +3,7 @@ node_modules/
 dist/
 platforms/
 plugins/
-.publish
+.publish/
 .vscode
 *.DS_Store
 *.log
