@@ -1,10 +1,11 @@
-$creeps: #F09;
+$creeps: #F09 #F0F;
 
 /**********/
 /* Creeps */
 /**********/
 .c {
-  background: $creeps;
+  background: nth($creeps, 1);
+  background-image: linear-gradient(to bottom right, nth($creeps, 1), nth($creeps, 2));
   border-radius: 50%;
   height: 5%;
   position: absolute;
