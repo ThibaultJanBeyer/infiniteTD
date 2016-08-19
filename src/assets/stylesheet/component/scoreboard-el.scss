@@ -5,6 +5,7 @@
 
 .scoreboard__el--alt {
   display: inline-block;
+  margin-bottom: 10px;
 }
 
 .scoreboard__el-player,
@@ -56,18 +57,17 @@
 
 /* Message */
 .scoreboard__el-message {
-  @include font-size-responsive($delta);
+  @include font-size-responsive();
   color: transparent;
   display: block;
-  transition: color 500ms, background 500ms, visibility 0s 0s;
+  position: absolute;
   text-align: center;
-  visibility: visible;
+  transition: color 500ms, background 500ms;
 }
 
 .scoreboard__el--flash {
   color: $color;
-  transition: color 500ms, background 500ms, visibility 1s 1s;
-  visibility: hidden;
+  transition: color 500ms, background 500ms;
 }
 
 /* Audio */

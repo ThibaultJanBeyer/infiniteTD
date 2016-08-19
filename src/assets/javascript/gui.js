@@ -54,19 +54,19 @@ let scoreboard,
 class Scoreboard {
   constructor() {
     this.e = createElement('div', 'scoreboard');
-    this.m = createElement('p', 'scoreboard__el scoreboard__el-message', '.');
-    this.money = createSVG({svgName: 'money', extraElement: 'p', svg: SVGmoney});
     this.player = createSVG({svgName: 'player', extraElement: 'input', svg: SVGplayer});
     this.player.input.setAttribute('aria-label', 'Player name: ');
+    this.money = createSVG({svgName: 'money', extraElement: 'p', svg: SVGmoney});
     this.level = createSVG({svgName: 'level', extraElement: 'p', svg: SVGlevel});
     this.score = createSVG({svgName: 'score', extraElement: 'p', svg: SVGscore});
     this.lives = createSVG({svgName: 'lives', extraElement: 'p', svg: SVGlives});
     this.controls = createElement('div', 'scoreboard__el-controls');
-    this.play = createElement('button', 'scoreboard__el scoreboard__el-pause', 'play');
-    this.audioOff = createSVG({container: 'button', svgName: 'audio', svg: SVGaudio.off});
-    this.audioOn = createSVG({container: 'button', svgName: 'audio', svg: SVGaudio.on});
-    this.audioOn.container.style.display = 'none';
-    appendChilds(this.controls, [this.play, this.audioOff.container, this.audioOn.container]);
+      this.play = createElement('button', 'scoreboard__el scoreboard__el-pause', 'play');
+      this.audioOff = createSVG({container: 'button', svgName: 'audio', svg: SVGaudio.off});
+      this.audioOn = createSVG({container: 'button', svgName: 'audio', svg: SVGaudio.on});
+      this.audioOn.container.style.display = 'none';
+      appendChilds(this.controls, [this.play, this.audioOff.container, this.audioOn.container]);
+    this.m = createElement('p', 'scoreboard__el scoreboard__el-message', '.');
 
     // Global Play & Pause
     this.play.addEventListener('click', (e) => {
@@ -140,10 +140,14 @@ class Scoreboard {
   }
 
   message(message, duration) {
+    this.m.style.display = 'block';
     this.m.innerHTML = message;
     this.m.className += ' scoreboard__el--flash';
     setTimeout(() => {
       removeClass(this.m, 'scoreboard__el--flash');
+      setTimeout(() => {
+        this.m.style.display = 'none';
+      }, 1000);
     }, Math.floor(duration) * 1000 + 500);
   }
 

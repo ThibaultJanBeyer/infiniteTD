@@ -121,8 +121,8 @@ function globalKeyboard(e) {
 function setSizes() {
 
   // get viewport of game
-  wX = b.offsetWidth || b.clientWidth;
-  wY = b.offsetHeight || b.clientHeight;
+  wX = b.offsetWidth -10;
+  wY = b.offsetHeight -10;
   // if the layout is horizontal
   // set the game a square based on the height
   if (wX > wY) {
@@ -144,7 +144,7 @@ function setSizes() {
     // also have the scoreboard elements inline
     scoreboard.elements.forEach((e) => { addClass(e, 'scoreboard__el--alt'); });
     addClass(scoreboard.e, 'scoreboard--alt');
-    addClass(board.e, 'board--alt');
+    addClass(board, 'board--alt');
     let i = fields.length; while (i--) {
       fields[i].e.style.width = board.clientWidth / 10 + 'px';
       fields[i].e.style.height = board.clientHeight / 10 + 'px';
