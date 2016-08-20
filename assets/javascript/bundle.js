@@ -634,16 +634,21 @@ class Creeps {
     this.lasts = [];
     this.tolerance = 5;
 
+    creepContainer.appendChild(this.e);
+    this.e.style.left = `${startField.x}px`;
+    this.e.style.top = `${startField.y}px`;
+    addClass(this.e, 'sr-only');
+    this.invulnerable = true;
+
     // visually represent hitpoints
     // this.hp / this.fullHp = 0.5 at 50% hp
     // * 10 to get a full number value so that .ceil rounds to a full number properly
     this.e.setAttribute('data-hp', Math.ceil(this.hp / this.fullHp * 10));
   }
 
-  create() {
-    creepContainer.appendChild(this.e);
-    this.e.style.left = `${startField.x}px`;
-    this.e.style.top = `${startField.y}px`;
+  setup() {
+    removeClass(this.e, 'sr-only');
+    this.invulnerable = false;
     nextLocation(this);
   }
 
@@ -664,7 +669,7 @@ class Creeps {
       }
       // remove creep
       // from board
-      creepContainer.removeChild(this.e);
+      addClass(this.e, 'sr-only');
       // from allCreeps array
       allCreeps.splice(allCreeps.indexOf(this), 1);
       kills++;
@@ -913,7 +918,7 @@ function appendChilds(to, els) {
 
 // myLoop
 // pass number of iterations and dur in ms and counter
-function myLoop({ cd, dur, cu, cb }) {
+function myLoop({ cd, dur, cu = 0, cb }) {
   // passes usefull stuff to callback and augmet the count up by 1
   cb({ cd, dur, cu });
   cu++;
@@ -933,7 +938,7 @@ function myInterval({ cd, dur, cb }) {
   function interval() {
     if (!isPaused) {
       if (--countdown >= 0) {
-        cb({ cd, dur });
+        cb({ countdown, dur });
       } else {
         clearInterval(loop);
       }
@@ -1490,20 +1495,23 @@ let i = 10; while (i--) {
 /**************/
 /* next level */
 /**************/
-function nextLevel() {  
+function nextLevel() {
+  creepContainer.innerHTML = '';
   setTimeout(() => {
+    for(let i = 0, il = levels[p1.level].amount; i < il; i++) {
+      let creep = new Creeps({
+        ms: levels[p1.level].creeps.ms,
+        hp: levels[p1.level].creeps.hp,
+        lvl: p1.level,
+        bounty: levels[p1.level].creeps.bounty
+      });
+      allCreeps.push(creep);
+    }
     myInterval({
-      cd: levels[p1.level].amount,
+      cd: allCreeps.length,
       dur: 500,
-      cb: () => {
-        let creep = new Creeps({
-          ms: levels[p1.level].creeps.ms,
-          hp: levels[p1.level].creeps.hp,
-          lvl: p1.level,
-          bounty: levels[p1.level].creeps.bounty
-        });
-        creep.create();
-        allCreeps.push(creep);
+      cb: ({countdown}) => {
+        allCreeps[countdown].setup();
       }
     });
   }, 1000);
@@ -1722,11 +1730,12 @@ function setupTowers() {
 }
 
 function towersInRange(el) {
-  // check if any Tower is in range
+  // check if any Tower is in range of creep
   for (let i = 0, il = fields.length; i < il; i++) {
     if(fields[i].tower) {
       // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
-      if (euclidDistance(el.x, fields[i].x, el.y, fields[i].y) <= fields[i].tower.rng) {
+      // and the ennemy is not invulnerable
+      if (euclidDistance(el.x, fields[i].x, el.y, fields[i].y) <= fields[i].tower.rng && !el.invulnerable) {
         fields[i].tower.shoot(fields[i], el);
       }
     }
@@ -1743,18 +1752,12 @@ function moveProjectile(el, creep) {
     x: creep.x - el.x,
     y: creep.y - el.y
   };
-  el.angleDeg = Math.atan2(creep.y - el.y, creep.x - el.x) * 180 / Math.PI;
-  el.e.style.transform = `translate(100%, 500%) rotate(${el.angleDeg}deg)`;
   
   let loop = setInterval(interval, 20);
 
   function interval() {
     if (!isPaused) {
       let increment = calculateIncrement(el, creep);
-      // if(el.follow) {
-      //   el.angleDeg = Math.atan2(creep.y - el.y, creep.x - el.x) * 180 / Math.PI;
-      //   el.e.style.transform = `translate(100%, 500%) rotate(${el.angleDeg}deg)`;
-      // }
       
       el.x += increment.x;
       el.dist.x -= increment.x;
