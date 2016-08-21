@@ -59,3 +59,21 @@ document.addEventListener('deviceready', function() {
     }
   }, 2000);
 })();
+
+/* Main Loop */
+
+// window.requestAnimationFrame = (function(){
+//   return window.requestAnimationFrame ||
+//     window.webkitRequestAnimationFrame ||
+//     window.mozRequestAnimationFrame ||
+//     window.oRequestAnimationFrame ||
+//     window.msRequestAnimationFrame ||
+//     function(callback) {
+//       window.setTimeout(callback, 1000 / 60);
+//     };
+// })();
+
+// (function mainLoop() {
+//   requestAnimationFrame(mainLoop);
+//   console.log('frame');
+// })();

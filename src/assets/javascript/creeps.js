@@ -17,16 +17,21 @@ class Creeps {
     this.lasts = [];
     this.tolerance = 5;
 
+    creepContainer.appendChild(this.e);
+    this.e.style.left = `${startField.x}px`;
+    this.e.style.top = `${startField.y}px`;
+    addClass(this.e, 'sr-only');
+    this.invulnerable = true;
+
     // visually represent hitpoints
     // this.hp / this.fullHp = 0.5 at 50% hp
     // * 10 to get a full number value so that .ceil rounds to a full number properly
     this.e.setAttribute('data-hp', Math.ceil(this.hp / this.fullHp * 10));
   }
 
-  create() {
-    creepContainer.appendChild(this.e);
-    this.e.style.left = `${startField.x}px`;
-    this.e.style.top = `${startField.y}px`;
+  setup() {
+    removeClass(this.e, 'sr-only');
+    this.invulnerable = false;
     nextLocation(this);
   }
 
@@ -45,9 +50,8 @@ class Creeps {
       if (killed) {
         player.unitKill(this);
       }
-      // remove creep
-      // from board
-      creepContainer.removeChild(this.e);
+      // hide creep
+      addClass(this.e, 'sr-only');
       // from allCreeps array
       allCreeps.splice(allCreeps.indexOf(this), 1);
       kills++;

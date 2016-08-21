@@ -104,18 +104,6 @@ function setupTowers() {
   builders.rock = new Builder([sell]);
 }
 
-function towersInRange(el) {
-  // check if any Tower is in range
-  for (let i = 0, il = fields.length; i < il; i++) {
-    if(fields[i].tower) {
-      // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
-      if (euclidDistance(el.x, fields[i].x, el.y, fields[i].y) <= fields[i].tower.rng) {
-        fields[i].tower.shoot(fields[i], el);
-      }
-    }
-  }
-}
-
 // move element
 function moveProjectile(el, creep) {
   // calculate the distance

@@ -90,7 +90,7 @@ function appendChilds(to, els) {
 
 // myLoop
 // pass number of iterations and dur in ms and counter
-function myLoop({ cd, dur, cu, cb }) {
+function myLoop({ cd, dur, cu = 0, cb }) {
   // passes usefull stuff to callback and augmet the count up by 1
   cb({ cd, dur, cu });
   cu++;
@@ -110,7 +110,7 @@ function myInterval({ cd, dur, cb }) {
   function interval() {
     if (!isPaused) {
       if (--countdown >= 0) {
-        cb({ cd, dur });
+        cb({ countdown, dur });
       } else {
         clearInterval(loop);
       }

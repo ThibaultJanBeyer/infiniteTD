@@ -29,20 +29,23 @@ let i = 10; while (i--) {
 /**************/
 /* next level */
 /**************/
-function nextLevel() {  
+function nextLevel() {
+  creepContainer.innerHTML = '';
   setTimeout(() => {
+    for(let i = 0, il = levels[p1.level].amount; i < il; i++) {
+      let creep = new Creeps({
+        ms: levels[p1.level].creeps.ms,
+        hp: levels[p1.level].creeps.hp,
+        lvl: p1.level,
+        bounty: levels[p1.level].creeps.bounty
+      });
+      allCreeps.push(creep);
+    }
     myInterval({
-      cd: levels[p1.level].amount,
+      cd: allCreeps.length,
       dur: 500,
-      cb: () => {
-        let creep = new Creeps({
-          ms: levels[p1.level].creeps.ms,
-          hp: levels[p1.level].creeps.hp,
-          lvl: p1.level,
-          bounty: levels[p1.level].creeps.bounty
-        });
-        creep.create();
-        allCreeps.push(creep);
+      cb: ({countdown}) => {
+        allCreeps[countdown].setup();
       }
     });
   }, 1000);

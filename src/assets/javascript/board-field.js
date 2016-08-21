@@ -121,7 +121,7 @@ class Field {
             trange = t.rng,
             ttargets = t.targets;
           // get all creeps
-          for(let i = 0, il = allCreeps.length; i < il; i++) {
+          let i = allCreeps.length; while (i--) {
             // check if the creeps distance is within tower range with
             // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
             if (euclidDistance(allCreeps[i].x, this.x, allCreeps[i].y, this.y) <= trange) {
