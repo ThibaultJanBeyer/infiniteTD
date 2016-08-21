@@ -28,17 +28,15 @@ function animateScore({ className, value, pos1, pos2 }) {
 //  | 
 //  v
 //  y
-// point A is at 0,0 point B at 2,3 to get a smooth movement
-// we need to know how many steps are needed to reach the goal
-// 1. Which coordinate is further away? (regardless if positive or negative) X or Y (x = 3)
-// 2. How many steps do we need to reach B? x / ms (3/1 = 3)
-// 3. Thus per step we need an increment of _ for y? y / (x/ms) (2/(3/1) = 0.666)
+// 1. What is the total distance ?
+// 2. How many miliseconds with that movement speed are needed to reach the goal ?
+// 3. How much time has passed and thus how many pixels were traveled in that time?
 // 4. was it a positive or negative distance?
 function calculateIncrement(el, next) {
   let increment = {};
 
   if(el.follow) {
-    el.dist = {
+    el.dist = { // 1
       x: next.x - el.x,
       y: next.y - el.y
     };
@@ -47,19 +45,14 @@ function calculateIncrement(el, next) {
   let x = Math.abs(el.dist.x);
   let y = Math.abs(el.dist.y);
 
-  if (x > y) { // 1.
-    increment.x = el.ms;
-    increment.steps = x / el.ms; // 2.
-    increment.y = y / increment.steps; // 3.
-  } else { // 1.
-    increment.y = el.ms;
-    increment.steps = y / el.ms; // 2.
-    increment.x = x / increment.steps; // 3.
-  }
+  let tX = x / el.ms; // 2
+  let tY = y / el.ms; // 2
 
-  // 4.
-  if(el.dist.x < 0) { increment.x *= -1; }
-  if(el.dist.y < 0) { increment.y *= -1; }
+  increment.x = (tX !== 0) ? x / tX * el.dt : 0; // 3
+  increment.y = (tY !== 0) ? y / tY * el.dt : 0; // 3
+
+  if(el.dist.x < 0) { increment.x *= -1; } // 4
+  if(el.dist.y < 0) { increment.y *= -1; } // 4
 
   return increment;
 }

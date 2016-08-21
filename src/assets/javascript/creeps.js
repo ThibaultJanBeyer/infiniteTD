@@ -16,10 +16,14 @@ class Creeps {
     this.bounty = bounty;
     this.lasts = [];
     this.tolerance = 5;
+    this.i = 0;
 
     creepContainer.appendChild(this.e);
+    // set current position
     this.e.style.left = `${startField.x}px`;
     this.e.style.top = `${startField.y}px`;
+    this.x = parseInt(this.e.style.left);
+    this.y = parseInt(this.e.style.top);
     addClass(this.e, 'sr-only');
     this.invulnerable = true;
 
@@ -32,7 +36,6 @@ class Creeps {
   setup() {
     removeClass(this.e, 'sr-only');
     this.invulnerable = false;
-    nextLocation(this);
   }
 
   damage(dmg) {
@@ -53,7 +56,6 @@ class Creeps {
       // hide creep
       addClass(this.e, 'sr-only');
       // from allCreeps array
-      allCreeps.splice(allCreeps.indexOf(this), 1);
       kills++;
       if (kills >= levels[p1.level].amount) {
         kills = 0;
@@ -64,25 +66,18 @@ class Creeps {
 }
 
 // the variable gretelFields contains all fields set by gretels path coordinates
-function nextLocation(creep, i = 0) {
+function nextLocation(creep) {
   let gf = gretelFields;
   // check if creep is not dead
   if (!creep.dead) {
-    let length = gretelFields.length - 1;
-    if (i++ < length) {
-      // set current position
-      creep.x = parseInt(creep.e.style.left);
-      creep.y = parseInt(creep.e.style.top);
+    if (creep.i < gf.length) {
       // move to next position
-      moveCreep(creep, gf[i], (el) => {
-        nextLocation(el, i);
-      });
+      if (moveCreep(creep, gf[creep.i])) {
+        creep.i++;
+      }
     } else {
-      let afterEnd = { x: creep.x + endField.w / 3, y: creep.y };
-      moveCreep(creep, afterEnd, () => {
-        p1.updateLives(-1);
-        creep.remove();
-      });
+      p1.updateLives(-1);
+      creep.remove();
     }
   }
 }
@@ -103,19 +98,15 @@ function moveCreep(el, next, cb) {
 
     increment = calculateIncrement(el, next);
     el.x += increment.x;
-    el.dist.x -= increment.x;
+    //el.dist.x -= increment.x;
     el.y += increment.y;
-    el.dist.y -= increment.y;
+    //el.dist.y -= increment.y;
     // update creep
     el.e.style.left = `${el.x}px`;
     el.e.style.top = `${el.y}px`;
   }
-
-  if (typeof increment === 'undefined' || increment == null || increment.steps >= 1) {
-    setTimeout(function() {
-      return moveCreep(el, next, cb);
-    }, 10);
-  } else {
-    return cb(el, next, cb);
+  if (Math.abs(el.dist.x) < 10 && Math.abs(el.dist.y) < 10) {
+    return true;
   }
+  return false;
 }

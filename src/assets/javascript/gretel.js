@@ -98,6 +98,7 @@ function handlePath(path) {
       }
     }
   }
+  gretelFields.push({ x: endField.x + endField.w / 3, y: endField.y });
 }
 
 // grabs the current, the next and previous field on the path for further calculations

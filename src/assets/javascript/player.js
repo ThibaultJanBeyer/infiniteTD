@@ -84,15 +84,14 @@ function setupPlayer() {
 }
 
 function lost() {
-  let i = allCreeps.length; while (i--) {
-    allCreeps[i].remove();
-  }
+  lostGame = true;
+  isPaused = true;
+  creepContainer.innerHTML = '';
+  allCreeps = [];
   let allTowers = board.querySelectorAll('.t');
   let j = allTowers.length; while (j--) {
     allTowers[j].className = 'board__field';
   }
-  lostGame = true;
-  isPaused = true;
   audio.play('you_lost_try_again');
 }
 

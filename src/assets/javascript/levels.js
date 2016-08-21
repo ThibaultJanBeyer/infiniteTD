@@ -8,7 +8,7 @@ let i = 10; while (i--) {
       creeps:
       {
         hp: 100 * i,
-        ms: 10,
+        ms: 0.1,
         bounty: 5
       },
       amount: 1
@@ -18,7 +18,7 @@ let i = 10; while (i--) {
     creeps:
     {
       hp: 10 * i,
-      ms: 1,
+      ms: 0.1,
       bounty: 5
     },
     amount: 2 * i
@@ -30,8 +30,12 @@ let i = 10; while (i--) {
 /* next level */
 /**************/
 function nextLevel() {
+  // remove leftovers
   creepContainer.innerHTML = '';
+  allCreeps = [];
+  // next level
   setTimeout(() => {
+    let tempCreeps = [];
     for(let i = 0, il = levels[p1.level].amount; i < il; i++) {
       let creep = new Creeps({
         ms: levels[p1.level].creeps.ms,
@@ -39,13 +43,14 @@ function nextLevel() {
         lvl: p1.level,
         bounty: levels[p1.level].creeps.bounty
       });
-      allCreeps.push(creep);
+      tempCreeps.push(creep);
     }
     myInterval({
-      cd: allCreeps.length,
+      cd: tempCreeps.length,
       dur: 500,
       cb: ({countdown}) => {
-        allCreeps[countdown].setup();
+        tempCreeps[countdown].setup();
+        allCreeps.push(tempCreeps[countdown]);
       }
     });
   }, 1000);

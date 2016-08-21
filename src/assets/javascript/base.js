@@ -62,18 +62,49 @@ document.addEventListener('deviceready', function() {
 
 /* Main Loop */
 
-// window.requestAnimationFrame = (function(){
-//   return window.requestAnimationFrame ||
-//     window.webkitRequestAnimationFrame ||
-//     window.mozRequestAnimationFrame ||
-//     window.oRequestAnimationFrame ||
-//     window.msRequestAnimationFrame ||
-//     function(callback) {
-//       window.setTimeout(callback, 1000 / 60);
-//     };
-// })();
+window.requestAnimationFrame = (function(){
+  return window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function(callback) {
+      window.setTimeout(callback, 1000 / 60);
+    };
+})();
 
-// (function mainLoop() {
-//   requestAnimationFrame(mainLoop);
-//   console.log('frame');
-// })();
+let time = new Date().getTime();
+(function mainLoop() {
+  requestAnimationFrame(mainLoop);
+
+  // get past time
+  let now = new Date().getTime(),
+    dt = now - time;
+
+  time = now;
+
+  if (!isPaused) {
+    console.log(allCreeps);
+    for(let i = 0, il = allCreeps.length; i < il; i++) {
+      allCreeps[i].dt = dt;
+      nextLocation(allCreeps[i]);
+    }
+  }
+
+})();
+
+// last_t = now()
+// while True:
+//    t = now()
+//    dt = t - last_t   // Vergangene zeit seit dem letzten update
+//    last_t = t
+//    for objekt in alle_meine_objekte:
+//        objekt.update(dt)
+//    for objekt in alle_meine_objekte:
+//        objekt.render($('game'))
+
+// und objekt.update(dt) sieht dann z.B. so aus:
+// function update(dt) {
+//    this.x = this.x + this.vx * dt
+//    this.y = this.y + this.vy * dt
+// }
