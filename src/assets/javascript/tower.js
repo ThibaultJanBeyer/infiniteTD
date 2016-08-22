@@ -151,7 +151,7 @@ class Projectile {
   }
 
   attack() {
-    if (moveObj(this, this.creep)) {
+    if (!this.dead && moveObj(this, this.creep)) {
       this.creep.damage(this.dmg);
       this.remove();
     }

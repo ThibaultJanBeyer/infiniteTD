@@ -221,7 +221,6 @@ class Field {
       if(catalogeTowers[i] === tower){
         this.tower = Object.create(catalogeTowers[i]);
         this.tower.setup(this);
-        console.log(this.tower);
       }
     }
     
@@ -1803,7 +1802,7 @@ class Projectile {
   }
 
   attack() {
-    if (moveObj(this, this.creep)) {
+    if (!this.dead && moveObj(this, this.creep)) {
       this.creep.damage(this.dmg);
       this.remove();
     }

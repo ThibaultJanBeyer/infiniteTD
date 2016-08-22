@@ -91,7 +91,6 @@ class Field {
       if(catalogeTowers[i] === tower){
         this.tower = Object.create(catalogeTowers[i]);
         this.tower.setup(this);
-        console.log(this.tower);
       }
     }
     
