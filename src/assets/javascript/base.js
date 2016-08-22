@@ -94,16 +94,12 @@ let time = new Date().getTime();
   if (!isPaused) {
     // creeps
     let i = allCreeps.length; while (i--) {
-      if(!allCreeps[i].dead) {
-        allCreeps[i].nextLocation(dt);
-      }
+      allCreeps[i].nextLocation(dt);
     }
 
     // projectiles
     let j = allProjectiles.length; while (j--) {
-      if(!allProjectiles[j].dead) {
-        allProjectiles[j].attack(dt);
-      }
+      allProjectiles[j].attack(dt);
     }
 
     // tower detect

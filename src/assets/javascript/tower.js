@@ -11,6 +11,8 @@ let tBasic,
 /* projectile */
 class Projectile {
   constructor(field, creep) {
+    this.hp = 1;
+    this.fullHp = 1;
     this.field = field;
     this.ms = field.tower.pms;
     this.dmg = field.tower.dmg;
@@ -22,6 +24,7 @@ class Projectile {
 
     this.e.style.left = `${this.x}px`;
     this.e.style.top = `${this.y}px`;
+    this.visual = { x: 0, y: 0 };
     projectileContainer.appendChild(this.e);
 
     allProjectiles.push(this);
@@ -32,15 +35,17 @@ class Projectile {
     // remove element
     // dead
     this.dead = true;
-    // from board
-    addClass(this.e, 'sr-only');
+    // invis
+    this.e.style.opacity = 0;
   }
 
   attack(dt) {
-    this.dt = dt;
-    if (!this.dead && moveObj(this, this.creep)) {
-      this.creep.damage(this.dmg);
-      this.remove();
+    if(!this.dead) {
+      this.dt = dt;
+      if (moveObj(this, this.creep)) {
+        this.creep.damage(this.dmg);
+        this.remove();
+      }
     }
   }
 }

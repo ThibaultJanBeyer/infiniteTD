@@ -35,8 +35,10 @@ function moveObj(el, target) {
     el.x += increment.x;
     el.y += increment.y;
     // update creep
-    el.e.style.left = `${el.x}px`;
-    el.e.style.top = `${el.y}px`;
+    el.visual.x += increment.x;
+    el.visual.y += increment.y;
+    // according to chromes performance timeline, it is way more performant inline the drawings here
+    el.e.style.transform = `translate3d(${el.visual.x}px,${el.visual.y}px, 1px)`;
   }
   if (Math.abs(el.dist.x) < 10 && Math.abs(el.dist.y) < 10) {
     return true;
