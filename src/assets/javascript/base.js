@@ -46,12 +46,20 @@ function init() {
 
 }
 
+/* Special functions for mobile usage */
+
 document.addEventListener('deviceready', function() {
+  // immersiveMode
   AndroidFullScreen.immersiveMode();
+  // keep window on
+  getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+  // is a device
   isDevice = true;
+  // init
   init();
 }, false);
 
+// normal usage
 (function(){
   setTimeout(() => {
     if (!isDevice) {
@@ -90,10 +98,15 @@ let time = new Date().getTime();
       nextLocation(allCreeps[i]);
     }
 
-    //projectiles
+    // projectiles
     for(let i = 0, il = allProjectiles.length; i < il; i++) {
       allProjectiles[i].dt = dt;
       allProjectiles[i].attack();
+    }
+
+    // tower detect
+    let i = allAttackTowers.length; while (i--) {
+      allAttackTowers[i].scan(dt);
     }
   }
 

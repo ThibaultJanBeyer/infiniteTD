@@ -97,12 +97,9 @@ class Builder {
       this.e.style.height = this.h;
       // check if size would be below minimum (90)
       let pos = [field.x - field.w / 2, field.y - field.w / 2];
-      console.log(parseInt(this.w));
       if (parseInt(this.w) <= 90) {
         pos = [field.x - 35, field.y - 35];
-        console.log('inside');
       }
-      console.log(pos);
       this.e.style.left = `${pos[0]}px`;
       this.e.style.top = `${pos[1]}px`;
     }

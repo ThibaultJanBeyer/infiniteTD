@@ -45,6 +45,11 @@
 
 - Add a good Readme.md
 - Add a Contribute.md
+- Fix Audio playing in Cordova
+http://stackoverflow.com/questions/24643619/cordova-media-plugin-vs-html5-audio
+https://github.com/devgeeks/ExampleHTML5AudioStreaming
+https://forum.ionicframework.com/t/how-to-play-local-audio-files/7479
+
 
 
 ---

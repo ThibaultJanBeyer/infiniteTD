@@ -86,16 +86,22 @@ class Field {
   }
 
   buildTower(tower) {
+    // check which tower to build
+    let i = catalogeTowers.length; while (i--) {
+      if(catalogeTowers[i] === tower){
+        this.tower = Object.create(catalogeTowers[i]);
+        this.tower.setup(this);
+        console.log(this.tower);
+      }
+    }
+    
     this.e.className += ` tower ${tower.name}`;
     this.e.setAttribute('data-level', tower.level);
+    this.lock('tower');
     if (this.e.className.indexOf('gretel__breadcrumb') > -1) {
       removeClass(this.e, 'gretel__breadcrumb');
     }
-    this.tower = tower; 
-    this.lock('tower');
-    if (tower.cd !== 0) {
-      this.scan();
-    }
+    
     gretel();
   }
 
@@ -104,38 +110,7 @@ class Field {
     removeClass(this.e, this.tower.name);
     this.e.removeAttribute('data-level');
     this.unlock();
-    clearInterval(this.scanInterval);
     this.tower = 0;
-  }
-
-  // scan for creeps nearby tower
-  scan() {
-    let cooldown = 0, tcooldown = this.tower.cd / 100;
-    // scan if creeps are nearby
-    this.scanInterval = setInterval(() => {
-      if(!isPaused) {
-        cooldown += 1;
-        if (cooldown >= tcooldown) {
-          let attacked = 0,
-            t = this.tower,
-            trange = t.rng,
-            ttargets = t.targets;
-          // get all creeps
-          let i = allCreeps.length; while (i--) {
-            // check if the creeps distance is within tower range with
-            // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
-            if (euclidDistance(allCreeps[i].x, this.x, allCreeps[i].y, this.y) <= trange) {
-              // then check how many targets the tower can focus
-              if(attacked <= ttargets) {
-                t.shoot(this, allCreeps[i]);
-                attacked++;
-                cooldown = 0;
-              }
-            }
-          }
-        }
-      }
-    }, 100);
   }
 }
 
