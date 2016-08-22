@@ -93,20 +93,22 @@ let time = new Date().getTime();
 
   if (!isPaused) {
     // creeps
-    for(let i = 0, il = allCreeps.length; i < il; i++) {
-      allCreeps[i].dt = dt;
-      nextLocation(allCreeps[i]);
+    let i = allCreeps.length; while (i--) {
+      if(!allCreeps[i].dead) {
+        allCreeps[i].nextLocation(dt);
+      }
     }
 
     // projectiles
-    for(let i = 0, il = allProjectiles.length; i < il; i++) {
-      allProjectiles[i].dt = dt;
-      allProjectiles[i].attack();
+    let j = allProjectiles.length; while (j--) {
+      if(!allProjectiles[j].dead) {
+        allProjectiles[j].attack(dt);
+      }
     }
 
     // tower detect
-    let i = allAttackTowers.length; while (i--) {
-      allAttackTowers[i].scan(dt);
+    let k = allAttackTowers.length; while (k--) {
+      allAttackTowers[k].scan(dt);
     }
   }
 

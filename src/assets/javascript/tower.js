@@ -150,7 +150,8 @@ class Projectile {
     addClass(this.e, 'sr-only');
   }
 
-  attack() {
+  attack(dt) {
+    this.dt = dt;
     if (!this.dead && moveObj(this, this.creep)) {
       this.creep.damage(this.dmg);
       this.remove();

@@ -93,20 +93,22 @@ let time = new Date().getTime();
 
   if (!isPaused) {
     // creeps
-    for(let i = 0, il = allCreeps.length; i < il; i++) {
-      allCreeps[i].dt = dt;
-      nextLocation(allCreeps[i]);
+    let i = allCreeps.length; while (i--) {
+      if(!allCreeps[i].dead) {
+        allCreeps[i].nextLocation(dt);
+      }
     }
 
     // projectiles
-    for(let i = 0, il = allProjectiles.length; i < il; i++) {
-      allProjectiles[i].dt = dt;
-      allProjectiles[i].attack();
+    let j = allProjectiles.length; while (j--) {
+      if(!allProjectiles[j].dead) {
+        allProjectiles[j].attack(dt);
+      }
     }
 
     // tower detect
-    let i = allAttackTowers.length; while (i--) {
-      allAttackTowers[i].scan(dt);
+    let k = allAttackTowers.length; while (k--) {
+      allAttackTowers[k].scan(dt);
     }
   }
 
@@ -719,21 +721,19 @@ class Creeps {
       }
     }
   }
-}
 
-// the variable gretelFields contains all fields set by gretels path coordinates
-function nextLocation(creep) {
-  let gf = gretelFields;
-  // check if creep is not dead
-  if (!creep.dead) {
-    if (creep.i < gf.length) {
+  // the variable gretelFields contains all fields set by gretels path coordinates
+  nextLocation(dt) {
+    let gf = gretelFields;
+    if (this.i < gf.length) {  
+      this.dt = dt;
       // move to next position
-      if (moveObj(creep, gf[creep.i])) {
-        creep.i++;
+      if (moveObj(this, gf[this.i])) {
+        this.i++;
       }
     } else {
       p1.updateLives(-1);
-      creep.remove();
+      this.remove();
     }
   }
 }
@@ -1801,7 +1801,8 @@ class Projectile {
     addClass(this.e, 'sr-only');
   }
 
-  attack() {
+  attack(dt) {
+    this.dt = dt;
     if (!this.dead && moveObj(this, this.creep)) {
       this.creep.damage(this.dmg);
       this.remove();

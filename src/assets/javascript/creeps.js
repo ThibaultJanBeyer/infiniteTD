@@ -63,21 +63,19 @@ class Creeps {
       }
     }
   }
-}
 
-// the variable gretelFields contains all fields set by gretels path coordinates
-function nextLocation(creep) {
-  let gf = gretelFields;
-  // check if creep is not dead
-  if (!creep.dead) {
-    if (creep.i < gf.length) {
+  // the variable gretelFields contains all fields set by gretels path coordinates
+  nextLocation(dt) {
+    let gf = gretelFields;
+    if (this.i < gf.length) {  
+      this.dt = dt;
       // move to next position
-      if (moveObj(creep, gf[creep.i])) {
-        creep.i++;
+      if (moveObj(this, gf[this.i])) {
+        this.i++;
       }
     } else {
       p1.updateLives(-1);
-      creep.remove();
+      this.remove();
     }
   }
 }
