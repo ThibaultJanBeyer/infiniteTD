@@ -17,6 +17,33 @@ function animateScore({ className, value, pos1, pos2 }) {
   }
 }
 
+// move Obj
+function moveObj(el, target) {
+  let increment;
+
+  if (!isPaused) {
+    // calculate the distance
+    // (x:10,y:20)[cur] -dist-> [target](x:20,y:20)
+    // target.x(20) - cur.x(10) = +10 dist
+    // target.y(20) - cur.y(20) = 0 dist
+    el.dist = {
+      x: target.x - el.x,
+      y: target.y - el.y
+    };
+
+    increment = calculateIncrement(el, target);
+    el.x += increment.x;
+    el.y += increment.y;
+    // update creep
+    el.e.style.left = `${el.x}px`;
+    el.e.style.top = `${el.y}px`;
+  }
+  if (Math.abs(el.dist.x) < 10 && Math.abs(el.dist.y) < 10) {
+    return true;
+  }
+  return false;
+}
+
 // this function calculates the x and y increments
 // that have to be added each step. Assume following example:
 // assume a movementspeed (ms) of 1
@@ -32,13 +59,13 @@ function animateScore({ className, value, pos1, pos2 }) {
 // 2. How many miliseconds with that movement speed are needed to reach the goal ?
 // 3. How much time has passed and thus how many pixels were traveled in that time?
 // 4. was it a positive or negative distance?
-function calculateIncrement(el, next) {
+function calculateIncrement(el, target) {
   let increment = {};
 
   if(el.follow) {
     el.dist = { // 1
-      x: next.x - el.x,
-      y: next.y - el.y
+      x: target.x - el.x,
+      y: target.y - el.y
     };
   }
 

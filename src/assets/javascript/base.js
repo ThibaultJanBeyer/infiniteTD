@@ -84,10 +84,16 @@ let time = new Date().getTime();
   time = now;
 
   if (!isPaused) {
-    console.log(allCreeps);
+    // creeps
     for(let i = 0, il = allCreeps.length; i < il; i++) {
       allCreeps[i].dt = dt;
       nextLocation(allCreeps[i]);
+    }
+
+    //projectiles
+    for(let i = 0, il = allProjectiles.length; i < il; i++) {
+      allProjectiles[i].dt = dt;
+      allProjectiles[i].attack();
     }
   }
 

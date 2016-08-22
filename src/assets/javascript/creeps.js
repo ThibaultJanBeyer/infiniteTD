@@ -72,7 +72,7 @@ function nextLocation(creep) {
   if (!creep.dead) {
     if (creep.i < gf.length) {
       // move to next position
-      if (moveCreep(creep, gf[creep.i])) {
+      if (moveObj(creep, gf[creep.i])) {
         creep.i++;
       }
     } else {
@@ -80,33 +80,4 @@ function nextLocation(creep) {
       creep.remove();
     }
   }
-}
-
-// move creep
-function moveCreep(el, next, cb) {
-  let increment;
-
-  if (!isPaused) {
-    // calculate the distance
-    // (x:10,y:20)[cur] -dist-> [next](x:20,y:20)
-    // next.x(20) - cur.x(10) = +10 dist
-    // next.y(20) - cur.y(20) = 0 dist
-    el.dist = {
-      x: next.x - el.x,
-      y: next.y - el.y
-    };
-
-    increment = calculateIncrement(el, next);
-    el.x += increment.x;
-    //el.dist.x -= increment.x;
-    el.y += increment.y;
-    //el.dist.y -= increment.y;
-    // update creep
-    el.e.style.left = `${el.x}px`;
-    el.e.style.top = `${el.y}px`;
-  }
-  if (Math.abs(el.dist.x) < 10 && Math.abs(el.dist.y) < 10) {
-    return true;
-  }
-  return false;
 }

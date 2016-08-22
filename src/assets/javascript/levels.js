@@ -32,6 +32,7 @@ let i = 10; while (i--) {
 function nextLevel() {
   // remove leftovers
   creepContainer.innerHTML = '';
+  projectileContainer.innerHTML = '';
   allCreeps = [];
   // next level
   setTimeout(() => {

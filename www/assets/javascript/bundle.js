@@ -84,10 +84,16 @@ let time = new Date().getTime();
   time = now;
 
   if (!isPaused) {
-    console.log(allCreeps);
+    // creeps
     for(let i = 0, il = allCreeps.length; i < il; i++) {
       allCreeps[i].dt = dt;
       nextLocation(allCreeps[i]);
+    }
+
+    //projectiles
+    for(let i = 0, il = allProjectiles.length; i < il; i++) {
+      allProjectiles[i].dt = dt;
+      allProjectiles[i].attack();
     }
   }
 
@@ -738,7 +744,7 @@ function nextLocation(creep) {
   if (!creep.dead) {
     if (creep.i < gf.length) {
       // move to next position
-      if (moveCreep(creep, gf[creep.i])) {
+      if (moveObj(creep, gf[creep.i])) {
         creep.i++;
       }
     } else {
@@ -746,35 +752,6 @@ function nextLocation(creep) {
       creep.remove();
     }
   }
-}
-
-// move creep
-function moveCreep(el, next, cb) {
-  let increment;
-
-  if (!isPaused) {
-    // calculate the distance
-    // (x:10,y:20)[cur] -dist-> [next](x:20,y:20)
-    // next.x(20) - cur.x(10) = +10 dist
-    // next.y(20) - cur.y(20) = 0 dist
-    el.dist = {
-      x: next.x - el.x,
-      y: next.y - el.y
-    };
-
-    increment = calculateIncrement(el, next);
-    el.x += increment.x;
-    //el.dist.x -= increment.x;
-    el.y += increment.y;
-    //el.dist.y -= increment.y;
-    // update creep
-    el.e.style.left = `${el.x}px`;
-    el.e.style.top = `${el.y}px`;
-  }
-  if (Math.abs(el.dist.x) < 10 && Math.abs(el.dist.y) < 10) {
-    return true;
-  }
-  return false;
 }
 
 // see https://github.com/edenspiekermann/a11y-dialog/ for more information
@@ -884,6 +861,33 @@ function animateScore({ className, value, pos1, pos2 }) {
   }
 }
 
+// move Obj
+function moveObj(el, target) {
+  let increment;
+
+  if (!isPaused) {
+    // calculate the distance
+    // (x:10,y:20)[cur] -dist-> [target](x:20,y:20)
+    // target.x(20) - cur.x(10) = +10 dist
+    // target.y(20) - cur.y(20) = 0 dist
+    el.dist = {
+      x: target.x - el.x,
+      y: target.y - el.y
+    };
+
+    increment = calculateIncrement(el, target);
+    el.x += increment.x;
+    el.y += increment.y;
+    // update creep
+    el.e.style.left = `${el.x}px`;
+    el.e.style.top = `${el.y}px`;
+  }
+  if (Math.abs(el.dist.x) < 10 && Math.abs(el.dist.y) < 10) {
+    return true;
+  }
+  return false;
+}
+
 // this function calculates the x and y increments
 // that have to be added each step. Assume following example:
 // assume a movementspeed (ms) of 1
@@ -899,13 +903,13 @@ function animateScore({ className, value, pos1, pos2 }) {
 // 2. How many miliseconds with that movement speed are needed to reach the goal ?
 // 3. How much time has passed and thus how many pixels were traveled in that time?
 // 4. was it a positive or negative distance?
-function calculateIncrement(el, next) {
+function calculateIncrement(el, target) {
   let increment = {};
 
   if(el.follow) {
     el.dist = { // 1
-      x: next.x - el.x,
-      y: next.y - el.y
+      x: target.x - el.x,
+      y: target.y - el.y
     };
   }
 
@@ -1531,6 +1535,7 @@ let i = 10; while (i--) {
 function nextLevel() {
   // remove leftovers
   creepContainer.innerHTML = '';
+  projectileContainer.innerHTML = '';
   allCreeps = [];
   // next level
   setTimeout(() => {
@@ -1665,7 +1670,8 @@ let tBasic,
   sell,
   rock,
   builders = {},
-  allTowers = [];
+  allTowers = [],
+  allProjectiles = [];
 
 /* projectile */
 class Projectile {
@@ -1675,6 +1681,7 @@ class Projectile {
     this.dmg = field.tower.dmg;
     this.x = field.x;
     this.y = field.y;
+    this.creep = creep;
     this.follow = field.tower.follow;
     this.e = createElement('div', `projectile projectile__${field.tower.name}`);
 
@@ -1682,7 +1689,7 @@ class Projectile {
     this.e.style.top = `${this.y}px`;
     projectileContainer.appendChild(this.e);
 
-    moveProjectile(this, creep);
+    allProjectiles.push(this);
   }
 
   remove() {
@@ -1691,7 +1698,15 @@ class Projectile {
     // dead
     this.dead = true;
     // from board
-    projectileContainer.removeChild(this.e);
+    addClass(this.e, 'sr-only');
+  }
+
+  attack() {
+    if (moveObj(this, this.creep)) {
+      console.log('boom');
+      this.creep.damage(this.dmg);
+      this.remove();
+    }
   }
 }
 
@@ -1739,7 +1754,7 @@ function setupTowers() {
     name: 'basic',
     cost: 50,
     dmg: 50,
-    pms: 20,
+    pms: 0.5,
     cd: 1000,
     rng: 0.6,
     description: 'This tower has a high attack speed with a basic damage and range. Upgrades drastically improve its range. Moreover, with special researches, this tower will be key to your success.'
@@ -1766,39 +1781,39 @@ function setupTowers() {
   builders.rock = new Builder([sell]);
 }
 
-// move element
-function moveProjectile(el, creep) {
-  // calculate the distance
-  // (x:10,y:20)[cur] -dist-> [next](x:20,y:20)
-  // next.x(20) - cur.x(10) = +10 dist
-  // next.y(20) - cur.y(20) = 0 dist
-  el.dist = {
-    x: creep.x - el.x,
-    y: creep.y - el.y
-  };
+// // move element
+// function moveProjectile(el, creep) {
+//   // calculate the distance
+//   // (x:10,y:20)[cur] -dist-> [next](x:20,y:20)
+//   // next.x(20) - cur.x(10) = +10 dist
+//   // next.y(20) - cur.y(20) = 0 dist
+//   el.dist = {
+//     x: creep.x - el.x,
+//     y: creep.y - el.y
+//   };
   
-  let loop = setInterval(interval, 20);
+//   let loop = setInterval(interval, 20);
 
-  function interval() {
-    if (!isPaused) {
-      let increment = calculateIncrement(el, creep);
+//   function interval() {
+//     if (!isPaused) {
+//       let increment = calculateIncrement(el, creep);
       
-      el.x += increment.x;
-      el.dist.x -= increment.x;
-      el.y += increment.y;
-      el.dist.y -= increment.y;
+//       el.x += increment.x;
+//       el.dist.x -= increment.x;
+//       el.y += increment.y;
+//       el.dist.y -= increment.y;
       
-      if(increment.steps < 1.5) {
-        creep.damage(el.dmg);
-        el.remove();
-        clearInterval(loop);
-      } else {
-        el.e.style.left = `${el.x}px`;
-        el.e.style.top = `${el.y}px`;
-      }
-    }
-  }
-}
+//       if(increment.steps < 1.5) {
+//         creep.damage(el.dmg);
+//         el.remove();
+//         clearInterval(loop);
+//       } else {
+//         el.e.style.left = `${el.x}px`;
+//         el.e.style.top = `${el.y}px`;
+//       }
+//     }
+//   }
+// }
 
 /**
  *    ____       _   _     _____ _           _ _                _         
