@@ -8,6 +8,43 @@ let tBasic,
   catalogeTowers = [],
   allProjectiles = [];
 
+/* projectile */
+class Projectile {
+  constructor(field, creep) {
+    this.field = field;
+    this.ms = field.tower.pms;
+    this.dmg = field.tower.dmg;
+    this.x = field.x;
+    this.y = field.y;
+    this.creep = creep;
+    this.follow = field.tower.follow;
+    this.e = createElement('div', `projectile projectile__${field.tower.name}`);
+
+    this.e.style.left = `${this.x}px`;
+    this.e.style.top = `${this.y}px`;
+    projectileContainer.appendChild(this.e);
+
+    allProjectiles.push(this);
+  }
+
+  remove() {
+    // @TODO: add explosion
+    // remove element
+    // dead
+    this.dead = true;
+    // from board
+    addClass(this.e, 'sr-only');
+  }
+
+  attack(dt) {
+    this.dt = dt;
+    if (!this.dead && moveObj(this, this.creep)) {
+      this.creep.damage(this.dmg);
+      this.remove();
+    }
+  }
+}
+
 /* Tower */
 class Tower {
   constructor({
@@ -119,43 +156,6 @@ class SellTower extends Tower {
 
   setup(field) {
     this.field = field;
-  }
-}
-
-/* projectile */
-class Projectile {
-  constructor(field, creep) {
-    this.field = field;
-    this.ms = field.tower.pms;
-    this.dmg = field.tower.dmg;
-    this.x = field.x;
-    this.y = field.y;
-    this.creep = creep;
-    this.follow = field.tower.follow;
-    this.e = createElement('div', `projectile projectile__${field.tower.name}`);
-
-    this.e.style.left = `${this.x}px`;
-    this.e.style.top = `${this.y}px`;
-    projectileContainer.appendChild(this.e);
-
-    allProjectiles.push(this);
-  }
-
-  remove() {
-    // @TODO: add explosion
-    // remove element
-    // dead
-    this.dead = true;
-    // from board
-    addClass(this.e, 'sr-only');
-  }
-
-  attack(dt) {
-    this.dt = dt;
-    if (!this.dead && moveObj(this, this.creep)) {
-      this.creep.damage(this.dmg);
-      this.remove();
-    }
   }
 }
 
