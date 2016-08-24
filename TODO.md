@@ -59,7 +59,6 @@ https://forum.ionicframework.com/t/how-to-play-local-audio-files/7479
   - Reading of properties first then recalculating second. See: https://engineering.gosquared.com/optimising-60fps-everywhere-in-javascript
 - Reduce Paint
   - Maybe remove gradient?
-  - Removing global focus?
 
 
 
