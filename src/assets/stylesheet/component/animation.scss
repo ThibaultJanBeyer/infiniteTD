@@ -1,22 +1,24 @@
 .animation__loselives,
 .animation__gainlives,
-.animation__gainpoints,
+.animation__gainscore,
 .animation__gainmoney,
 .animation__losemoney,
 .animation__levelup {
   @include font-size-responsive($delta);
-  animation: flyUp 1000ms ease-out 1 forwards;
+  pointer-events: none;
+  visibility: hidden;
+  transition: transform 1s ease-out, opacity 1s ease-out;
   position: absolute;
 }
 
 .animation__loselives--scoreboard,
 .animation__gainlives--scoreboard,
-.animation__gainpoints--scoreboard,
+.animation__gainscore--scoreboard,
 .animation__gainmoney--scoreboard,
 .animation__losemoney--scoreboard,
 .animation__levelup--scoreboard {
-  margin-left: 30px;
-  margin-top: -30px;
+  left: 50%;
+  top: 0;
 }
 
 .animation__loselives,
@@ -32,7 +34,7 @@
   color: $red;
 }
 
-.animation__gainpoints {
+.animation__gainscore {
   color: $score;
 }
 

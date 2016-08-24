@@ -15,20 +15,26 @@ class Player {
     this.level = level;
     this.score = score;
     this.lives = lives;
+    this.livesAnimationCounter = 0;
+    this.moneyAnimationCounter = 0;
   }
 
   unitKill(unit) {
-    this.money += unit.bounty;
-    this.score += unit.bounty;
+    this.money += unit.bounty.value;
+    this.score += unit.bounty.value;
     scoreboard.update(this);
-    animateScore({className: 'animation__gainmoney', value: `+${unit.bounty} $`, pos1: unit, pos2: scoreboard.money.container});
-    animateScore({className: 'animation__gainpoints', value: `+${unit.bounty}`, pos2: scoreboard.score.container});
+    
+    animateScore([
+      [ unit.bounty.creep, unit ],
+      [ unit.bounty.money ],
+      [ unit.bounty.score ]
+    ]);
   }
 
   levelUp() {
     if (!lostGame) {
       this.level += 1;
-      animateScore({className: 'animation__levelup', value: '+1', pos1: startField, pos2: scoreboard.level.container});
+      animateScore([ scoreboard.level.up ]);
       scoreboard.update(this);
       if (!levels[this.level]) {
         audio.play('winner_winner_chicken_dinner');
@@ -46,13 +52,20 @@ class Player {
   }
   
   updateLives(amount) {
-    // lose life
+    // update lives
     this.lives += amount;
+    let n = this.livesAnimationCounter;
     if (amount >= 0) {
-      animateScore({className: 'animation__gainlives', value: `+${amount}`, pos2: scoreboard.lives.container});
+      scoreboard.lives.up[n].innerHTML = `+${amount}`;
+      animateScore([ scoreboard.lives.up[n] ]);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.lives.up[n]]), 1000);
     } else {
-      animateScore({className: 'animation__loselives', value: amount, pos1: endField, pos2: scoreboard.lives.container});
+      scoreboard.lives.down[n].innerHTML = amount;
+      animateScore([ scoreboard.lives.down[n] ]);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.lives.down[n]]), 1000);
     }
+    this.livesAnimationCounter = (n++ >= 19) ? 0 : this.livesAnimationCounter + 1; 
+
     scoreboard.update(this);
     // check if lost
     if(this.lives <= 0) {
@@ -62,12 +75,29 @@ class Player {
 
   updateMoney(amount, place) {
     // update wallet
+    console.log(amount, place);
     this.money += amount;
+    let n = this.livesAnimationCounter;
     if (amount >= 0) {
-      animateScore({className: 'animation__gainmoney', value: `+${amount} $`, pos1: place, pos2: scoreboard.money.container});
+      scoreboard.money.up[n].innerHTML = `+${amount}`;
+      scoreboard.money.up2[n].innerHTML = `+${amount}`;
+      animateScore([ 
+        scoreboard.money.up[n],
+        [ scoreboard.money.up2[n], place ]
+      ]);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.money.up[n]]), 1000);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.money.up2[n]]), 1000);
     } else {
-      animateScore({className: 'animation__losemoney', value: `${amount} $`, pos1: place, pos2: scoreboard.money.container});
+      scoreboard.money.down[n].innerHTML = amount;
+      scoreboard.money.down2[n].innerHTML = amount;
+      animateScore([ 
+        scoreboard.money.down[n],
+        [ scoreboard.money.down2[n], place ]
+      ]);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.money.down[n]]), 1000);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.money.down2[n]]), 1000);
     }
+    this.moneyAnimationCounter = (n++ >= 19) ? 0 : this.moneyAnimationCounter + 1; 
     scoreboard.update(this);
   }
 }

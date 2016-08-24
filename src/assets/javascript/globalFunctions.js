@@ -1,19 +1,27 @@
-function animateScore({ className, value, pos1, pos2 }) {
-  if (pos1) {
-    let eBoard = createElement('div', className, value);
-    eBoard.style.left = `${pos1.x}px`;
-    eBoard.style.top = `${pos1.y}px`;
-    board.appendChild(eBoard);
-    setTimeout(() => {
-      board.removeChild(eBoard);
-    }, 1000);
+function animateScore(els) {
+  let i = els.length; while (i--) {
+    let el = (els[i][0]) ? els[i][0] : els[i];
+    let pos = (els[i][1]) ? els[i][1] : 0;
+    
+    el.style.visibility = 'visible';
+
+    if (pos.x) {
+      el.style.left = `${pos.x}px`;
+      el.style.top = `${pos.y}px`;
+    }
+
+    el.style.transform = 'translate3d(0, -300%, 1px)';
+    el.style.opacity = 0;
   }
-  if (pos2) {
-    let eScore = createElement('div', `${className} ${className}--scoreboard`, value);
-    pos2.appendChild(eScore);
-    setTimeout(() => {
-      pos2.removeChild(eScore);
-    }, 1000);
+}
+
+function recycleAnimation(els) {
+  let i = els.length; while (i--) {
+    let el = els[i];
+    
+    el.style.visibility = 'hidden';
+    el.style.transform = 'translate3d(0, 0, 1px)';
+    el.style.opacity = 1;
   }
 }
 

@@ -31,11 +31,15 @@ let i = 10; while (i--) {
 /**************/
 function nextLevel() {
   // remove leftovers
+  let i = holders.length; while (i--) { holders[i].innerHTML = ''; }
   creepContainer.innerHTML = '';
   projectileContainer.innerHTML = '';
   allCreeps = [];
   // next level
   setTimeout(() => {
+    // recycling
+    recycleAnimation(recyclings);
+    
     let tempCreeps = [];
     for(let i = 0, il = levels[p1.level].amount; i < il; i++) {
       let creep = new Creeps({

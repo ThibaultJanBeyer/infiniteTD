@@ -94,7 +94,9 @@ let time = new Date().getTime();
   if (!isPaused) {
     // creeps
     let i = allCreeps.length; while (i--) {
-      allCreeps[i].nextLocation(dt);
+      if (allCreeps[i]) {
+        allCreeps[i].nextLocation(dt);
+      }
     }
 
     // projectiles
@@ -277,7 +279,7 @@ function checkWhichTowerToOpen(el, bu, sb) {
 }
 
 // fields
-let board, creepContainer, projectileContainer, fields = [], 
+let board, creepContainer, projectileContainer, bountyContainer, fields = [], 
   startField, endField,
   topFields = [],
   rightFields = [],
@@ -301,11 +303,6 @@ function setupBoard() {
 
   // setup board
   board = createElement('div', 'board');
-
-  // create creep & projectile container
-  creepContainer = d.createElement('div');
-  projectileContainer = d.createElement('div');
-  appendChilds(board, [creepContainer, projectileContainer]);
 
   // fields
   for (let i = 0, il = boardSize; i < il; i++) {
@@ -368,6 +365,27 @@ function setupBoard() {
   g.addEventListener('keyup', (e) => {
     globalKeyboard(e);
   });
+
+  // create creep & projectile container
+  creepContainer = d.createElement('div');
+  projectileContainer = d.createElement('div');
+  bountyContainer = d.createElement('div');
+  // add animation elements for money changes
+  scoreboard.money.up = [];
+  scoreboard.money.up2 = [];
+  scoreboard.money.down = [];
+  scoreboard.money.down2 = [];
+  let l = 20; while (l--) {
+    scoreboard.money.up[l] = createElement('span', 'animation__gainmoney animation__gainmoney--scoreboard');
+    scoreboard.money.up2[l] = createElement('span', 'animation__gainmoney');
+    scoreboard.money.down[l] = createElement('span', 'animation__losemoney animation__losemoney--scoreboard');
+    scoreboard.money.down2[l] = createElement('span', 'animation__losemoney');
+    appendChilds(scoreboard.money.generalHolder, [scoreboard.money.up[l], scoreboard.money.down[l]]);
+    appendChilds(bountyContainer, [scoreboard.money.up2[l], scoreboard.money.down2[l]]);
+  }
+
+  // append all
+  appendChilds(board, [creepContainer, projectileContainer, bountyContainer]);
 }
 
 function globalClick(e) {
@@ -664,10 +682,23 @@ class Creeps {
     bounty
   }) {
     this.e = createElement('div', `c c__l${lvl}`);
+
+    // since updating the DOM is expensive
+    // we already create all the visual bounty elements
+    // and append them to their respective position
+    this.bounty = {
+      value: bounty,
+      creep: createElement('span', 'animation__gainmoney', bounty),
+      money: createElement('span', 'animation__gainmoney animation__gainmoney--scoreboard', bounty),
+      score: createElement('span', 'animation__gainscore animation__gainscore--scoreboard', bounty)
+    };
+    bountyContainer.appendChild(this.bounty.creep);
+    scoreboard.money.holder.appendChild(this.bounty.money);
+    scoreboard.score.holder.appendChild(this.bounty.score);
+
     this.ms = ms;
     this.hp = hp;
     this.fullHp = hp;
-    this.bounty = bounty;
     this.lasts = [];
     this.tolerance = 5;
     this.i = 0;
@@ -825,22 +856,30 @@ function setupExtraInfo() {
   extraInfo = new ExtraInfo();
 }
 
-function animateScore({ className, value, pos1, pos2 }) {
-  if (pos1) {
-    let eBoard = createElement('div', className, value);
-    eBoard.style.left = `${pos1.x}px`;
-    eBoard.style.top = `${pos1.y}px`;
-    board.appendChild(eBoard);
-    setTimeout(() => {
-      board.removeChild(eBoard);
-    }, 1000);
+function animateScore(els) {
+  let i = els.length; while (i--) {
+    let el = (els[i][0]) ? els[i][0] : els[i];
+    let pos = (els[i][1]) ? els[i][1] : 0;
+    
+    el.style.visibility = 'visible';
+
+    if (pos.x) {
+      el.style.left = `${pos.x}px`;
+      el.style.top = `${pos.y}px`;
+    }
+
+    el.style.transform = 'translate3d(0, -300%, 1px)';
+    el.style.opacity = 0;
   }
-  if (pos2) {
-    let eScore = createElement('div', `${className} ${className}--scoreboard`, value);
-    pos2.appendChild(eScore);
-    setTimeout(() => {
-      pos2.removeChild(eScore);
-    }, 1000);
+}
+
+function recycleAnimation(els) {
+  let i = els.length; while (i--) {
+    let el = els[i];
+    
+    el.style.visibility = 'hidden';
+    el.style.transform = 'translate3d(0, 0, 1px)';
+    el.style.opacity = 1;
   }
 }
 
@@ -1233,18 +1272,47 @@ let scoreboard,
     }
   },
   audio,
-  soundOff = false;
+  soundOff = false,
+  holders = [], recyclings = [];
 
 /* Scoreboard */
 class Scoreboard {
   constructor() {
+    // scoreboard element
     this.e = createElement('div', 'scoreboard');
+    // player icon + Inputfield
     this.player = createSVG({svgName: 'player', extraElement: 'input', svg: SVGplayer});
     this.player.input.setAttribute('aria-label', 'Player name: ');
+    // money icon + holder for money gain and lose
     this.money = createSVG({svgName: 'money', extraElement: 'p', svg: SVGmoney});
+      this.money.holder = d.createElement('div');
+      holders.push(this.money.holder);
+      this.money.generalHolder = d.createElement('div');
+      appendChilds(this.money.container, [this.money.holder, this.money.generalHolder]);
+    // level icon + holder for level +1
     this.level = createSVG({svgName: 'level', extraElement: 'p', svg: SVGlevel});
+      this.level.holder = d.createElement('div');
+        this.level.up = createElement('span', 'animation__levelup animation__levelup--scoreboard', '+1');
+        this.level.holder.appendChild(this.level.up);
+      this.level.container.appendChild(this.level.holder);
+      recyclings.push(this.level.up);
+    // score icon + holder for gain
     this.score = createSVG({svgName: 'score', extraElement: 'p', svg: SVGscore});
+      this.score.holder = d.createElement('div');
+      this.score.container.appendChild(this.score.holder);
+      holders.push(this.score.holder);
+    // score icon + holder for gain/lose + gain/lose element
     this.lives = createSVG({svgName: 'lives', extraElement: 'p', svg: SVGlives});
+      this.lives.holder = d.createElement('div');
+        // create several gain/lose elements since a player could lose several lives simultaneously
+        this.lives.up = [];
+        this.lives.down = [];
+        let i = 20; while (i--) {
+          this.lives.up[i] = createElement('span', 'animation__gainlives animation__gainlives--scoreboard', '+1');
+          this.lives.down[i] = createElement('span', 'animation__loselives animation__loselives--scoreboard', '-1');
+          appendChilds(this.lives.holder, [this.lives.up[i], this.lives.down[i]]);
+        }
+      this.lives.container.appendChild(this.lives.holder);
     this.controls = createElement('div', 'scoreboard__el-controls');
       this.play = createElement('button', 'scoreboard__el scoreboard__el-pause', 'play');
       this.audioOff = createSVG({container: 'button', svgName: 'audio', svg: SVGaudio.off});
@@ -1519,11 +1587,15 @@ let i = 10; while (i--) {
 /**************/
 function nextLevel() {
   // remove leftovers
+  let i = holders.length; while (i--) { holders[i].innerHTML = ''; }
   creepContainer.innerHTML = '';
   projectileContainer.innerHTML = '';
   allCreeps = [];
   // next level
   setTimeout(() => {
+    // recycling
+    recycleAnimation(recyclings);
+    
     let tempCreeps = [];
     for(let i = 0, il = levels[p1.level].amount; i < il; i++) {
       let creep = new Creeps({
@@ -1562,20 +1634,26 @@ class Player {
     this.level = level;
     this.score = score;
     this.lives = lives;
+    this.livesAnimationCounter = 0;
+    this.moneyAnimationCounter = 0;
   }
 
   unitKill(unit) {
-    this.money += unit.bounty;
-    this.score += unit.bounty;
+    this.money += unit.bounty.value;
+    this.score += unit.bounty.value;
     scoreboard.update(this);
-    animateScore({className: 'animation__gainmoney', value: `+${unit.bounty} $`, pos1: unit, pos2: scoreboard.money.container});
-    animateScore({className: 'animation__gainpoints', value: `+${unit.bounty}`, pos2: scoreboard.score.container});
+    
+    animateScore([
+      [ unit.bounty.creep, unit ],
+      [ unit.bounty.money ],
+      [ unit.bounty.score ]
+    ]);
   }
 
   levelUp() {
     if (!lostGame) {
       this.level += 1;
-      animateScore({className: 'animation__levelup', value: '+1', pos1: startField, pos2: scoreboard.level.container});
+      animateScore([ scoreboard.level.up ]);
       scoreboard.update(this);
       if (!levels[this.level]) {
         audio.play('winner_winner_chicken_dinner');
@@ -1593,13 +1671,20 @@ class Player {
   }
   
   updateLives(amount) {
-    // lose life
+    // update lives
     this.lives += amount;
+    let n = this.livesAnimationCounter;
     if (amount >= 0) {
-      animateScore({className: 'animation__gainlives', value: `+${amount}`, pos2: scoreboard.lives.container});
+      scoreboard.lives.up[n].innerHTML = `+${amount}`;
+      animateScore([ scoreboard.lives.up[n] ]);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.lives.up[n]]), 1000);
     } else {
-      animateScore({className: 'animation__loselives', value: amount, pos1: endField, pos2: scoreboard.lives.container});
+      scoreboard.lives.down[n].innerHTML = amount;
+      animateScore([ scoreboard.lives.down[n] ]);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.lives.down[n]]), 1000);
     }
+    this.livesAnimationCounter = (n++ >= 19) ? 0 : this.livesAnimationCounter + 1; 
+
     scoreboard.update(this);
     // check if lost
     if(this.lives <= 0) {
@@ -1609,12 +1694,29 @@ class Player {
 
   updateMoney(amount, place) {
     // update wallet
+    console.log(amount, place);
     this.money += amount;
+    let n = this.livesAnimationCounter;
     if (amount >= 0) {
-      animateScore({className: 'animation__gainmoney', value: `+${amount} $`, pos1: place, pos2: scoreboard.money.container});
+      scoreboard.money.up[n].innerHTML = `+${amount}`;
+      scoreboard.money.up2[n].innerHTML = `+${amount}`;
+      animateScore([ 
+        scoreboard.money.up[n],
+        [ scoreboard.money.up2[n], place ]
+      ]);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.money.up[n]]), 1000);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.money.up2[n]]), 1000);
     } else {
-      animateScore({className: 'animation__losemoney', value: `${amount} $`, pos1: place, pos2: scoreboard.money.container});
+      scoreboard.money.down[n].innerHTML = amount;
+      scoreboard.money.down2[n].innerHTML = amount;
+      animateScore([ 
+        scoreboard.money.down[n],
+        [ scoreboard.money.down2[n], place ]
+      ]);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.money.down[n]]), 1000);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.money.down2[n]]), 1000);
     }
+    this.moneyAnimationCounter = (n++ >= 19) ? 0 : this.moneyAnimationCounter + 1; 
     scoreboard.update(this);
   }
 }

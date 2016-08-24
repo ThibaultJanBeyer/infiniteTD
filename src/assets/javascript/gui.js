@@ -48,18 +48,47 @@ let scoreboard,
     }
   },
   audio,
-  soundOff = false;
+  soundOff = false,
+  holders = [], recyclings = [];
 
 /* Scoreboard */
 class Scoreboard {
   constructor() {
+    // scoreboard element
     this.e = createElement('div', 'scoreboard');
+    // player icon + Inputfield
     this.player = createSVG({svgName: 'player', extraElement: 'input', svg: SVGplayer});
     this.player.input.setAttribute('aria-label', 'Player name: ');
+    // money icon + holder for money gain and lose
     this.money = createSVG({svgName: 'money', extraElement: 'p', svg: SVGmoney});
+      this.money.holder = d.createElement('div');
+      holders.push(this.money.holder);
+      this.money.generalHolder = d.createElement('div');
+      appendChilds(this.money.container, [this.money.holder, this.money.generalHolder]);
+    // level icon + holder for level +1
     this.level = createSVG({svgName: 'level', extraElement: 'p', svg: SVGlevel});
+      this.level.holder = d.createElement('div');
+        this.level.up = createElement('span', 'animation__levelup animation__levelup--scoreboard', '+1');
+        this.level.holder.appendChild(this.level.up);
+      this.level.container.appendChild(this.level.holder);
+      recyclings.push(this.level.up);
+    // score icon + holder for gain
     this.score = createSVG({svgName: 'score', extraElement: 'p', svg: SVGscore});
+      this.score.holder = d.createElement('div');
+      this.score.container.appendChild(this.score.holder);
+      holders.push(this.score.holder);
+    // score icon + holder for gain/lose + gain/lose element
     this.lives = createSVG({svgName: 'lives', extraElement: 'p', svg: SVGlives});
+      this.lives.holder = d.createElement('div');
+        // create several gain/lose elements since a player could lose several lives simultaneously
+        this.lives.up = [];
+        this.lives.down = [];
+        let i = 20; while (i--) {
+          this.lives.up[i] = createElement('span', 'animation__gainlives animation__gainlives--scoreboard', '+1');
+          this.lives.down[i] = createElement('span', 'animation__loselives animation__loselives--scoreboard', '-1');
+          appendChilds(this.lives.holder, [this.lives.up[i], this.lives.down[i]]);
+        }
+      this.lives.container.appendChild(this.lives.holder);
     this.controls = createElement('div', 'scoreboard__el-controls');
       this.play = createElement('button', 'scoreboard__el scoreboard__el-pause', 'play');
       this.audioOff = createSVG({container: 'button', svgName: 'audio', svg: SVGaudio.off});

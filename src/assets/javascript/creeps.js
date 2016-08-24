@@ -10,10 +10,23 @@ class Creeps {
     bounty
   }) {
     this.e = createElement('div', `c c__l${lvl}`);
+
+    // since updating the DOM is expensive
+    // we already create all the visual bounty elements
+    // and append them to their respective position
+    this.bounty = {
+      value: bounty,
+      creep: createElement('span', 'animation__gainmoney', bounty),
+      money: createElement('span', 'animation__gainmoney animation__gainmoney--scoreboard', bounty),
+      score: createElement('span', 'animation__gainscore animation__gainscore--scoreboard', bounty)
+    };
+    bountyContainer.appendChild(this.bounty.creep);
+    scoreboard.money.holder.appendChild(this.bounty.money);
+    scoreboard.score.holder.appendChild(this.bounty.score);
+
     this.ms = ms;
     this.hp = hp;
     this.fullHp = hp;
-    this.bounty = bounty;
     this.lasts = [];
     this.tolerance = 5;
     this.i = 0;

@@ -94,7 +94,9 @@ let time = new Date().getTime();
   if (!isPaused) {
     // creeps
     let i = allCreeps.length; while (i--) {
-      allCreeps[i].nextLocation(dt);
+      if (allCreeps[i]) {
+        allCreeps[i].nextLocation(dt);
+      }
     }
 
     // projectiles

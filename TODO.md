@@ -53,17 +53,12 @@ https://forum.ionicframework.com/t/how-to-play-local-audio-files/7479
 
 #Performance
 
-- Reduce draws by reducing DOM manipulation (Update Layer tree)
-  - +1 animations should already be in the DOM and recycled
-  - Projectiles should already be in the DOM and recycled
-- Reduce drawing by movement (recalculating styles)
-  - All movement should be transforms instead of Top/Left position whenever possible
+- Projectiles should already be in the DOM and recycled
 - Check where layout comes from
   - Reading of properties first then recalculating second. See: https://engineering.gosquared.com/optimising-60fps-everywhere-in-javascript
 - Reduce Paint
   - Maybe remove gradient?
   - Removing global focus?
-  - Instead of hiding elements by adding a class, use transform scale (0,0)?
 
 
 

@@ -1,5 +1,5 @@
 // fields
-let board, creepContainer, projectileContainer, fields = [], 
+let board, creepContainer, projectileContainer, bountyContainer, fields = [], 
   startField, endField,
   topFields = [],
   rightFields = [],
@@ -23,11 +23,6 @@ function setupBoard() {
 
   // setup board
   board = createElement('div', 'board');
-
-  // create creep & projectile container
-  creepContainer = d.createElement('div');
-  projectileContainer = d.createElement('div');
-  appendChilds(board, [creepContainer, projectileContainer]);
 
   // fields
   for (let i = 0, il = boardSize; i < il; i++) {
@@ -90,6 +85,27 @@ function setupBoard() {
   g.addEventListener('keyup', (e) => {
     globalKeyboard(e);
   });
+
+  // create creep & projectile container
+  creepContainer = d.createElement('div');
+  projectileContainer = d.createElement('div');
+  bountyContainer = d.createElement('div');
+  // add animation elements for money changes
+  scoreboard.money.up = [];
+  scoreboard.money.up2 = [];
+  scoreboard.money.down = [];
+  scoreboard.money.down2 = [];
+  let l = 20; while (l--) {
+    scoreboard.money.up[l] = createElement('span', 'animation__gainmoney animation__gainmoney--scoreboard');
+    scoreboard.money.up2[l] = createElement('span', 'animation__gainmoney');
+    scoreboard.money.down[l] = createElement('span', 'animation__losemoney animation__losemoney--scoreboard');
+    scoreboard.money.down2[l] = createElement('span', 'animation__losemoney');
+    appendChilds(scoreboard.money.generalHolder, [scoreboard.money.up[l], scoreboard.money.down[l]]);
+    appendChilds(bountyContainer, [scoreboard.money.up2[l], scoreboard.money.down2[l]]);
+  }
+
+  // append all
+  appendChilds(board, [creepContainer, projectileContainer, bountyContainer]);
 }
 
 function globalClick(e) {
