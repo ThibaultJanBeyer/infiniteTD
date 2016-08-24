@@ -20,7 +20,7 @@
 
 - Add general upgrades to towers
 - Add a Canon tower (splash damage)
-- Canon tower: upgrade to Flame tower (with +dps)
+- Canon tower: upgrade to Flame tower (splash with +dps (for all units welking over it))
 - Canon tower: upgrade to Multi tower (with multiple targets)
 - Add a Slow tower (slowing enemies)
 - Slow tower: upgrade to Poison tower (single target slow +dps)
