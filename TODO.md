@@ -32,6 +32,8 @@
 
 #Ennemies
 
+- When path change creeps should not walk over towers by default
+  - figure out when/how that happens
 - Add bosses every 10th level
 - Have an infinite or extremely high amount of levels
 
@@ -53,7 +55,6 @@ https://forum.ionicframework.com/t/how-to-play-local-audio-files/7479
 
 #Performance
 
-- Projectiles should already be in the DOM and recycled
 - Check where layout comes from
   - Reading of properties first then recalculating second. See: https://engineering.gosquared.com/optimising-60fps-everywhere-in-javascript
 - Reduce Paint
