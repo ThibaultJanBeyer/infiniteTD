@@ -16,9 +16,9 @@ class Creeps {
     // and append them to their respective position
     this.bounty = {
       value: bounty,
-      creep: createElement('span', 'animation__gainmoney', bounty),
-      money: createElement('span', 'animation__gainmoney animation__gainmoney--scoreboard', bounty),
-      score: createElement('span', 'animation__gainscore animation__gainscore--scoreboard', bounty)
+      creep: createElement('span', 'animation__gainmoney', `+${bounty}`),
+      money: createElement('span', 'animation__gainmoney animation__gainmoney--scoreboard', `+${bounty}`),
+      score: createElement('span', 'animation__gainscore animation__gainscore--scoreboard', `+${bounty}`)
     };
     bountyContainer.appendChild(this.bounty.creep);
     scoreboard.money.holder.appendChild(this.bounty.money);

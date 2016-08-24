@@ -57,12 +57,18 @@ class Player {
     let n = this.livesAnimationCounter;
     if (amount >= 0) {
       scoreboard.lives.up[n].innerHTML = `+${amount}`;
+      scoreboard.lives.up2[n].innerHTML = `+${amount}`;
       animateScore([ scoreboard.lives.up[n] ]);
+      animateScore([ [scoreboard.lives.up2[n], startField] ]);
       setTimeout(recycleAnimation.bind(null, [scoreboard.lives.up[n]]), 1000);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.lives.up2[n]]), 1000);
     } else {
       scoreboard.lives.down[n].innerHTML = amount;
+      scoreboard.lives.down2[n].innerHTML = amount;
       animateScore([ scoreboard.lives.down[n] ]);
+      animateScore([ [scoreboard.lives.down2[n], endField] ]);
       setTimeout(recycleAnimation.bind(null, [scoreboard.lives.down[n]]), 1000);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.lives.down2[n]]), 1000);
     }
     this.livesAnimationCounter = (n++ >= 19) ? 0 : this.livesAnimationCounter + 1; 
 
@@ -75,7 +81,6 @@ class Player {
 
   updateMoney(amount, place) {
     // update wallet
-    console.log(amount, place);
     this.money += amount;
     let n = this.livesAnimationCounter;
     if (amount >= 0) {

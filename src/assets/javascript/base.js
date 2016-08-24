@@ -100,8 +100,8 @@ let time = new Date().getTime();
     }
 
     // projectiles
-    let j = allProjectiles.length; while (j--) {
-      allProjectiles[j].attack(dt);
+    let j = readyProjectiles.length; while (j--) {
+      readyProjectiles[j].attack(dt);
     }
 
     // tower detect

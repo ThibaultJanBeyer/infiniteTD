@@ -77,17 +77,9 @@ class Scoreboard {
       this.score.holder = d.createElement('div');
       this.score.container.appendChild(this.score.holder);
       holders.push(this.score.holder);
-    // score icon + holder for gain/lose + gain/lose element
+    // lives icon + holder for gain/lose + gain/lose element
     this.lives = createSVG({svgName: 'lives', extraElement: 'p', svg: SVGlives});
       this.lives.holder = d.createElement('div');
-        // create several gain/lose elements since a player could lose several lives simultaneously
-        this.lives.up = [];
-        this.lives.down = [];
-        let i = 20; while (i--) {
-          this.lives.up[i] = createElement('span', 'animation__gainlives animation__gainlives--scoreboard', '+1');
-          this.lives.down[i] = createElement('span', 'animation__loselives animation__loselives--scoreboard', '-1');
-          appendChilds(this.lives.holder, [this.lives.up[i], this.lives.down[i]]);
-        }
       this.lives.container.appendChild(this.lives.holder);
     this.controls = createElement('div', 'scoreboard__el-controls');
       this.play = createElement('button', 'scoreboard__el scoreboard__el-pause', 'play');

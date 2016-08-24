@@ -6,37 +6,57 @@ let tBasic,
   allTowers = [],
   allAttackTowers = [],
   catalogeTowers = [],
-  allProjectiles = [];
+  allProjectiles = [],
+  readyProjectiles = [];
 
 /* projectile */
 class Projectile {
-  constructor(field, creep) {
+  constructor(field) {
     this.hp = 1;
     this.fullHp = 1;
     this.field = field;
     this.ms = field.tower.pms;
     this.dmg = field.tower.dmg;
-    this.x = field.x;
-    this.y = field.y;
-    this.creep = creep;
+    this.x = field.x + fields[0].w / 2;
+    this.y = field.y + fields[0].w / 2;
+    this.startpos = { x: this.x, y: this.y };
+    this.visual = { x: 0, y: 0 };
+    this.creep = 0;
     this.follow = field.tower.follow;
     this.e = createElement('div', `projectile projectile__${field.tower.name}`);
-
     this.e.style.left = `${this.x}px`;
     this.e.style.top = `${this.y}px`;
-    this.visual = { x: 0, y: 0 };
-    projectileContainer.appendChild(this.e);
-
+    this.e.style.opacity = 0;
     allProjectiles.push(this);
+
+    projectileContainer.appendChild(this.e);
+  }
+
+  setup(creep) {
+    this.dead = false;
+    this.creep = creep;
+    this.e.style.opacity = 1;
+    readyProjectiles.push(this);
+  }
+
+  update() {
+    this.x = this.field.x + fields[0].w / 2;
+    this.y = this.field.y + fields[0].w / 2;
+    this.startpos = { x: this.x, y: this.y };
+    this.e.style.left = `${this.x}px`;
+    this.e.style.top = `${this.y}px`;
   }
 
   remove() {
     // @TODO: add explosion
-    // remove element
     // dead
     this.dead = true;
-    // invis
+    // reset
     this.e.style.opacity = 0;
+    this.x = this.startpos.x;
+    this.y = this.startpos.y;
+    this.visual = { x: 0, y: 0 };
+    this.e.style.transform = 'translate3d(0, 0, 1px)';
   }
 
   attack(dt) {
@@ -77,12 +97,22 @@ class Tower {
     this.follow = follow;
     this.level = level;
     this.description = description;
+    this.projectileAnimationCounter = 0;
+    this.projectiles = [];
 
     allTowers.push(this);
   }
 
-  shoot(field, creep) {
-    let porjectile = new Projectile(field, creep);
+  shoot(creep) {
+    let n = this.projectileAnimationCounter;
+    console.log(n);
+    this.projectiles[n].setup(creep);
+    // count up
+    if (this.projectileAnimationCounter++ >= 19) {
+      this.projectileAnimationCounter = 0;
+      // reset all the deads except the last who should continue to attack
+      readyProjectiles = [this.projectiles[n]];
+    }
   }
 
   update() {
@@ -101,7 +131,7 @@ class Tower {
         if (!allCreeps[i].dead && euclidDistance(allCreeps[i].x, this.field.x, allCreeps[i].y, this.field.y) <= this.rng) {
           // then check how many targets the tower can focus
           if(attacked <= this.targets) {
-            this.shoot(this.field, allCreeps[i]);
+            this.shoot(allCreeps[i]);
             attacked++;
             this.cdCount = 0;
           }
@@ -128,6 +158,9 @@ class BasicTower extends Tower {
 
   setup(field) {
     this.field = field;
+    let i = 20; while (i--) {
+      this.projectiles[i] = new Projectile(this.field);
+    }
     allAttackTowers.push(this);
   }
 }

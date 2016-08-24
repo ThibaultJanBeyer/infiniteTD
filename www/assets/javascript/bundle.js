@@ -100,8 +100,8 @@ let time = new Date().getTime();
     }
 
     // projectiles
-    let j = allProjectiles.length; while (j--) {
-      allProjectiles[j].attack(dt);
+    let j = readyProjectiles.length; while (j--) {
+      readyProjectiles[j].attack(dt);
     }
 
     // tower detect
@@ -356,20 +356,21 @@ function setupBoard() {
   }
 
   // close builder when outside is clicked
-  g.addEventListener('click', (e) => {
+  b.addEventListener('click', (e) => {
     e.stopPropagation();
     globalClick(e);
   });
 
-  // pause / unpause game with spacebar
-  g.addEventListener('keyup', (e) => {
+  // pause / unpause game with p
+  d.addEventListener('keyup', (e) => {
     globalKeyboard(e);
   });
 
   // create creep & projectile container
-  creepContainer = d.createElement('div');
-  projectileContainer = d.createElement('div');
-  bountyContainer = d.createElement('div');
+  creepContainer = createElement('div', 'creep-container');
+  projectileContainer = createElement('div', 'projectile-container');
+  bountyContainer = createElement('div', 'bounty-container');
+  livesContainer = createElement('div', 'lives-container');
   // add animation elements for money changes
   scoreboard.money.up = [];
   scoreboard.money.up2 = [];
@@ -384,8 +385,23 @@ function setupBoard() {
     appendChilds(bountyContainer, [scoreboard.money.up2[l], scoreboard.money.down2[l]]);
   }
 
+  // create several gain/lose elements since a player could lose several lives simultaneously
+  scoreboard.lives.up = [];
+  scoreboard.lives.up2 = [];
+  scoreboard.lives.down = [];
+  scoreboard.lives.down2 = [];
+  let m = 20; while (m--) {
+    scoreboard.lives.up[m] = createElement('span', 'animation__gainlives animation__gainlives--scoreboard', '+1');
+    scoreboard.lives.up2[m] = createElement('span', 'animation__gainlives', '+1');
+    scoreboard.lives.down[m] = createElement('span', 'animation__loselives animation__loselives--scoreboard', '-1');
+    scoreboard.lives.down2[m] = createElement('span', 'animation__loselives', '-1');
+    appendChilds(scoreboard.lives.holder, [scoreboard.lives.up[m], scoreboard.lives.down[m]]);
+    appendChilds(livesContainer, [scoreboard.lives.up2[m], scoreboard.lives.down2[m]]);
+  console.log(scoreboard.lives.down2[m]);
+  }
+
   // append all
-  appendChilds(board, [creepContainer, projectileContainer, bountyContainer]);
+  appendChilds(board, [creepContainer, projectileContainer, bountyContainer, livesContainer]);
 }
 
 function globalClick(e) {
@@ -461,6 +477,10 @@ function setSizes() {
   // also the range of the towers have to be updated
   let j = allTowers.length; while (j--) {
     allTowers[j].update();
+  }
+  // and the pos of the projectiles
+  let k = allProjectiles.length; while (k--) {
+    allProjectiles[k].update();
   }
 }
 
@@ -688,9 +708,9 @@ class Creeps {
     // and append them to their respective position
     this.bounty = {
       value: bounty,
-      creep: createElement('span', 'animation__gainmoney', bounty),
-      money: createElement('span', 'animation__gainmoney animation__gainmoney--scoreboard', bounty),
-      score: createElement('span', 'animation__gainscore animation__gainscore--scoreboard', bounty)
+      creep: createElement('span', 'animation__gainmoney', `+${bounty}`),
+      money: createElement('span', 'animation__gainmoney animation__gainmoney--scoreboard', `+${bounty}`),
+      score: createElement('span', 'animation__gainscore animation__gainscore--scoreboard', `+${bounty}`)
     };
     bountyContainer.appendChild(this.bounty.creep);
     scoreboard.money.holder.appendChild(this.bounty.money);
@@ -1301,17 +1321,9 @@ class Scoreboard {
       this.score.holder = d.createElement('div');
       this.score.container.appendChild(this.score.holder);
       holders.push(this.score.holder);
-    // score icon + holder for gain/lose + gain/lose element
+    // lives icon + holder for gain/lose + gain/lose element
     this.lives = createSVG({svgName: 'lives', extraElement: 'p', svg: SVGlives});
       this.lives.holder = d.createElement('div');
-        // create several gain/lose elements since a player could lose several lives simultaneously
-        this.lives.up = [];
-        this.lives.down = [];
-        let i = 20; while (i--) {
-          this.lives.up[i] = createElement('span', 'animation__gainlives animation__gainlives--scoreboard', '+1');
-          this.lives.down[i] = createElement('span', 'animation__loselives animation__loselives--scoreboard', '-1');
-          appendChilds(this.lives.holder, [this.lives.up[i], this.lives.down[i]]);
-        }
       this.lives.container.appendChild(this.lives.holder);
     this.controls = createElement('div', 'scoreboard__el-controls');
       this.play = createElement('button', 'scoreboard__el scoreboard__el-pause', 'play');
@@ -1563,7 +1575,7 @@ let i = 10; while (i--) {
     levels[i] = {
       creeps:
       {
-        hp: 100 * i,
+        hp: 500 * i,
         ms: 0.1,
         bounty: 5
       },
@@ -1589,7 +1601,6 @@ function nextLevel() {
   // remove leftovers
   let i = holders.length; while (i--) { holders[i].innerHTML = ''; }
   creepContainer.innerHTML = '';
-  projectileContainer.innerHTML = '';
   allCreeps = [];
   // next level
   setTimeout(() => {
@@ -1676,12 +1687,18 @@ class Player {
     let n = this.livesAnimationCounter;
     if (amount >= 0) {
       scoreboard.lives.up[n].innerHTML = `+${amount}`;
+      scoreboard.lives.up2[n].innerHTML = `+${amount}`;
       animateScore([ scoreboard.lives.up[n] ]);
+      animateScore([ [scoreboard.lives.up2[n], startField] ]);
       setTimeout(recycleAnimation.bind(null, [scoreboard.lives.up[n]]), 1000);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.lives.up2[n]]), 1000);
     } else {
       scoreboard.lives.down[n].innerHTML = amount;
+      scoreboard.lives.down2[n].innerHTML = amount;
       animateScore([ scoreboard.lives.down[n] ]);
+      animateScore([ [scoreboard.lives.down2[n], endField] ]);
       setTimeout(recycleAnimation.bind(null, [scoreboard.lives.down[n]]), 1000);
+      setTimeout(recycleAnimation.bind(null, [scoreboard.lives.down2[n]]), 1000);
     }
     this.livesAnimationCounter = (n++ >= 19) ? 0 : this.livesAnimationCounter + 1; 
 
@@ -1694,7 +1711,6 @@ class Player {
 
   updateMoney(amount, place) {
     // update wallet
-    console.log(amount, place);
     this.money += amount;
     let n = this.livesAnimationCounter;
     if (amount >= 0) {
@@ -1760,37 +1776,57 @@ let tBasic,
   allTowers = [],
   allAttackTowers = [],
   catalogeTowers = [],
-  allProjectiles = [];
+  allProjectiles = [],
+  readyProjectiles = [];
 
 /* projectile */
 class Projectile {
-  constructor(field, creep) {
+  constructor(field) {
     this.hp = 1;
     this.fullHp = 1;
     this.field = field;
     this.ms = field.tower.pms;
     this.dmg = field.tower.dmg;
-    this.x = field.x;
-    this.y = field.y;
-    this.creep = creep;
+    this.x = field.x + fields[0].w / 2;
+    this.y = field.y + fields[0].w / 2;
+    this.startpos = { x: this.x, y: this.y };
+    this.visual = { x: 0, y: 0 };
+    this.creep = 0;
     this.follow = field.tower.follow;
     this.e = createElement('div', `projectile projectile__${field.tower.name}`);
-
     this.e.style.left = `${this.x}px`;
     this.e.style.top = `${this.y}px`;
-    this.visual = { x: 0, y: 0 };
-    projectileContainer.appendChild(this.e);
-
+    this.e.style.opacity = 0;
     allProjectiles.push(this);
+
+    projectileContainer.appendChild(this.e);
+  }
+
+  setup(creep) {
+    this.dead = false;
+    this.creep = creep;
+    this.e.style.opacity = 1;
+    readyProjectiles.push(this);
+  }
+
+  update() {
+    this.x = this.field.x + fields[0].w / 2;
+    this.y = this.field.y + fields[0].w / 2;
+    this.startpos = { x: this.x, y: this.y };
+    this.e.style.left = `${this.x}px`;
+    this.e.style.top = `${this.y}px`;
   }
 
   remove() {
     // @TODO: add explosion
-    // remove element
     // dead
     this.dead = true;
-    // invis
+    // reset
     this.e.style.opacity = 0;
+    this.x = this.startpos.x;
+    this.y = this.startpos.y;
+    this.visual = { x: 0, y: 0 };
+    this.e.style.transform = 'translate3d(0, 0, 1px)';
   }
 
   attack(dt) {
@@ -1831,12 +1867,22 @@ class Tower {
     this.follow = follow;
     this.level = level;
     this.description = description;
+    this.projectileAnimationCounter = 0;
+    this.projectiles = [];
 
     allTowers.push(this);
   }
 
-  shoot(field, creep) {
-    let porjectile = new Projectile(field, creep);
+  shoot(creep) {
+    let n = this.projectileAnimationCounter;
+    console.log(n);
+    this.projectiles[n].setup(creep);
+    // count up
+    if (this.projectileAnimationCounter++ >= 19) {
+      this.projectileAnimationCounter = 0;
+      // reset all the deads except the last who should continue to attack
+      readyProjectiles = [this.projectiles[n]];
+    }
   }
 
   update() {
@@ -1855,7 +1901,7 @@ class Tower {
         if (!allCreeps[i].dead && euclidDistance(allCreeps[i].x, this.field.x, allCreeps[i].y, this.field.y) <= this.rng) {
           // then check how many targets the tower can focus
           if(attacked <= this.targets) {
-            this.shoot(this.field, allCreeps[i]);
+            this.shoot(allCreeps[i]);
             attacked++;
             this.cdCount = 0;
           }
@@ -1882,6 +1928,9 @@ class BasicTower extends Tower {
 
   setup(field) {
     this.field = field;
+    let i = 20; while (i--) {
+      this.projectiles[i] = new Projectile(this.field);
+    }
     allAttackTowers.push(this);
   }
 }

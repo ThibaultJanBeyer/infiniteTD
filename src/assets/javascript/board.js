@@ -76,20 +76,21 @@ function setupBoard() {
   }
 
   // close builder when outside is clicked
-  g.addEventListener('click', (e) => {
+  b.addEventListener('click', (e) => {
     e.stopPropagation();
     globalClick(e);
   });
 
-  // pause / unpause game with spacebar
-  g.addEventListener('keyup', (e) => {
+  // pause / unpause game with p
+  d.addEventListener('keyup', (e) => {
     globalKeyboard(e);
   });
 
   // create creep & projectile container
-  creepContainer = d.createElement('div');
-  projectileContainer = d.createElement('div');
-  bountyContainer = d.createElement('div');
+  creepContainer = createElement('div', 'creep-container');
+  projectileContainer = createElement('div', 'projectile-container');
+  bountyContainer = createElement('div', 'bounty-container');
+  livesContainer = createElement('div', 'lives-container');
   // add animation elements for money changes
   scoreboard.money.up = [];
   scoreboard.money.up2 = [];
@@ -104,8 +105,23 @@ function setupBoard() {
     appendChilds(bountyContainer, [scoreboard.money.up2[l], scoreboard.money.down2[l]]);
   }
 
+  // create several gain/lose elements since a player could lose several lives simultaneously
+  scoreboard.lives.up = [];
+  scoreboard.lives.up2 = [];
+  scoreboard.lives.down = [];
+  scoreboard.lives.down2 = [];
+  let m = 20; while (m--) {
+    scoreboard.lives.up[m] = createElement('span', 'animation__gainlives animation__gainlives--scoreboard', '+1');
+    scoreboard.lives.up2[m] = createElement('span', 'animation__gainlives', '+1');
+    scoreboard.lives.down[m] = createElement('span', 'animation__loselives animation__loselives--scoreboard', '-1');
+    scoreboard.lives.down2[m] = createElement('span', 'animation__loselives', '-1');
+    appendChilds(scoreboard.lives.holder, [scoreboard.lives.up[m], scoreboard.lives.down[m]]);
+    appendChilds(livesContainer, [scoreboard.lives.up2[m], scoreboard.lives.down2[m]]);
+  console.log(scoreboard.lives.down2[m]);
+  }
+
   // append all
-  appendChilds(board, [creepContainer, projectileContainer, bountyContainer]);
+  appendChilds(board, [creepContainer, projectileContainer, bountyContainer, livesContainer]);
 }
 
 function globalClick(e) {
@@ -181,6 +197,10 @@ function setSizes() {
   // also the range of the towers have to be updated
   let j = allTowers.length; while (j--) {
     allTowers[j].update();
+  }
+  // and the pos of the projectiles
+  let k = allProjectiles.length; while (k--) {
+    allProjectiles[k].update();
   }
 }
 

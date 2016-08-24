@@ -7,7 +7,7 @@ let i = 10; while (i--) {
     levels[i] = {
       creeps:
       {
-        hp: 100 * i,
+        hp: 500 * i,
         ms: 0.1,
         bounty: 5
       },
@@ -33,7 +33,6 @@ function nextLevel() {
   // remove leftovers
   let i = holders.length; while (i--) { holders[i].innerHTML = ''; }
   creepContainer.innerHTML = '';
-  projectileContainer.innerHTML = '';
   allCreeps = [];
   // next level
   setTimeout(() => {
