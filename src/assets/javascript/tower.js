@@ -56,7 +56,7 @@ class Projectile {
     this.x = this.startpos.x;
     this.y = this.startpos.y;
     this.visual = { x: 0, y: 0 };
-    setVendor(this.e, transform, 'translate3d(0, 0, 1px)');
+    setVendor(this.e, 'Transform', 'translate3d(0, 0, 1px)');
   }
 
   attack(dt) {
@@ -128,7 +128,6 @@ class Tower {
         // check if the creeps distance is within tower range with
         // euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance
         if (!allCreeps[i].dead && euclidDistance(allCreeps[i].x, this.field.x, allCreeps[i].y, this.field.y) <= this.rng) {
-          console.log(this);
           // then check how many targets the tower can focus
           if(attacked <= this.targets) {
             this.shoot(allCreeps[i]);

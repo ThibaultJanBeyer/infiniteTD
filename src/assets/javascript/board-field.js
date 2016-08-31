@@ -94,10 +94,10 @@ class Field {
     //     this.tower.setup(this);
     //   }
     // }
-    if (tower.name === 'basic') {
+    if (tower.nameOg === 'basic') {
       this.tower = new BasicTower();
       this.tower.setup(this);
-    } else if (tower.name === 'rock') {
+    } else if (tower.nameOg === 'rock') {
       this.tower = new RockTower();
       this.tower.setup(this);
     }
