@@ -1,5 +1,5 @@
 // fields
-let board, creepContainer, projectileContainer, bountyContainer, fields = [], 
+let board, creepContainer, projectileContainer, bountyContainer, livesContainer, fields = [], 
   startField, endField,
   topFields = [],
   rightFields = [],
@@ -117,7 +117,6 @@ function setupBoard() {
     scoreboard.lives.down2[m] = createElement('span', 'animation__loselives', '-1');
     appendChilds(scoreboard.lives.holder, [scoreboard.lives.up[m], scoreboard.lives.down[m]]);
     appendChilds(livesContainer, [scoreboard.lives.up2[m], scoreboard.lives.down2[m]]);
-  console.log(scoreboard.lives.down2[m]);
   }
 
   // append all

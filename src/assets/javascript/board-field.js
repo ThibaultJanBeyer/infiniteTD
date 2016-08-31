@@ -87,11 +87,19 @@ class Field {
 
   buildTower(tower) {
     // check which tower to build
-    let i = catalogeTowers.length; while (i--) {
-      if(catalogeTowers[i] === tower){
-        this.tower = Object.create(catalogeTowers[i]);
-        this.tower.setup(this);
-      }
+    // let i = catalogeTowers.length; while (i--) {
+    //   if(catalogeTowers[i] === tower){
+    //     this.tower = Object.create(catalogeTowers[i]);
+    //     // how to create a class tower based on a name??
+    //     this.tower.setup(this);
+    //   }
+    // }
+    if (tower.name === 'basic') {
+      this.tower = new BasicTower();
+      this.tower.setup(this);
+    } else if (tower.name === 'rock') {
+      this.tower = new RockTower();
+      this.tower.setup(this);
     }
     
     this.e.className += ` tower ${tower.name}`;

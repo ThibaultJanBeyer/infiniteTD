@@ -10,7 +10,7 @@ function animateScore(els) {
       el.style.top = `${pos.y}px`;
     }
 
-    el.style.transform = 'translate3d(0, -300%, 1px)';
+    setVendor(el, transform, 'translate3d(0, -300%, 1px)');
     el.style.opacity = 0;
   }
 }
@@ -20,7 +20,7 @@ function recycleAnimation(els) {
     let el = els[i];
     
     el.style.visibility = 'hidden';
-    el.style.transform = 'translate3d(0, 0, 1px)';
+    setVendor(el, transform, 'translate3d(0, 0, 1px)');
     el.style.opacity = 1;
   }
 }
@@ -46,7 +46,7 @@ function moveObj(el, target) {
     el.visual.x += increment.x;
     el.visual.y += increment.y;
     // according to chromes performance timeline, it is way more performant inline the drawings here
-    el.e.style.transform = `translate3d(${el.visual.x}px,${el.visual.y}px, 1px)`;
+    setVendor(el, transform, `translate3d(${el.visual.x}px,${el.visual.y}px, 1px)`);
   }
   if (Math.abs(el.dist.x) < 10 && Math.abs(el.dist.y) < 10) {
     return true;
@@ -97,6 +97,14 @@ function calculateIncrement(el, target) {
 /******************************/
 /* Functions for an easy life */
 /******************************/
+
+// vendor prefixes
+function setVendor(element, property, value) {
+  element.style["webkit" + property] = value;
+  element.style["moz" + property] = value;
+  element.style["ms" + property] = value;
+  element.style["o" + property] = value;
+}
 
 // capitalize first letter
 function capitalizeFirstLetter(string) {
