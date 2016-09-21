@@ -11,6 +11,7 @@ function animateScore(els) {
     }
 
     setVendor(el, 'Transform', 'translate3d(0, -300%, 1px)');
+    // el.style.transform = 'translate3d(0, -300%, 1px)';
     el.style.opacity = 0;
   }
 }
@@ -21,6 +22,7 @@ function recycleAnimation(els) {
     
     el.style.visibility = 'hidden';
     setVendor(el, 'Transform', 'translate3d(0, 0, 1px)');
+    // el.style.transform = 'translate3d(0, 0, 1px)';
     el.style.opacity = 1;
   }
 }
@@ -47,6 +49,7 @@ function moveObj(el, target) {
     el.visual.y += increment.y;
     // according to chromes performance timeline, it is way more performant inline the drawings here
     setVendor(el.e, 'Transform', `translate3d(${el.visual.x}px,${el.visual.y}px, 1px)`);
+    // el.e.style.transform = `translate3d(${el.visual.x}px,${el.visual.y}px, 1px)`;
   }
   if (Math.abs(el.dist.x) < 10 && Math.abs(el.dist.y) < 10) {
     return true;
@@ -100,10 +103,10 @@ function calculateIncrement(el, target) {
 
 // vendor prefixes
 function setVendor(element, property, value) {
-  element.style[`webkit${property}`] = value;
-  element.style[`moz${property}`] = value;
-  element.style[`ms${property}`] = value;
-  element.style[`o${property}`] = value;
+  element.style[`Webkit${property}`] = value;
+  element.style[`Moz${property}`] = value;
+  element.style[`MS${property}`] = value;
+  element.style[`O${property}`] = value;
 }
 
 // capitalize first letter

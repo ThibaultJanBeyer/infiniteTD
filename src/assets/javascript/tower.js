@@ -57,6 +57,7 @@ class Projectile {
     this.y = this.startpos.y;
     this.visual = { x: 0, y: 0 };
     setVendor(this.e, 'Transform', 'translate3d(0, 0, 1px)');
+    // this.e.style.transform = 'translate3d(0, 0, 1px)';
   }
 
   attack(dt) {
