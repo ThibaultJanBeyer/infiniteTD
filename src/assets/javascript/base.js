@@ -13,7 +13,7 @@ let wX, wY, isPaused = true,
 
 /* Setup Scene */
 function init() {
-
+  
   // Scoreboard
   setupScoreboard();
 
@@ -111,19 +111,3 @@ let time = new Date().getTime();
   }
 
 })();
-
-// last_t = now()
-// while True:
-//    t = now()
-//    dt = t - last_t   // Vergangene zeit seit dem letzten update
-//    last_t = t
-//    for objekt in alle_meine_objekte:
-//        objekt.update(dt)
-//    for objekt in alle_meine_objekte:
-//        objekt.render($('game'))
-
-// und objekt.update(dt) sieht dann z.B. so aus:
-// function update(dt) {
-//    this.x = this.x + this.vx * dt
-//    this.y = this.y + this.vy * dt
-// }
