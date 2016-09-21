@@ -1,30 +1,12 @@
 // levels
-let levels = {}, kills = 0;
-
-// levels 1-10
-let i = 10; while (i--) {
-  if (i === 1) {
-    levels[i] = {
-      creeps:
-      {
-        hp: 500 * i,
-        ms: 0.1,
-        bounty: 5
-      },
-      amount: 1
-    };
-  } else {
-  levels[i] = {
-    creeps:
-    {
-      hp: 10 * i,
-      ms: 0.1,
-      bounty: 5
-    },
-    amount: 2 * i
-  };
+let levels = {
+  creeps: {
+    hp: 10,
+    ms: 0.1,
+    bounty: 5,
+    amount: 1
   }
-}
+}, kills = 0;
 
 /**************/
 /* next level */
@@ -36,16 +18,20 @@ function nextLevel() {
   allCreeps = [];
   // next level
   setTimeout(() => {
+    levels.creeps.hp += 10;
+    levels.creeps.ms += 0.01;
+    levels.creeps.bounty += 0.1;
+    levels.creeps.amount += 1;
     // recycling
     recycleAnimation(recyclings);
     
     let tempCreeps = [];
-    for(let i = 0, il = levels[p1.level].amount; i < il; i++) {
+    for(let i = 0, il = levels.creeps.amount; i < il; i++) {
       let creep = new Creeps({
-        ms: levels[p1.level].creeps.ms,
-        hp: levels[p1.level].creeps.hp,
+        ms: levels.creeps.ms,
+        hp: levels.creeps.hp,
         lvl: p1.level,
-        bounty: levels[p1.level].creeps.bounty
+        bounty: levels.creeps.bounty
       });
       tempCreeps.push(creep);
     }

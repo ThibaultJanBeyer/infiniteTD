@@ -71,7 +71,7 @@ class Creeps {
       this.e.style.opacity = 0;
       // from allCreeps array
       kills++;
-      if (kills >= levels[p1.level].amount) {
+      if (kills >= levels.creeps.amount) {
         kills = 0;
         p1.levelUp();
       }

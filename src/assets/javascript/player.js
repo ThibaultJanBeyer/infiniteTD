@@ -36,11 +36,11 @@ class Player {
       this.level += 1;
       animateScore([ scoreboard.level.up ]);
       scoreboard.update(this);
-      if (!levels[this.level]) {
-        audio.play('winner_winner_chicken_dinner');
-      } else {
+      // if (!levels[this.level]) {
+      //   audio.play('winner_winner_chicken_dinner');
+      // } else {
         nextLevel();
-      }
+      // }
       setTimeout(() => {
         if (!lostGame) {
           if (this.level % 2 === 0) {
