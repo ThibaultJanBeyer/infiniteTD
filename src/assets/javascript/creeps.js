@@ -14,11 +14,12 @@ class Creeps {
     // since updating the DOM is expensive
     // we already create all the visual bounty elements
     // and append them to their respective position
+    let bnty = Math.round(bounty);
     this.bounty = {
-      value: bounty,
-      creep: createElement('span', 'animation__gainmoney', `+${bounty}`),
-      money: createElement('span', 'animation__gainmoney animation__gainmoney--scoreboard', `+${bounty}`),
-      score: createElement('span', 'animation__gainscore animation__gainscore--scoreboard', `+${bounty}`)
+      value: bnty,
+      creep: createElement('span', 'animation__gainmoney', `+${bnty}`),
+      money: createElement('span', 'animation__gainmoney animation__gainmoney--scoreboard', `+${bnty}`),
+      score: createElement('span', 'animation__gainscore animation__gainscore--scoreboard', `+${bnty}`)
     };
     bountyContainer.appendChild(this.bounty.creep);
     scoreboard.money.holder.appendChild(this.bounty.money);

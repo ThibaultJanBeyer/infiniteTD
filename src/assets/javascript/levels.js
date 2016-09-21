@@ -2,9 +2,10 @@
 let levels = {
   creeps: {
     hp: 10,
-    ms: 0.1,
+    ms: 0.05,
     bounty: 5,
-    amount: 1
+    amount: 1,
+    spawn: 500
   }
 }, kills = 0;
 
@@ -18,10 +19,11 @@ function nextLevel() {
   allCreeps = [];
   // next level
   setTimeout(() => {
-    levels.creeps.hp += 10;
-    levels.creeps.ms += 0.01;
-    levels.creeps.bounty += 0.1;
-    levels.creeps.amount += 1;
+    levels.creeps.hp += 5;
+    levels.creeps.ms += 0.001;
+    levels.creeps.bounty += 0.05;
+    levels.creeps.amount += 0.5;
+    levels.creeps.spawn -= 0.5;
     // recycling
     recycleAnimation(recyclings);
     
@@ -37,7 +39,7 @@ function nextLevel() {
     }
     myInterval({
       cd: tempCreeps.length,
-      dur: 500,
+      dur: levels.creeps.spawn,
       cb: ({countdown}) => {
         tempCreeps[countdown].setup();
         allCreeps.push(tempCreeps[countdown]);
